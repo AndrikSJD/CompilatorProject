@@ -1,10 +1,10 @@
-﻿grammar MiniCSharpParser;
+ parser grammar MiniCSharpParser;
 
-// Importamos el lexer generado previamente
-import MiniCSharpScanner;
+options {
+    tokenVocab = MiniCSharpScanner; 
+}
 
 // Reglas sintácticas
-
 program : using* CLASS ID LBRACE (varDecl | classDecl | methodDecl)* RBRACE;
 
 using : USING ID SEMICOLON;
@@ -27,7 +27,7 @@ statement : designator ASSIGN expr SEMICOLON
           | BREAK SEMICOLON
           | RETURN expr? SEMICOLON
           | READ LPARENT designator RPARENT SEMICOLON
-          | WRITE LPARENT expr (COMMA NUMBER)? RPARENT SEMICOLON
+          | WRITE LPARENT expr (COMMA NUM)? RPARENT SEMICOLON
           | block
           | SEMICOLON;
 
@@ -47,21 +47,8 @@ expr : (SUB | cast)? term ((ADD | SUB) term)*;
 
 term : factor ((MUL | DIV | MOD) factor)*;
 
-factor : designator (LPARENT (actPars)? RPARENT | NUMBER | CHARCONST | STRINGCONST | BOOLCONST | NEW ID | LPARENT expr RPARENT);
+factor : designator (LPARENT (actPars)? RPARENT | NUM | TYPECHAR | TYPESTRING | TYPEBOOL | NEW ID | LPARENT expr RPARENT);
 
 designator : ID ((DOT ID) | (LBRACK expr RBRACK))*;
 
 relop : (EQUAL | NOTEQUAL | GT | GE | LT | LE);
-
-// Tokens léxicos
-
-NUMBER : DIGIT+;
-BOOLCONST : ('true' | 'false');
-CHARCONST : '\'' (~('\n' | '\r' | '\'') | ('\\' .))* '\'';
-STRINGCONST : '"' (~('\n' | '\r' | '"') | ('\\' .))* '"';
-WS : [ \t\n\r]+ -> skip;
-
-// Reglas para ignorar comentarios y tokens desconocidos
-
-COMMENT : '//' ~[\r\n]* -> skip;
-OTHER : . -> skip;

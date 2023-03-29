@@ -8,11 +8,11 @@ fragment LETTER : [a-z]|[A-Z];
 fragment EXPRESION : LETTER+;
 
 // Const values
-CHAR : 'char';
-INT : 'int';
-DOUBLE : 'double';
-BOOL : 'bool';
-STRING : 'string';
+TYPECHAR : 'char';
+TYPEINT : 'int';
+TYPEDOUBLE : 'double';
+TYPEBOOL : 'bool';
+TYPESTRING : 'string';
 
 // Array methods
 ARRADD : 'add';
@@ -65,3 +65,6 @@ MOD : '%';
 NUM : DIGIT+;
 ID : LETTER  (LETTER | DIGIT)*;
 PLAINTEXT : '"' (LETTER|DIGIT|WS)* '"';
+CHAR : '"' ~['\\r\n] '"' ;
+BOOLEAN: ('true'|'false');
+DOUBLE: DIGIT+ '.' DIGIT*;
