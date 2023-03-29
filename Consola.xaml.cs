@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Compilador;
+namespace Proyecto;
 
 public partial class Consola : Window
 {

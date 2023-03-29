@@ -5,7 +5,7 @@ options {
 }
 
 // Reglas sintácticas
-program : using* CLASS ID LBRACE (varDecl | classDecl | methodDecl)* RBRACE;
+program : using* CLASS ID LBRACE (varDecl | classDecl | methodDecl)* RBRACE EOF;
 
 using : USING ID SEMICOLON;
 

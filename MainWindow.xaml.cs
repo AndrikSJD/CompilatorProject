@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
+using Antlr4.Runtime;
+using SyntacticAnalysisGenerated;
 
 
-namespace Compilador
+namespace Proyecto
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -17,6 +19,7 @@ namespace Compilador
     /// </summary>
     public partial class MainWindow
     {
+        
         public MainWindow() 
         {
             // El System.Diagnostics.Debug.WriteLine es para imprimir en la consola del debugger.
@@ -24,13 +27,14 @@ namespace Compilador
             
             InitializeComponent();
         }
-        
+
         private void Add_Tab_Button_Click(object sender, EventArgs e)
         {
             // Aqui va la logica para agregar una nueva pestaña
             // Al agregar la nueva pestaña tome en consideracion
             // que se debe agregar un nuevo TabItem y un nuevo TextBox
             // dentro del TabControl y que dentro del textbox se agrega el texto del archivo.txt que se subio
+          
         }
         
         private void closeButton_Click(object sender, EventArgs e)
