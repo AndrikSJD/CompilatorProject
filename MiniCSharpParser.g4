@@ -65,6 +65,9 @@ designator : ID? ((DOT ID) | (LBRACK expr RBRACK))*;
 
 relop : (EQUAL | NOTEQUAL | GT | GE | LT | LE);
 
-arrayMethods : (ARRADD | ARRDEL) LPARENT ID ((DOT ID) | (LPARENT parameters? RPARENT))*  COMMA (NUM | ID) RPARENT;
+arrayMethods : ((ARRADD | ARRDEL) LPARENT ID ((DOT ID) 
+    | (LPARENT parameters? RPARENT))*  
+    COMMA (NUM | ID | PLAINTEXT) RPARENT)
+    | ARRLEN LPARENT designator RPARENT SEMICOLON;
 
-parameters : (ID | NUM) (COMMA (ID | NUM))*;
+parameters : (ID | NUM | PLAINTEXT) (COMMA (ID | NUM | PLAINTEXT))*;
