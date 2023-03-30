@@ -3,9 +3,7 @@ lexer grammar MiniCSharpScanner;
 COMMENT : '//' ~[\r\n]* -> skip;
 WS  :   [ \t\n\r]+ -> skip;
 
-fragment DIGIT : [0-9];
-fragment LETTER : [a-z]|[A-Z];
-fragment EXPRESION : LETTER+;
+
 
 // Const values
 TYPECHAR : 'char';
@@ -61,6 +59,11 @@ SUB : '-';
 MUL : '*';
 DIV : '/';
 MOD : '%';
+
+fragment DIGIT : [0-9];
+fragment LETTER : [a-z]|[A-Z];
+fragment EXPRESION : LETTER+;
+
 
 NUM : DIGIT+;
 ID : LETTER  (LETTER | DIGIT)*;

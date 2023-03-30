@@ -74,6 +74,39 @@ namespace Proyecto
         
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
+            //Extraer texto de la pantalla principal
+            ICharStream input = CharStreams.fromString(Pantalla.Text);
+            
+            //Escanea el texto que se le manda del input
+            MiniCSharpScanner lexer = new MiniCSharpScanner(input);
+            // Organiza los tokens streams
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            //Le manda los tokens al parser
+            MiniCSharpParser parser = new MiniCSharpParser(tokens);
+            //Remueve los error listeners
+            parser.RemoveErrorListeners();
+            //Crea un nuevo error listener
+            MyParserErrorListener errorListener = new MyParserErrorListener();
+            parser.AddErrorListener(errorListener);
+            //Obtiene el resultado
+            MiniCSharpParser.ProgramContext tree = parser.program();
+            
+            
+            
+            //Mostrar texto de salida
+            Consola salida = new Consola();
+            // salida.SalidaConsola.Text = tree.ToStringTree(parser);
+            if (errorListener.HasErrors())
+            {
+                salida.SalidaConsola.Text = errorListener.ToString();
+            }
+            else
+            {
+                salida.SalidaConsola.Text = "No hay errores";
+            }
+            salida.Show();
+                
+                
             // Aqui va la logica para correr el codigo
             // AL correr el codigo tome en consideracion
             // que el resultado de la compilacion se muestra en una nueva ventana llamada Consola
