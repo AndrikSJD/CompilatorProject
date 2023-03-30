@@ -78,15 +78,17 @@ namespace Proyecto
             ICharStream input = CharStreams.fromString(Pantalla.Text);
             
             //Escanea el texto que se le manda del input
-            MiniCSharpScanner lexer = new MiniCSharpScanner(input);
+            MiniCSharpScanner scanner = new MiniCSharpScanner(input);
             // Organiza los tokens streams
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            CommonTokenStream tokens = new CommonTokenStream(scanner);
             //Le manda los tokens al parser
             MiniCSharpParser parser = new MiniCSharpParser(tokens);
             //Remueve los error listeners
+            scanner.RemoveErrorListeners();
             parser.RemoveErrorListeners();
             //Crea un nuevo error listener
             MyParserErrorListener errorListener = new MyParserErrorListener();
+            scanner.AddErrorListener(errorListener);
             parser.AddErrorListener(errorListener);
             //Obtiene el resultado
             MiniCSharpParser.ProgramContext tree = parser.program();

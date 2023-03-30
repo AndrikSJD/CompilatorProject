@@ -1,9 +1,8 @@
 lexer grammar MiniCSharpScanner;
 
 COMMENT : '//' ~[\r\n]* -> skip;
+BLOCKCOMMENT : '/*' ( BLOCKCOMMENT | ~[*/] | COMMENT )* '*/' -> skip;
 WS  :   [ \t\n\r]+ -> skip;
-
-
 
 // Const values
 TYPECHAR : 'char';
@@ -64,10 +63,11 @@ fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];
 fragment EXPRESION : LETTER+;
 
-
 NUM : DIGIT+;
 ID : LETTER  (LETTER | DIGIT)*;
-PLAINTEXT : '"' (LETTER|DIGIT|WS)* '"';
+PLAINTEXT : '"' .*? '"';
 CHAR : '"' ~['\\r\n] '"' ;
 BOOLEAN: ('true'|'false');
 DOUBLE: DIGIT+ '.' DIGIT*;
+LCOMMENT : '/*';
+RCOMMENT : '*/';

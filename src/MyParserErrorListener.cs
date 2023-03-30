@@ -13,7 +13,7 @@ using Antlr4.Runtime;
 
 
 
-public class MyParserErrorListener : Antlr4.Runtime.BaseErrorListener
+public class MyParserErrorListener : BaseErrorListener, IAntlrErrorListener<int>
 {
     private List<string> errorMsgs = new List<string>();
 
@@ -37,6 +37,12 @@ public class MyParserErrorListener : Antlr4.Runtime.BaseErrorListener
     public bool HasErrors()
     {
         return errorMsgs.Count > 0;
+    }
+
+    public void SyntaxError(TextWriter output, IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine,
+        string msg, RecognitionException e)
+    {
+        throw new NotImplementedException();
     }
 
     public override string ToString()
