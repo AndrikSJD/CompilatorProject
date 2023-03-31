@@ -53,9 +53,8 @@ fragment EXPRESION : LETTER+;
 fragment LCOMMENT : '/*';
 fragment RCOMMENT : '*/';
 
-NUM : DIGIT+;
+NUM : SUB? (DIGIT+ | DIGIT+ '.' DIGIT*);
 ID : LETTER  (LETTER | DIGIT)*;
 STRINGCONST : '"' .*? '"';
 CHARCONST : '"' ~['\\r\n] '"' ;
 BOOLEANCONST: ('true'|'false');
-DOUBLE: DIGIT+ '.' DIGIT*;

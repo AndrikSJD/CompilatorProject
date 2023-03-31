@@ -42,8 +42,7 @@ public partial class MiniCSharpParser : Parser {
 		RBRACE=17, LPARENT=18, RPARENT=19, LBRACK=20, RBRACK=21, SEMICOLON=22, 
 		COMMA=23, DOT=24, ASSIGN=25, INC=26, DEC=27, OR=28, AND=29, EQUAL=30, 
 		NOTEQUAL=31, GT=32, GE=33, LT=34, LE=35, ADD=36, SUB=37, MUL=38, DIV=39, 
-		MOD=40, NUM=41, ID=42, STRINGCONST=43, CHARCONST=44, BOOLEANCONST=45, 
-		DOUBLE=46;
+		MOD=40, NUM=41, ID=42, STRINGCONST=43, CHARCONST=44, BOOLEANCONST=45;
 	public const int
 		RULE_program = 0, RULE_using = 1, RULE_varDecl = 2, RULE_classDecl = 3, 
 		RULE_methodDecl = 4, RULE_formPars = 5, RULE_type = 6, RULE_statement = 7, 
@@ -69,7 +68,7 @@ public partial class MiniCSharpParser : Parser {
 		"RBRACE", "LPARENT", "RPARENT", "LBRACK", "RBRACK", "SEMICOLON", "COMMA", 
 		"DOT", "ASSIGN", "INC", "DEC", "OR", "AND", "EQUAL", "NOTEQUAL", "GT", 
 		"GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD", "NUM", "ID", "STRINGCONST", 
-		"CHARCONST", "BOOLEANCONST", "DOUBLE"
+		"CHARCONST", "BOOLEANCONST"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -1919,7 +1918,7 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,46,283,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,45,283,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,5,0,40,8,0,10,0,12,0,43,9,
 		0,1,0,1,0,1,0,1,0,1,0,1,0,5,0,51,8,0,10,0,12,0,54,9,0,1,0,1,0,1,0,1,1,
