@@ -21,10 +21,10 @@ public class ScannerErrorListener : IAntlrErrorListener<int>
     public void SyntaxError(TextWriter output, IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine,
         string msg, RecognitionException e)
     {
-        if (recognizer.GetType() == typeof(MiniCSharpParser))
+        if (recognizer.GetType() == typeof(MiniCSharpScanner))
         {
             
-            mensajesError.AddFirst(new String("Error de escaner!!! = Linea "+line+":"+charPositionInLine + " " + "Mensaje de error: "+ msg ));
+            mensajesError.AddFirst(new String("Error en el escaner en la linea "+line+":"+charPositionInLine + " " + "Mensaje de error: "+ msg ));
         }
         else
         {

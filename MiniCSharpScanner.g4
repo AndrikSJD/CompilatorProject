@@ -1,5 +1,14 @@
 lexer grammar MiniCSharpScanner;
 
+@lexer::members {
+    public override void NotifyListeners(LexerNoViableAltException e) {
+        this.ErrorListenerDispatch.SyntaxError(this.ErrorOutput, (IRecognizer) this, 0, TokenStartLine, 
+        this.TokenStartColumn,"token invalido: '" + 
+        this.GetErrorDisplay(this.EmitEOF().InputStream.GetText(Interval.Of(this.TokenStartCharIndex,this.InputStream.Index)))  
+        + "'", (RecognitionException) e);
+    }
+ }
+
 COMMENT : '//' ~[\r\n]* -> skip;
 BLOCKCOMMENT : '/*' ( BLOCKCOMMENT | ~[*/] | '/' ~'*' )* '*/' -> skip;
 WS  :   [ \t\n\r]+ -> skip;
@@ -45,7 +54,7 @@ ADD : '+';
 SUB : '-';
 MUL : '*';
 DIV : '/';
-MOD : '%';
+MOD : '%';      
 
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];

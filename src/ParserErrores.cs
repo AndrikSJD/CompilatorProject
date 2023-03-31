@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Dfa;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Sharpen;
 using SyntacticAnalysisGenerated;
 
@@ -18,11 +19,11 @@ using Antlr4.Runtime;
 
 public class ParserErrorListener : BaseErrorListener
 {
-    private List<string> errorMsgs = new List<string>();
+    private ArrayList<string> errorMsgs;
 
     public ParserErrorListener()
     {
-        this.errorMsgs = new List<string>();
+        this.errorMsgs = new ArrayList<string>();
     }
 
     public override void SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line,
@@ -30,9 +31,9 @@ public class ParserErrorListener : BaseErrorListener
     {
 
         if (recognizer is MiniCSharpParser)
-            errorMsgs.Add($"PARSER ERROR - line {line}:{charPositionInLine} {msg}");
+            errorMsgs.Add($"Error en el parser en la linea {line} y  columna {charPositionInLine} {msg}");
         else
-            errorMsgs.Add("Other Error");
+            errorMsgs.Add("Error fuera del parser");
 
     }
 
@@ -50,7 +51,7 @@ public class ParserErrorListener : BaseErrorListener
 
     public override string ToString()
     {
-        if (!HasErrors()) return "0 errores";
+        if (!HasErrors()) return "No hay errores";
         var builder = new System.Text.StringBuilder();
         foreach (string s in errorMsgs)
         {

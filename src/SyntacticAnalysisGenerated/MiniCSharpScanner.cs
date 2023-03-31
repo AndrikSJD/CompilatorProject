@@ -58,6 +58,14 @@ public partial class MiniCSharpScanner : Lexer {
 	};
 
 
+	    public override void NotifyListeners(LexerNoViableAltException e) {
+	        this.ErrorListenerDispatch.SyntaxError(this.ErrorOutput, (IRecognizer) this, 0, TokenStartLine, 
+	        this.TokenStartColumn,"token invalido: '" + 
+	        this.GetErrorDisplay(this.EmitEOF().InputStream.GetText(Interval.Of(this.TokenStartCharIndex,this.InputStream.Index)))  
+	        + "'", (RecognitionException) e);
+	    }
+	 
+
 	public MiniCSharpScanner(ICharStream input)
 	: this(input, Console.Out, Console.Error) { }
 

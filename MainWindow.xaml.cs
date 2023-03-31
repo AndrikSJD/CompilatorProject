@@ -172,6 +172,8 @@ namespace Proyecto
             CommonTokenStream tokens = new CommonTokenStream(scanner);
             //Le manda los tokens al parser
             MiniCSharpParser parser = new MiniCSharpParser(tokens);
+            // Manejo de errores en español
+            MyErrorStrategy errorStrategy = new MyErrorStrategy();
             //Remueve los error listeners
             scanner.RemoveErrorListeners();
             parser.RemoveErrorListeners();
@@ -181,6 +183,7 @@ namespace Proyecto
             //Agrega los error listener
             scanner.AddErrorListener(scannerErrorListener);
             parser.AddErrorListener(parserErrorListener);
+            parser.ErrorHandler = errorStrategy;
             //Obtiene el resultado
             MiniCSharpParser.ProgramContext tree = parser.program();
             
@@ -191,11 +194,12 @@ namespace Proyecto
             //Verifica si hay errores
             if (parserErrorListener.HasErrors() || scannerErrorListener.HasErrors())
             {
-                salida.SalidaConsola.Text = "SE HAN ENCONTRADO ERRORES!!!\n"+"Errorer de parser= " +parserErrorListener.ToString()  +"\nErrores de escaner="+ scannerErrorListener.ToString();
+                salida.SalidaConsola.Text = "Errorer de parser: " + parserErrorListener.ToString()  +
+                                            "\nErrores de escaner: "+ scannerErrorListener.ToString();
             }
             else
             {
-                salida.SalidaConsola.Text = "Compilacion Exitosa" + "\n" + tree.ToStringTree(parser) + "\n" ;
+                salida.SalidaConsola.Text = "Compilacion Exitosa";
                 
             }
             salida.Show();
