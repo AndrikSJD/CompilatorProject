@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/Admin/Desktop/Compi/CompilatorProject\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Proyecto\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -146,17 +146,5 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitRelop([NotNull] MiniCSharpParser.RelopContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="MiniCSharpParser.arrayMethods"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitArrayMethods([NotNull] MiniCSharpParser.ArrayMethodsContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="MiniCSharpParser.parameters"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitParameters([NotNull] MiniCSharpParser.ParametersContext context);
 }
 } // namespace SyntacticAnalysisGenerated

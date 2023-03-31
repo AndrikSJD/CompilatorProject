@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/Admin/Desktop/Compi/CompilatorProject\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Proyecto\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -264,30 +264,6 @@ public partial class MiniCSharpParserBaseListener : IMiniCSharpParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitRelop([NotNull] MiniCSharpParser.RelopContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="MiniCSharpParser.arrayMethods"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterArrayMethods([NotNull] MiniCSharpParser.ArrayMethodsContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="MiniCSharpParser.arrayMethods"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitArrayMethods([NotNull] MiniCSharpParser.ArrayMethodsContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="MiniCSharpParser.parameters"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterParameters([NotNull] MiniCSharpParser.ParametersContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="MiniCSharpParser.parameters"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitParameters([NotNull] MiniCSharpParser.ParametersContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

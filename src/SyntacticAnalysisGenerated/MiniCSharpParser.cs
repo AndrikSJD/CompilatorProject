@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/Admin/Desktop/Compi/CompilatorProject\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Proyecto\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -37,44 +37,39 @@ public partial class MiniCSharpParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		COMMENT=1, BLOCKCOMMENT=2, WS=3, TYPECHAR=4, TYPEINT=5, TYPEDOUBLE=6, 
-		TYPEBOOL=7, TYPESTRING=8, ARRADD=9, ARRDEL=10, ARRLEN=11, CLASS=12, USING=13, 
-		VOID=14, IF=15, ELSE=16, FOR=17, WHILE=18, BREAK=19, RETURN=20, READ=21, 
-		WRITE=22, NEW=23, LBRACE=24, RBRACE=25, LPARENT=26, RPARENT=27, LBRACK=28, 
-		RBRACK=29, SEMICOLON=30, COMMA=31, DOT=32, ASSIGN=33, INC=34, DEC=35, 
-		OR=36, AND=37, EQUAL=38, NOTEQUAL=39, GT=40, GE=41, LT=42, LE=43, ADD=44, 
-		SUB=45, MUL=46, DIV=47, MOD=48, NUM=49, ID=50, PLAINTEXT=51, CHAR=52, 
-		BOOLEAN=53, DOUBLE=54, LCOMMENT=55, RCOMMENT=56, ALLTHING=57;
+		COMMENT=1, BLOCKCOMMENT=2, WS=3, CLASS=4, USING=5, VOID=6, IF=7, ELSE=8, 
+		FOR=9, WHILE=10, BREAK=11, RETURN=12, READ=13, WRITE=14, NEW=15, LBRACE=16, 
+		RBRACE=17, LPARENT=18, RPARENT=19, LBRACK=20, RBRACK=21, SEMICOLON=22, 
+		COMMA=23, DOT=24, ASSIGN=25, INC=26, DEC=27, OR=28, AND=29, EQUAL=30, 
+		NOTEQUAL=31, GT=32, GE=33, LT=34, LE=35, ADD=36, SUB=37, MUL=38, DIV=39, 
+		MOD=40, NUM=41, ID=42, STRINGCONST=43, CHARCONST=44, BOOLEANCONST=45, 
+		DOUBLE=46;
 	public const int
 		RULE_program = 0, RULE_using = 1, RULE_varDecl = 2, RULE_classDecl = 3, 
 		RULE_methodDecl = 4, RULE_formPars = 5, RULE_type = 6, RULE_statement = 7, 
 		RULE_block = 8, RULE_actPars = 9, RULE_condition = 10, RULE_condTerm = 11, 
 		RULE_condFact = 12, RULE_cast = 13, RULE_expr = 14, RULE_term = 15, RULE_factor = 16, 
-		RULE_designator = 17, RULE_relop = 18, RULE_arrayMethods = 19, RULE_parameters = 20;
+		RULE_designator = 17, RULE_relop = 18;
 	public static readonly string[] ruleNames = {
 		"program", "using", "varDecl", "classDecl", "methodDecl", "formPars", 
 		"type", "statement", "block", "actPars", "condition", "condTerm", "condFact", 
-		"cast", "expr", "term", "factor", "designator", "relop", "arrayMethods", 
-		"parameters"
+		"cast", "expr", "term", "factor", "designator", "relop"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, null, null, null, "'char'", "'int'", "'double'", "'bool'", "'string'", 
-		"'add'", "'del'", "'len'", "'class'", "'using'", "'void'", "'if'", "'else'", 
+		null, null, null, null, "'class'", "'using'", "'void'", "'if'", "'else'", 
 		"'for'", "'while'", "'break'", "'return'", "'read'", "'write'", "'new'", 
 		"'{'", "'}'", "'('", "')'", "'['", "']'", "';'", "','", "'.'", "'='", 
 		"'++'", "'--'", "'||'", "'&&'", "'=='", "'!='", "'>'", "'>='", "'<'", 
-		"'<='", "'+'", "'-'", "'*'", "'/'", "'%'", null, null, null, null, null, 
-		null, "'/*'", "'*/'"
+		"'<='", "'+'", "'-'", "'*'", "'/'", "'%'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, "COMMENT", "BLOCKCOMMENT", "WS", "TYPECHAR", "TYPEINT", "TYPEDOUBLE", 
-		"TYPEBOOL", "TYPESTRING", "ARRADD", "ARRDEL", "ARRLEN", "CLASS", "USING", 
-		"VOID", "IF", "ELSE", "FOR", "WHILE", "BREAK", "RETURN", "READ", "WRITE", 
-		"NEW", "LBRACE", "RBRACE", "LPARENT", "RPARENT", "LBRACK", "RBRACK", "SEMICOLON", 
-		"COMMA", "DOT", "ASSIGN", "INC", "DEC", "OR", "AND", "EQUAL", "NOTEQUAL", 
-		"GT", "GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD", "NUM", "ID", 
-		"PLAINTEXT", "CHAR", "BOOLEAN", "DOUBLE", "LCOMMENT", "RCOMMENT", "ALLTHING"
+		null, "COMMENT", "BLOCKCOMMENT", "WS", "CLASS", "USING", "VOID", "IF", 
+		"ELSE", "FOR", "WHILE", "BREAK", "RETURN", "READ", "WRITE", "NEW", "LBRACE", 
+		"RBRACE", "LPARENT", "RPARENT", "LBRACK", "RBRACK", "SEMICOLON", "COMMA", 
+		"DOT", "ASSIGN", "INC", "DEC", "OR", "AND", "EQUAL", "NOTEQUAL", "GT", 
+		"GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD", "NUM", "ID", "STRINGCONST", 
+		"CHARCONST", "BOOLEANCONST", "DOUBLE"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -169,61 +164,61 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 45;
+			State = 41;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==USING) {
 				{
 				{
-				State = 42;
+				State = 38;
 				@using();
 				}
 				}
-				State = 47;
+				State = 43;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 48;
+			State = 44;
 			Match(CLASS);
-			State = 49;
+			State = 45;
 			Match(ID);
-			State = 50;
+			State = 46;
 			Match(LBRACE);
-			State = 56;
+			State = 52;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 1125900175299056L) != 0) {
+			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 4398046511184L) != 0) {
 				{
-				State = 54;
+				State = 50;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 				case 1:
 					{
-					State = 51;
+					State = 47;
 					varDecl();
 					}
 					break;
 				case 2:
 					{
-					State = 52;
+					State = 48;
 					classDecl();
 					}
 					break;
 				case 3:
 					{
-					State = 53;
+					State = 49;
 					methodDecl();
 					}
 					break;
 				}
 				}
-				State = 58;
+				State = 54;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 59;
+			State = 55;
 			Match(RBRACE);
-			State = 60;
+			State = 56;
 			Match(Eof);
 			}
 		}
@@ -272,11 +267,11 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 62;
+			State = 58;
 			Match(USING);
-			State = 63;
+			State = 59;
 			Match(ID);
-			State = 64;
+			State = 60;
 			Match(SEMICOLON);
 			}
 		}
@@ -335,27 +330,27 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 66;
+			State = 62;
 			type();
-			State = 67;
+			State = 63;
 			Match(ID);
-			State = 72;
+			State = 68;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				State = 68;
+				State = 64;
 				Match(COMMA);
-				State = 69;
+				State = 65;
 				Match(ID);
 				}
 				}
-				State = 74;
+				State = 70;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 75;
+			State = 71;
 			Match(SEMICOLON);
 			}
 		}
@@ -412,27 +407,27 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 77;
+			State = 73;
 			Match(CLASS);
-			State = 78;
+			State = 74;
 			Match(ID);
-			State = 79;
+			State = 75;
 			Match(LBRACE);
-			State = 83;
+			State = 79;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 1125900175278576L) != 0) {
+			while (_la==ID) {
 				{
 				{
-				State = 80;
+				State = 76;
 				varDecl();
 				}
 				}
-				State = 85;
+				State = 81;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 86;
+			State = 82;
 			Match(RBRACE);
 			}
 		}
@@ -492,47 +487,41 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 90;
+			State = 86;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case TYPECHAR:
-			case TYPEINT:
-			case TYPEDOUBLE:
-			case TYPEBOOL:
-			case TYPESTRING:
-			case LBRACK:
 			case ID:
 				{
-				State = 88;
+				State = 84;
 				type();
 				}
 				break;
 			case VOID:
 				{
-				State = 89;
+				State = 85;
 				Match(VOID);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 92;
+			State = 88;
 			Match(ID);
-			State = 93;
+			State = 89;
 			Match(LPARENT);
-			State = 95;
+			State = 91;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (((_la) & ~0x3f) == 0 && ((1L << _la) & 1125900175278576L) != 0) {
+			if (_la==ID) {
 				{
-				State = 94;
+				State = 90;
 				formPars();
 				}
 			}
 
-			State = 97;
+			State = 93;
 			Match(RPARENT);
-			State = 98;
+			State = 94;
 			block();
 			}
 		}
@@ -593,25 +582,25 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 100;
+			State = 96;
 			type();
-			State = 101;
+			State = 97;
 			Match(ID);
-			State = 108;
+			State = 104;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				State = 102;
+				State = 98;
 				Match(COMMA);
-				State = 103;
+				State = 99;
 				type();
-				State = 104;
+				State = 100;
 				Match(ID);
 				}
 				}
-				State = 110;
+				State = 106;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -629,33 +618,9 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class TypeContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ID() { return GetTokens(MiniCSharpParser.ID); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID(int i) {
-			return GetToken(MiniCSharpParser.ID, i);
-		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(MiniCSharpParser.ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LBRACK() { return GetToken(MiniCSharpParser.LBRACK, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RBRACK() { return GetToken(MiniCSharpParser.RBRACK, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] TYPECHAR() { return GetTokens(MiniCSharpParser.TYPECHAR); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPECHAR(int i) {
-			return GetToken(MiniCSharpParser.TYPECHAR, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] TYPEINT() { return GetTokens(MiniCSharpParser.TYPEINT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEINT(int i) {
-			return GetToken(MiniCSharpParser.TYPEINT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] TYPEDOUBLE() { return GetTokens(MiniCSharpParser.TYPEDOUBLE); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEDOUBLE(int i) {
-			return GetToken(MiniCSharpParser.TYPEDOUBLE, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] TYPEBOOL() { return GetTokens(MiniCSharpParser.TYPEBOOL); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEBOOL(int i) {
-			return GetToken(MiniCSharpParser.TYPEBOOL, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] TYPESTRING() { return GetTokens(MiniCSharpParser.TYPESTRING); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPESTRING(int i) {
-			return GetToken(MiniCSharpParser.TYPESTRING, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(MiniCSharpParser.NUM, 0); }
 		public TypeContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -687,66 +652,16 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 118;
-			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,9,Context) ) {
-			case 1:
-				{
-				State = 114;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				while (((_la) & ~0x3f) == 0 && ((1L << _la) & 496L) != 0) {
-					{
-					{
-					State = 111;
-					_la = TokenStream.LA(1);
-					if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 496L) != 0) ) {
-					ErrorHandler.RecoverInline(this);
-					}
-					else {
-						ErrorHandler.ReportMatch(this);
-					    Consume();
-					}
-					}
-					}
-					State = 116;
-					ErrorHandler.Sync(this);
-					_la = TokenStream.LA(1);
-				}
-				}
-				break;
-			case 2:
-				{
-				State = 117;
-				Match(ID);
-				}
-				break;
-			}
-			State = 125;
+			State = 107;
+			Match(ID);
+			State = 110;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==LBRACK) {
 				{
-				State = 120;
+				State = 108;
 				Match(LBRACK);
-				State = 122;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if (_la==NUM || _la==ID) {
-					{
-					State = 121;
-					_la = TokenStream.LA(1);
-					if ( !(_la==NUM || _la==ID) ) {
-					ErrorHandler.RecoverInline(this);
-					}
-					else {
-						ErrorHandler.ReportMatch(this);
-					    Consume();
-					}
-					}
-				}
-
-				State = 124;
+				State = 109;
 				Match(RBRACK);
 				}
 			}
@@ -805,21 +720,7 @@ public partial class MiniCSharpParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
 			return GetRuleContext<BlockContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArrayMethodsContext arrayMethods() {
-			return GetRuleContext<ArrayMethodsContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LCOMMENT() { return GetTokens(MiniCSharpParser.LCOMMENT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LCOMMENT(int i) {
-			return GetToken(MiniCSharpParser.LCOMMENT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ALLTHING() { return GetTokens(MiniCSharpParser.ALLTHING); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ALLTHING(int i) {
-			return GetToken(MiniCSharpParser.ALLTHING, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] RCOMMENT() { return GetTokens(MiniCSharpParser.RCOMMENT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RCOMMENT(int i) {
-			return GetToken(MiniCSharpParser.RCOMMENT, i);
-		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BLOCKCOMMENT() { return GetToken(MiniCSharpParser.BLOCKCOMMENT, 0); }
 		public StatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -849,88 +750,88 @@ public partial class MiniCSharpParser : Parser {
 		EnterRule(_localctx, 14, RULE_statement);
 		int _la;
 		try {
-			State = 210;
+			State = 184;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,16,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 127;
+				State = 112;
 				designator();
-				State = 128;
+				State = 113;
 				Match(ASSIGN);
-				State = 129;
+				State = 114;
 				expr();
-				State = 130;
+				State = 115;
 				Match(SEMICOLON);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 132;
+				State = 117;
 				designator();
-				State = 140;
+				State = 125;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case LPARENT:
 					{
-					State = 133;
+					State = 118;
 					Match(LPARENT);
-					State = 135;
+					State = 120;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,12,Context) ) {
-					case 1:
+					_la = TokenStream.LA(1);
+					if (((_la) & ~0x3f) == 0 && ((1L << _la) & 68307160170496L) != 0) {
 						{
-						State = 134;
+						State = 119;
 						actPars();
 						}
-						break;
 					}
-					State = 137;
+
+					State = 122;
 					Match(RPARENT);
 					}
 					break;
 				case INC:
 					{
-					State = 138;
+					State = 123;
 					Match(INC);
 					}
 					break;
 				case DEC:
 					{
-					State = 139;
+					State = 124;
 					Match(DEC);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 142;
+				State = 127;
 				Match(SEMICOLON);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 144;
+				State = 129;
 				Match(IF);
-				State = 145;
+				State = 130;
 				Match(LPARENT);
-				State = 146;
+				State = 131;
 				condition();
-				State = 147;
+				State = 132;
 				Match(RPARENT);
-				State = 148;
+				State = 133;
 				statement();
-				State = 151;
+				State = 136;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,14,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,11,Context) ) {
 				case 1:
 					{
-					State = 149;
+					State = 134;
 					Match(ELSE);
-					State = 150;
+					State = 135;
 					statement();
 					}
 					break;
@@ -940,174 +841,145 @@ public partial class MiniCSharpParser : Parser {
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 153;
+				State = 138;
 				Match(FOR);
-				State = 154;
+				State = 139;
 				Match(LPARENT);
-				State = 155;
+				State = 140;
 				expr();
-				State = 156;
+				State = 141;
 				Match(SEMICOLON);
-				State = 158;
+				State = 143;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if (((_la) & ~0x3f) == 0 && ((1L << _la) & 22517727897846256L) != 0) {
+				if (((_la) & ~0x3f) == 0 && ((1L << _la) & 68307160170496L) != 0) {
 					{
-					State = 157;
+					State = 142;
 					condition();
 					}
 				}
 
-				State = 160;
+				State = 145;
 				Match(SEMICOLON);
-				State = 162;
+				State = 147;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if (((_la) & ~0x3f) == 0 && ((1L << _la) & 37154762784673280L) != 0) {
+				if (((_la) & ~0x3f) == 0 && ((1L << _la) & 4398050803332L) != 0) {
 					{
-					State = 161;
+					State = 146;
 					statement();
 					}
 				}
 
-				State = 164;
+				State = 149;
 				Match(RPARENT);
-				State = 165;
+				State = 150;
 				statement();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 167;
+				State = 152;
 				Match(WHILE);
-				State = 168;
+				State = 153;
 				Match(LPARENT);
-				State = 169;
+				State = 154;
 				condition();
-				State = 170;
+				State = 155;
 				Match(RPARENT);
-				State = 171;
+				State = 156;
 				statement();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 173;
+				State = 158;
 				Match(BREAK);
-				State = 174;
+				State = 159;
 				Match(SEMICOLON);
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 175;
+				State = 160;
 				Match(RETURN);
-				State = 177;
+				State = 162;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,17,Context) ) {
-				case 1:
+				_la = TokenStream.LA(1);
+				if (((_la) & ~0x3f) == 0 && ((1L << _la) & 68307160170496L) != 0) {
 					{
-					State = 176;
+					State = 161;
 					expr();
 					}
-					break;
 				}
-				State = 179;
+
+				State = 164;
 				Match(SEMICOLON);
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 180;
+				State = 165;
 				Match(READ);
-				State = 181;
+				State = 166;
 				Match(LPARENT);
-				State = 182;
+				State = 167;
 				designator();
-				State = 183;
+				State = 168;
 				Match(RPARENT);
-				State = 184;
+				State = 169;
 				Match(SEMICOLON);
 				}
 				break;
 			case 9:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 186;
+				State = 171;
 				Match(WRITE);
-				State = 187;
+				State = 172;
 				Match(LPARENT);
-				State = 188;
+				State = 173;
 				expr();
-				State = 191;
+				State = 176;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==COMMA) {
 					{
-					State = 189;
+					State = 174;
 					Match(COMMA);
-					State = 190;
+					State = 175;
 					Match(NUM);
 					}
 				}
 
-				State = 193;
+				State = 178;
 				Match(RPARENT);
-				State = 194;
+				State = 179;
 				Match(SEMICOLON);
 				}
 				break;
 			case 10:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 196;
+				State = 181;
 				block();
 				}
 				break;
 			case 11:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 197;
-				arrayMethods();
+				State = 182;
+				Match(BLOCKCOMMENT);
 				}
 				break;
 			case 12:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 198;
-				Match(LCOMMENT);
-				State = 199;
-				Match(ALLTHING);
-				State = 205;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				while (_la==LCOMMENT) {
-					{
-					{
-					State = 200;
-					Match(LCOMMENT);
-					State = 201;
-					Match(ALLTHING);
-					State = 202;
-					Match(RCOMMENT);
-					}
-					}
-					State = 207;
-					ErrorHandler.Sync(this);
-					_la = TokenStream.LA(1);
-				}
-				State = 208;
-				Match(RCOMMENT);
-				}
-				break;
-			case 13:
-				EnterOuterAlt(_localctx, 13);
-				{
-				State = 209;
+				State = 183;
 				Match(SEMICOLON);
 				}
 				break;
@@ -1170,35 +1042,35 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 212;
+			State = 186;
 			Match(LBRACE);
-			State = 217;
+			State = 191;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 37154762784673776L) != 0) {
+			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 4398050803332L) != 0) {
 				{
-				State = 215;
+				State = 189;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,21,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,17,Context) ) {
 				case 1:
 					{
-					State = 213;
+					State = 187;
 					varDecl();
 					}
 					break;
 				case 2:
 					{
-					State = 214;
+					State = 188;
 					statement();
 					}
 					break;
 				}
 				}
-				State = 219;
+				State = 193;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 220;
+			State = 194;
 			Match(RBRACE);
 			}
 		}
@@ -1255,21 +1127,21 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 222;
+			State = 196;
 			expr();
-			State = 227;
+			State = 201;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				State = 223;
+				State = 197;
 				Match(COMMA);
-				State = 224;
+				State = 198;
 				expr();
 				}
 				}
-				State = 229;
+				State = 203;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1328,21 +1200,21 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 230;
+			State = 204;
 			condTerm();
-			State = 235;
+			State = 209;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==OR) {
 				{
 				{
-				State = 231;
+				State = 205;
 				Match(OR);
-				State = 232;
+				State = 206;
 				condTerm();
 				}
 				}
-				State = 237;
+				State = 211;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1401,21 +1273,21 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 238;
+			State = 212;
 			condFact();
-			State = 243;
+			State = 217;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==AND) {
 				{
 				{
-				State = 239;
+				State = 213;
 				Match(AND);
-				State = 240;
+				State = 214;
 				condFact();
 				}
 				}
-				State = 245;
+				State = 219;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1472,11 +1344,11 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 246;
+			State = 220;
 			expr();
-			State = 247;
+			State = 221;
 			relop();
-			State = 248;
+			State = 222;
 			expr();
 			}
 		}
@@ -1527,11 +1399,11 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 250;
+			State = 224;
 			Match(LPARENT);
-			State = 251;
+			State = 225;
 			type();
-			State = 252;
+			State = 226;
 			Match(RPARENT);
 			}
 		}
@@ -1595,31 +1467,31 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 256;
+			State = 230;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,26,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,22,Context) ) {
 			case 1:
 				{
-				State = 254;
+				State = 228;
 				Match(SUB);
 				}
 				break;
 			case 2:
 				{
-				State = 255;
+				State = 229;
 				cast();
 				}
 				break;
 			}
-			State = 258;
+			State = 232;
 			term();
-			State = 263;
+			State = 237;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==ADD || _la==SUB) {
 				{
 				{
-				State = 259;
+				State = 233;
 				_la = TokenStream.LA(1);
 				if ( !(_la==ADD || _la==SUB) ) {
 				ErrorHandler.RecoverInline(this);
@@ -1628,11 +1500,11 @@ public partial class MiniCSharpParser : Parser {
 					ErrorHandler.ReportMatch(this);
 				    Consume();
 				}
-				State = 260;
+				State = 234;
 				term();
 				}
 				}
-				State = 265;
+				State = 239;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1699,28 +1571,28 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 266;
+			State = 240;
 			factor();
-			State = 271;
+			State = 245;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 492581209243648L) != 0) {
+			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 1924145348608L) != 0) {
 				{
 				{
-				State = 267;
+				State = 241;
 				_la = TokenStream.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 492581209243648L) != 0) ) {
+				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 1924145348608L) != 0) ) {
 				ErrorHandler.RecoverInline(this);
 				}
 				else {
 					ErrorHandler.ReportMatch(this);
 				    Consume();
 				}
-				State = 268;
+				State = 242;
 				factor();
 				}
 				}
-				State = 273;
+				State = 247;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1743,24 +1615,17 @@ public partial class MiniCSharpParser : Parser {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENT() { return GetToken(MiniCSharpParser.LPARENT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPARENT() { return GetToken(MiniCSharpParser.RPARENT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(MiniCSharpParser.NUM, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DOUBLE() { return GetToken(MiniCSharpParser.DOUBLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEDOUBLE() { return GetToken(MiniCSharpParser.TYPEDOUBLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPECHAR() { return GetToken(MiniCSharpParser.TYPECHAR, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPESTRING() { return GetToken(MiniCSharpParser.TYPESTRING, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEBOOL() { return GetToken(MiniCSharpParser.TYPEBOOL, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPEINT() { return GetToken(MiniCSharpParser.TYPEINT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PLAINTEXT() { return GetToken(MiniCSharpParser.PLAINTEXT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NEW() { return GetToken(MiniCSharpParser.NEW, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
-			return GetRuleContext<ExprContext>(0);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public ActParsContext actPars() {
 			return GetRuleContext<ActParsContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(MiniCSharpParser.NUM, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CHARCONST() { return GetToken(MiniCSharpParser.CHARCONST, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRINGCONST() { return GetToken(MiniCSharpParser.STRINGCONST, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOOLEANCONST() { return GetToken(MiniCSharpParser.BOOLEANCONST, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NEW() { return GetToken(MiniCSharpParser.NEW, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(MiniCSharpParser.ID, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public TypeContext type() {
-			return GetRuleContext<TypeContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
+			return GetRuleContext<ExprContext>(0);
 		}
 		public FactorContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -1789,117 +1654,90 @@ public partial class MiniCSharpParser : Parser {
 	public FactorContext factor() {
 		FactorContext _localctx = new FactorContext(Context, State);
 		EnterRule(_localctx, 32, RULE_factor);
+		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 274;
-			designator();
-			State = 297;
+			State = 266;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
-			case 1:
+			switch (TokenStream.LA(1)) {
+			case ID:
+				EnterOuterAlt(_localctx, 1);
 				{
-				State = 275;
-				Match(LPARENT);
-				State = 277;
+				State = 248;
+				designator();
+				State = 254;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,29,Context) ) {
-				case 1:
+				_la = TokenStream.LA(1);
+				if (_la==LPARENT) {
 					{
-					State = 276;
-					actPars();
+					State = 249;
+					Match(LPARENT);
+					State = 251;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+					if (((_la) & ~0x3f) == 0 && ((1L << _la) & 68307160170496L) != 0) {
+						{
+						State = 250;
+						actPars();
+						}
 					}
-					break;
+
+					State = 253;
+					Match(RPARENT);
+					}
 				}
-				State = 279;
-				Match(RPARENT);
+
 				}
 				break;
-			case 2:
+			case NUM:
+				EnterOuterAlt(_localctx, 2);
 				{
-				State = 280;
+				State = 256;
 				Match(NUM);
 				}
 				break;
-			case 3:
+			case CHARCONST:
+				EnterOuterAlt(_localctx, 3);
 				{
-				State = 281;
-				Match(DOUBLE);
+				State = 257;
+				Match(CHARCONST);
 				}
 				break;
-			case 4:
+			case STRINGCONST:
+				EnterOuterAlt(_localctx, 4);
 				{
-				State = 282;
-				Match(TYPEDOUBLE);
+				State = 258;
+				Match(STRINGCONST);
 				}
 				break;
-			case 5:
+			case BOOLEANCONST:
+				EnterOuterAlt(_localctx, 5);
 				{
-				State = 283;
-				Match(TYPECHAR);
+				State = 259;
+				Match(BOOLEANCONST);
 				}
 				break;
-			case 6:
+			case NEW:
+				EnterOuterAlt(_localctx, 6);
 				{
-				State = 284;
-				Match(TYPESTRING);
-				}
-				break;
-			case 7:
-				{
-				State = 285;
-				Match(TYPEBOOL);
-				}
-				break;
-			case 8:
-				{
-				State = 286;
-				Match(TYPEINT);
-				}
-				break;
-			case 9:
-				{
-				State = 287;
-				Match(PLAINTEXT);
-				}
-				break;
-			case 10:
-				{
-				{
-				State = 288;
+				State = 260;
 				Match(NEW);
-				State = 291;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
-				case 1:
-					{
-					State = 289;
-					Match(ID);
-					}
-					break;
-				case 2:
-					{
-					State = 290;
-					type();
-					}
-					break;
-				}
-				}
+				State = 261;
+				Match(ID);
 				}
 				break;
-			case 11:
+			case LPARENT:
+				EnterOuterAlt(_localctx, 7);
 				{
-				{
-				State = 293;
+				State = 262;
 				Match(LPARENT);
-				State = 294;
+				State = 263;
 				expr();
-				State = 295;
+				State = 264;
 				Match(RPARENT);
 				}
-				}
 				break;
-			}
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1967,30 +1805,22 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 300;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==ID) {
-				{
-				State = 299;
-				Match(ID);
-				}
-			}
-
-			State = 310;
+			State = 268;
+			Match(ID);
+			State = 277;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==LBRACK || _la==DOT) {
 				{
-				State = 308;
+				State = 275;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case DOT:
 					{
 					{
-					State = 302;
+					State = 269;
 					Match(DOT);
-					State = 303;
+					State = 270;
 					Match(ID);
 					}
 					}
@@ -1998,11 +1828,11 @@ public partial class MiniCSharpParser : Parser {
 				case LBRACK:
 					{
 					{
-					State = 304;
+					State = 271;
 					Match(LBRACK);
-					State = 305;
+					State = 272;
 					expr();
-					State = 306;
+					State = 273;
 					Match(RBRACK);
 					}
 					}
@@ -2011,7 +1841,7 @@ public partial class MiniCSharpParser : Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				State = 312;
+				State = 279;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -2066,282 +1896,14 @@ public partial class MiniCSharpParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 313;
+			State = 280;
 			_la = TokenStream.LA(1);
-			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 17317308137472L) != 0) ) {
+			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 67645734912L) != 0) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class ArrayMethodsContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LPARENT() { return GetTokens(MiniCSharpParser.LPARENT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENT(int i) {
-			return GetToken(MiniCSharpParser.LPARENT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ID() { return GetTokens(MiniCSharpParser.ID); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID(int i) {
-			return GetToken(MiniCSharpParser.ID, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COMMA() { return GetToken(MiniCSharpParser.COMMA, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] RPARENT() { return GetTokens(MiniCSharpParser.RPARENT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPARENT(int i) {
-			return GetToken(MiniCSharpParser.RPARENT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ARRADD() { return GetToken(MiniCSharpParser.ARRADD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ARRDEL() { return GetToken(MiniCSharpParser.ARRDEL, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(MiniCSharpParser.NUM, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PLAINTEXT() { return GetToken(MiniCSharpParser.PLAINTEXT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] DOT() { return GetTokens(MiniCSharpParser.DOT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DOT(int i) {
-			return GetToken(MiniCSharpParser.DOT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ParametersContext[] parameters() {
-			return GetRuleContexts<ParametersContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ParametersContext parameters(int i) {
-			return GetRuleContext<ParametersContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ARRLEN() { return GetToken(MiniCSharpParser.ARRLEN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public DesignatorContext designator() {
-			return GetRuleContext<DesignatorContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(MiniCSharpParser.SEMICOLON, 0); }
-		public ArrayMethodsContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_arrayMethods; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IMiniCSharpParserListener typedListener = listener as IMiniCSharpParserListener;
-			if (typedListener != null) typedListener.EnterArrayMethods(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IMiniCSharpParserListener typedListener = listener as IMiniCSharpParserListener;
-			if (typedListener != null) typedListener.ExitArrayMethods(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitArrayMethods(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public ArrayMethodsContext arrayMethods() {
-		ArrayMethodsContext _localctx = new ArrayMethodsContext(Context, State);
-		EnterRule(_localctx, 38, RULE_arrayMethods);
-		int _la;
-		try {
-			State = 339;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case ARRADD:
-			case ARRDEL:
-				EnterOuterAlt(_localctx, 1);
-				{
-				{
-				State = 315;
-				_la = TokenStream.LA(1);
-				if ( !(_la==ARRADD || _la==ARRDEL) ) {
-				ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
-				State = 316;
-				Match(LPARENT);
-				State = 317;
-				Match(ID);
-				State = 327;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				while (_la==LPARENT || _la==DOT) {
-					{
-					State = 325;
-					ErrorHandler.Sync(this);
-					switch (TokenStream.LA(1)) {
-					case DOT:
-						{
-						{
-						State = 318;
-						Match(DOT);
-						State = 319;
-						Match(ID);
-						}
-						}
-						break;
-					case LPARENT:
-						{
-						{
-						State = 320;
-						Match(LPARENT);
-						State = 322;
-						ErrorHandler.Sync(this);
-						_la = TokenStream.LA(1);
-						if (((_la) & ~0x3f) == 0 && ((1L << _la) & 3940649673949184L) != 0) {
-							{
-							State = 321;
-							parameters();
-							}
-						}
-
-						State = 324;
-						Match(RPARENT);
-						}
-						}
-						break;
-					default:
-						throw new NoViableAltException(this);
-					}
-					}
-					State = 329;
-					ErrorHandler.Sync(this);
-					_la = TokenStream.LA(1);
-				}
-				State = 330;
-				Match(COMMA);
-				State = 331;
-				_la = TokenStream.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 3940649673949184L) != 0) ) {
-				ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
-				State = 332;
-				Match(RPARENT);
-				}
-				}
-				break;
-			case ARRLEN:
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 333;
-				Match(ARRLEN);
-				State = 334;
-				Match(LPARENT);
-				State = 335;
-				designator();
-				State = 336;
-				Match(RPARENT);
-				State = 337;
-				Match(SEMICOLON);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class ParametersContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ID() { return GetTokens(MiniCSharpParser.ID); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID(int i) {
-			return GetToken(MiniCSharpParser.ID, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] NUM() { return GetTokens(MiniCSharpParser.NUM); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM(int i) {
-			return GetToken(MiniCSharpParser.NUM, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] PLAINTEXT() { return GetTokens(MiniCSharpParser.PLAINTEXT); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PLAINTEXT(int i) {
-			return GetToken(MiniCSharpParser.PLAINTEXT, i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] COMMA() { return GetTokens(MiniCSharpParser.COMMA); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COMMA(int i) {
-			return GetToken(MiniCSharpParser.COMMA, i);
-		}
-		public ParametersContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_parameters; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IMiniCSharpParserListener typedListener = listener as IMiniCSharpParserListener;
-			if (typedListener != null) typedListener.EnterParameters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IMiniCSharpParserListener typedListener = listener as IMiniCSharpParserListener;
-			if (typedListener != null) typedListener.ExitParameters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitParameters(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public ParametersContext parameters() {
-		ParametersContext _localctx = new ParametersContext(Context, State);
-		EnterRule(_localctx, 40, RULE_parameters);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 341;
-			_la = TokenStream.LA(1);
-			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 3940649673949184L) != 0) ) {
-			ErrorHandler.RecoverInline(this);
-			}
-			else {
-				ErrorHandler.ReportMatch(this);
-			    Consume();
-			}
-			State = 346;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==COMMA) {
-				{
-				{
-				State = 342;
-				Match(COMMA);
-				State = 343;
-				_la = TokenStream.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 3940649673949184L) != 0) ) {
-				ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
-				}
-				}
-				State = 348;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
 			}
 			}
 		}
@@ -2357,124 +1919,99 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,57,350,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,46,283,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
-		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,1,0,5,0,44,
-		8,0,10,0,12,0,47,9,0,1,0,1,0,1,0,1,0,1,0,1,0,5,0,55,8,0,10,0,12,0,58,9,
-		0,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,71,8,2,10,2,12,2,74,
-		9,2,1,2,1,2,1,3,1,3,1,3,1,3,5,3,82,8,3,10,3,12,3,85,9,3,1,3,1,3,1,4,1,
-		4,3,4,91,8,4,1,4,1,4,1,4,3,4,96,8,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,
-		5,5,5,107,8,5,10,5,12,5,110,9,5,1,6,5,6,113,8,6,10,6,12,6,116,9,6,1,6,
-		3,6,119,8,6,1,6,1,6,3,6,123,8,6,1,6,3,6,126,8,6,1,7,1,7,1,7,1,7,1,7,1,
-		7,1,7,1,7,3,7,136,8,7,1,7,1,7,1,7,3,7,141,8,7,1,7,1,7,1,7,1,7,1,7,1,7,
-		1,7,1,7,1,7,3,7,152,8,7,1,7,1,7,1,7,1,7,1,7,3,7,159,8,7,1,7,1,7,3,7,163,
-		8,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,178,8,7,1,
-		7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,192,8,7,1,7,1,7,1,7,
-		1,7,1,7,1,7,1,7,1,7,1,7,1,7,5,7,204,8,7,10,7,12,7,207,9,7,1,7,1,7,3,7,
-		211,8,7,1,8,1,8,1,8,5,8,216,8,8,10,8,12,8,219,9,8,1,8,1,8,1,9,1,9,1,9,
-		5,9,226,8,9,10,9,12,9,229,9,9,1,10,1,10,1,10,5,10,234,8,10,10,10,12,10,
-		237,9,10,1,11,1,11,1,11,5,11,242,8,11,10,11,12,11,245,9,11,1,12,1,12,1,
-		12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,3,14,257,8,14,1,14,1,14,1,14,5,14,
-		262,8,14,10,14,12,14,265,9,14,1,15,1,15,1,15,5,15,270,8,15,10,15,12,15,
-		273,9,15,1,16,1,16,1,16,3,16,278,8,16,1,16,1,16,1,16,1,16,1,16,1,16,1,
-		16,1,16,1,16,1,16,1,16,1,16,3,16,292,8,16,1,16,1,16,1,16,1,16,3,16,298,
-		8,16,1,17,3,17,301,8,17,1,17,1,17,1,17,1,17,1,17,1,17,5,17,309,8,17,10,
-		17,12,17,312,9,17,1,18,1,18,1,19,1,19,1,19,1,19,1,19,1,19,1,19,3,19,323,
-		8,19,1,19,5,19,326,8,19,10,19,12,19,329,9,19,1,19,1,19,1,19,1,19,1,19,
-		1,19,1,19,1,19,1,19,3,19,340,8,19,1,20,1,20,1,20,5,20,345,8,20,10,20,12,
-		20,348,9,20,1,20,0,0,21,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,
-		34,36,38,40,0,7,1,0,4,8,1,0,49,50,1,0,44,45,1,0,46,48,1,0,38,43,1,0,9,
-		10,1,0,49,51,392,0,45,1,0,0,0,2,62,1,0,0,0,4,66,1,0,0,0,6,77,1,0,0,0,8,
-		90,1,0,0,0,10,100,1,0,0,0,12,118,1,0,0,0,14,210,1,0,0,0,16,212,1,0,0,0,
-		18,222,1,0,0,0,20,230,1,0,0,0,22,238,1,0,0,0,24,246,1,0,0,0,26,250,1,0,
-		0,0,28,256,1,0,0,0,30,266,1,0,0,0,32,274,1,0,0,0,34,300,1,0,0,0,36,313,
-		1,0,0,0,38,339,1,0,0,0,40,341,1,0,0,0,42,44,3,2,1,0,43,42,1,0,0,0,44,47,
-		1,0,0,0,45,43,1,0,0,0,45,46,1,0,0,0,46,48,1,0,0,0,47,45,1,0,0,0,48,49,
-		5,12,0,0,49,50,5,50,0,0,50,56,5,24,0,0,51,55,3,4,2,0,52,55,3,6,3,0,53,
-		55,3,8,4,0,54,51,1,0,0,0,54,52,1,0,0,0,54,53,1,0,0,0,55,58,1,0,0,0,56,
-		54,1,0,0,0,56,57,1,0,0,0,57,59,1,0,0,0,58,56,1,0,0,0,59,60,5,25,0,0,60,
-		61,5,0,0,1,61,1,1,0,0,0,62,63,5,13,0,0,63,64,5,50,0,0,64,65,5,30,0,0,65,
-		3,1,0,0,0,66,67,3,12,6,0,67,72,5,50,0,0,68,69,5,31,0,0,69,71,5,50,0,0,
-		70,68,1,0,0,0,71,74,1,0,0,0,72,70,1,0,0,0,72,73,1,0,0,0,73,75,1,0,0,0,
-		74,72,1,0,0,0,75,76,5,30,0,0,76,5,1,0,0,0,77,78,5,12,0,0,78,79,5,50,0,
-		0,79,83,5,24,0,0,80,82,3,4,2,0,81,80,1,0,0,0,82,85,1,0,0,0,83,81,1,0,0,
-		0,83,84,1,0,0,0,84,86,1,0,0,0,85,83,1,0,0,0,86,87,5,25,0,0,87,7,1,0,0,
-		0,88,91,3,12,6,0,89,91,5,14,0,0,90,88,1,0,0,0,90,89,1,0,0,0,91,92,1,0,
-		0,0,92,93,5,50,0,0,93,95,5,26,0,0,94,96,3,10,5,0,95,94,1,0,0,0,95,96,1,
-		0,0,0,96,97,1,0,0,0,97,98,5,27,0,0,98,99,3,16,8,0,99,9,1,0,0,0,100,101,
-		3,12,6,0,101,108,5,50,0,0,102,103,5,31,0,0,103,104,3,12,6,0,104,105,5,
-		50,0,0,105,107,1,0,0,0,106,102,1,0,0,0,107,110,1,0,0,0,108,106,1,0,0,0,
-		108,109,1,0,0,0,109,11,1,0,0,0,110,108,1,0,0,0,111,113,7,0,0,0,112,111,
-		1,0,0,0,113,116,1,0,0,0,114,112,1,0,0,0,114,115,1,0,0,0,115,119,1,0,0,
-		0,116,114,1,0,0,0,117,119,5,50,0,0,118,114,1,0,0,0,118,117,1,0,0,0,119,
-		125,1,0,0,0,120,122,5,28,0,0,121,123,7,1,0,0,122,121,1,0,0,0,122,123,1,
-		0,0,0,123,124,1,0,0,0,124,126,5,29,0,0,125,120,1,0,0,0,125,126,1,0,0,0,
-		126,13,1,0,0,0,127,128,3,34,17,0,128,129,5,33,0,0,129,130,3,28,14,0,130,
-		131,5,30,0,0,131,211,1,0,0,0,132,140,3,34,17,0,133,135,5,26,0,0,134,136,
-		3,18,9,0,135,134,1,0,0,0,135,136,1,0,0,0,136,137,1,0,0,0,137,141,5,27,
-		0,0,138,141,5,34,0,0,139,141,5,35,0,0,140,133,1,0,0,0,140,138,1,0,0,0,
-		140,139,1,0,0,0,141,142,1,0,0,0,142,143,5,30,0,0,143,211,1,0,0,0,144,145,
-		5,15,0,0,145,146,5,26,0,0,146,147,3,20,10,0,147,148,5,27,0,0,148,151,3,
-		14,7,0,149,150,5,16,0,0,150,152,3,14,7,0,151,149,1,0,0,0,151,152,1,0,0,
-		0,152,211,1,0,0,0,153,154,5,17,0,0,154,155,5,26,0,0,155,156,3,28,14,0,
-		156,158,5,30,0,0,157,159,3,20,10,0,158,157,1,0,0,0,158,159,1,0,0,0,159,
-		160,1,0,0,0,160,162,5,30,0,0,161,163,3,14,7,0,162,161,1,0,0,0,162,163,
-		1,0,0,0,163,164,1,0,0,0,164,165,5,27,0,0,165,166,3,14,7,0,166,211,1,0,
-		0,0,167,168,5,18,0,0,168,169,5,26,0,0,169,170,3,20,10,0,170,171,5,27,0,
-		0,171,172,3,14,7,0,172,211,1,0,0,0,173,174,5,19,0,0,174,211,5,30,0,0,175,
-		177,5,20,0,0,176,178,3,28,14,0,177,176,1,0,0,0,177,178,1,0,0,0,178,179,
-		1,0,0,0,179,211,5,30,0,0,180,181,5,21,0,0,181,182,5,26,0,0,182,183,3,34,
-		17,0,183,184,5,27,0,0,184,185,5,30,0,0,185,211,1,0,0,0,186,187,5,22,0,
-		0,187,188,5,26,0,0,188,191,3,28,14,0,189,190,5,31,0,0,190,192,5,49,0,0,
-		191,189,1,0,0,0,191,192,1,0,0,0,192,193,1,0,0,0,193,194,5,27,0,0,194,195,
-		5,30,0,0,195,211,1,0,0,0,196,211,3,16,8,0,197,211,3,38,19,0,198,199,5,
-		55,0,0,199,205,5,57,0,0,200,201,5,55,0,0,201,202,5,57,0,0,202,204,5,56,
-		0,0,203,200,1,0,0,0,204,207,1,0,0,0,205,203,1,0,0,0,205,206,1,0,0,0,206,
-		208,1,0,0,0,207,205,1,0,0,0,208,211,5,56,0,0,209,211,5,30,0,0,210,127,
-		1,0,0,0,210,132,1,0,0,0,210,144,1,0,0,0,210,153,1,0,0,0,210,167,1,0,0,
-		0,210,173,1,0,0,0,210,175,1,0,0,0,210,180,1,0,0,0,210,186,1,0,0,0,210,
-		196,1,0,0,0,210,197,1,0,0,0,210,198,1,0,0,0,210,209,1,0,0,0,211,15,1,0,
-		0,0,212,217,5,24,0,0,213,216,3,4,2,0,214,216,3,14,7,0,215,213,1,0,0,0,
-		215,214,1,0,0,0,216,219,1,0,0,0,217,215,1,0,0,0,217,218,1,0,0,0,218,220,
-		1,0,0,0,219,217,1,0,0,0,220,221,5,25,0,0,221,17,1,0,0,0,222,227,3,28,14,
-		0,223,224,5,31,0,0,224,226,3,28,14,0,225,223,1,0,0,0,226,229,1,0,0,0,227,
-		225,1,0,0,0,227,228,1,0,0,0,228,19,1,0,0,0,229,227,1,0,0,0,230,235,3,22,
-		11,0,231,232,5,36,0,0,232,234,3,22,11,0,233,231,1,0,0,0,234,237,1,0,0,
-		0,235,233,1,0,0,0,235,236,1,0,0,0,236,21,1,0,0,0,237,235,1,0,0,0,238,243,
-		3,24,12,0,239,240,5,37,0,0,240,242,3,24,12,0,241,239,1,0,0,0,242,245,1,
-		0,0,0,243,241,1,0,0,0,243,244,1,0,0,0,244,23,1,0,0,0,245,243,1,0,0,0,246,
-		247,3,28,14,0,247,248,3,36,18,0,248,249,3,28,14,0,249,25,1,0,0,0,250,251,
-		5,26,0,0,251,252,3,12,6,0,252,253,5,27,0,0,253,27,1,0,0,0,254,257,5,45,
-		0,0,255,257,3,26,13,0,256,254,1,0,0,0,256,255,1,0,0,0,256,257,1,0,0,0,
-		257,258,1,0,0,0,258,263,3,30,15,0,259,260,7,2,0,0,260,262,3,30,15,0,261,
-		259,1,0,0,0,262,265,1,0,0,0,263,261,1,0,0,0,263,264,1,0,0,0,264,29,1,0,
-		0,0,265,263,1,0,0,0,266,271,3,32,16,0,267,268,7,3,0,0,268,270,3,32,16,
-		0,269,267,1,0,0,0,270,273,1,0,0,0,271,269,1,0,0,0,271,272,1,0,0,0,272,
-		31,1,0,0,0,273,271,1,0,0,0,274,297,3,34,17,0,275,277,5,26,0,0,276,278,
-		3,18,9,0,277,276,1,0,0,0,277,278,1,0,0,0,278,279,1,0,0,0,279,298,5,27,
-		0,0,280,298,5,49,0,0,281,298,5,54,0,0,282,298,5,6,0,0,283,298,5,4,0,0,
-		284,298,5,8,0,0,285,298,5,7,0,0,286,298,5,5,0,0,287,298,5,51,0,0,288,291,
-		5,23,0,0,289,292,5,50,0,0,290,292,3,12,6,0,291,289,1,0,0,0,291,290,1,0,
-		0,0,292,298,1,0,0,0,293,294,5,26,0,0,294,295,3,28,14,0,295,296,5,27,0,
-		0,296,298,1,0,0,0,297,275,1,0,0,0,297,280,1,0,0,0,297,281,1,0,0,0,297,
-		282,1,0,0,0,297,283,1,0,0,0,297,284,1,0,0,0,297,285,1,0,0,0,297,286,1,
-		0,0,0,297,287,1,0,0,0,297,288,1,0,0,0,297,293,1,0,0,0,297,298,1,0,0,0,
-		298,33,1,0,0,0,299,301,5,50,0,0,300,299,1,0,0,0,300,301,1,0,0,0,301,310,
-		1,0,0,0,302,303,5,32,0,0,303,309,5,50,0,0,304,305,5,28,0,0,305,306,3,28,
-		14,0,306,307,5,29,0,0,307,309,1,0,0,0,308,302,1,0,0,0,308,304,1,0,0,0,
-		309,312,1,0,0,0,310,308,1,0,0,0,310,311,1,0,0,0,311,35,1,0,0,0,312,310,
-		1,0,0,0,313,314,7,4,0,0,314,37,1,0,0,0,315,316,7,5,0,0,316,317,5,26,0,
-		0,317,327,5,50,0,0,318,319,5,32,0,0,319,326,5,50,0,0,320,322,5,26,0,0,
-		321,323,3,40,20,0,322,321,1,0,0,0,322,323,1,0,0,0,323,324,1,0,0,0,324,
-		326,5,27,0,0,325,318,1,0,0,0,325,320,1,0,0,0,326,329,1,0,0,0,327,325,1,
-		0,0,0,327,328,1,0,0,0,328,330,1,0,0,0,329,327,1,0,0,0,330,331,5,31,0,0,
-		331,332,7,6,0,0,332,340,5,27,0,0,333,334,5,11,0,0,334,335,5,26,0,0,335,
-		336,3,34,17,0,336,337,5,27,0,0,337,338,5,30,0,0,338,340,1,0,0,0,339,315,
-		1,0,0,0,339,333,1,0,0,0,340,39,1,0,0,0,341,346,7,6,0,0,342,343,5,31,0,
-		0,343,345,7,6,0,0,344,342,1,0,0,0,345,348,1,0,0,0,346,344,1,0,0,0,346,
-		347,1,0,0,0,347,41,1,0,0,0,348,346,1,0,0,0,40,45,54,56,72,83,90,95,108,
-		114,118,122,125,135,140,151,158,162,177,191,205,210,215,217,227,235,243,
-		256,263,271,277,291,297,300,308,310,322,325,327,339,346
+		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,5,0,40,8,0,10,0,12,0,43,9,
+		0,1,0,1,0,1,0,1,0,1,0,1,0,5,0,51,8,0,10,0,12,0,54,9,0,1,0,1,0,1,0,1,1,
+		1,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,67,8,2,10,2,12,2,70,9,2,1,2,1,2,1,3,1,
+		3,1,3,1,3,5,3,78,8,3,10,3,12,3,81,9,3,1,3,1,3,1,4,1,4,3,4,87,8,4,1,4,1,
+		4,1,4,3,4,92,8,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,5,5,5,103,8,5,10,5,
+		12,5,106,9,5,1,6,1,6,1,6,3,6,111,8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,
+		7,121,8,7,1,7,1,7,1,7,3,7,126,8,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,
+		3,7,137,8,7,1,7,1,7,1,7,1,7,1,7,3,7,144,8,7,1,7,1,7,3,7,148,8,7,1,7,1,
+		7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,163,8,7,1,7,1,7,1,7,
+		1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,177,8,7,1,7,1,7,1,7,1,7,1,7,1,
+		7,3,7,185,8,7,1,8,1,8,1,8,5,8,190,8,8,10,8,12,8,193,9,8,1,8,1,8,1,9,1,
+		9,1,9,5,9,200,8,9,10,9,12,9,203,9,9,1,10,1,10,1,10,5,10,208,8,10,10,10,
+		12,10,211,9,10,1,11,1,11,1,11,5,11,216,8,11,10,11,12,11,219,9,11,1,12,
+		1,12,1,12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,3,14,231,8,14,1,14,1,14,1,
+		14,5,14,236,8,14,10,14,12,14,239,9,14,1,15,1,15,1,15,5,15,244,8,15,10,
+		15,12,15,247,9,15,1,16,1,16,1,16,3,16,252,8,16,1,16,3,16,255,8,16,1,16,
+		1,16,1,16,1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,267,8,16,1,17,1,17,1,
+		17,1,17,1,17,1,17,1,17,5,17,276,8,17,10,17,12,17,279,9,17,1,18,1,18,1,
+		18,0,0,19,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,3,1,0,
+		36,37,1,0,38,40,1,0,30,35,311,0,41,1,0,0,0,2,58,1,0,0,0,4,62,1,0,0,0,6,
+		73,1,0,0,0,8,86,1,0,0,0,10,96,1,0,0,0,12,107,1,0,0,0,14,184,1,0,0,0,16,
+		186,1,0,0,0,18,196,1,0,0,0,20,204,1,0,0,0,22,212,1,0,0,0,24,220,1,0,0,
+		0,26,224,1,0,0,0,28,230,1,0,0,0,30,240,1,0,0,0,32,266,1,0,0,0,34,268,1,
+		0,0,0,36,280,1,0,0,0,38,40,3,2,1,0,39,38,1,0,0,0,40,43,1,0,0,0,41,39,1,
+		0,0,0,41,42,1,0,0,0,42,44,1,0,0,0,43,41,1,0,0,0,44,45,5,4,0,0,45,46,5,
+		42,0,0,46,52,5,16,0,0,47,51,3,4,2,0,48,51,3,6,3,0,49,51,3,8,4,0,50,47,
+		1,0,0,0,50,48,1,0,0,0,50,49,1,0,0,0,51,54,1,0,0,0,52,50,1,0,0,0,52,53,
+		1,0,0,0,53,55,1,0,0,0,54,52,1,0,0,0,55,56,5,17,0,0,56,57,5,0,0,1,57,1,
+		1,0,0,0,58,59,5,5,0,0,59,60,5,42,0,0,60,61,5,22,0,0,61,3,1,0,0,0,62,63,
+		3,12,6,0,63,68,5,42,0,0,64,65,5,23,0,0,65,67,5,42,0,0,66,64,1,0,0,0,67,
+		70,1,0,0,0,68,66,1,0,0,0,68,69,1,0,0,0,69,71,1,0,0,0,70,68,1,0,0,0,71,
+		72,5,22,0,0,72,5,1,0,0,0,73,74,5,4,0,0,74,75,5,42,0,0,75,79,5,16,0,0,76,
+		78,3,4,2,0,77,76,1,0,0,0,78,81,1,0,0,0,79,77,1,0,0,0,79,80,1,0,0,0,80,
+		82,1,0,0,0,81,79,1,0,0,0,82,83,5,17,0,0,83,7,1,0,0,0,84,87,3,12,6,0,85,
+		87,5,6,0,0,86,84,1,0,0,0,86,85,1,0,0,0,87,88,1,0,0,0,88,89,5,42,0,0,89,
+		91,5,18,0,0,90,92,3,10,5,0,91,90,1,0,0,0,91,92,1,0,0,0,92,93,1,0,0,0,93,
+		94,5,19,0,0,94,95,3,16,8,0,95,9,1,0,0,0,96,97,3,12,6,0,97,104,5,42,0,0,
+		98,99,5,23,0,0,99,100,3,12,6,0,100,101,5,42,0,0,101,103,1,0,0,0,102,98,
+		1,0,0,0,103,106,1,0,0,0,104,102,1,0,0,0,104,105,1,0,0,0,105,11,1,0,0,0,
+		106,104,1,0,0,0,107,110,5,42,0,0,108,109,5,20,0,0,109,111,5,21,0,0,110,
+		108,1,0,0,0,110,111,1,0,0,0,111,13,1,0,0,0,112,113,3,34,17,0,113,114,5,
+		25,0,0,114,115,3,28,14,0,115,116,5,22,0,0,116,185,1,0,0,0,117,125,3,34,
+		17,0,118,120,5,18,0,0,119,121,3,18,9,0,120,119,1,0,0,0,120,121,1,0,0,0,
+		121,122,1,0,0,0,122,126,5,19,0,0,123,126,5,26,0,0,124,126,5,27,0,0,125,
+		118,1,0,0,0,125,123,1,0,0,0,125,124,1,0,0,0,126,127,1,0,0,0,127,128,5,
+		22,0,0,128,185,1,0,0,0,129,130,5,7,0,0,130,131,5,18,0,0,131,132,3,20,10,
+		0,132,133,5,19,0,0,133,136,3,14,7,0,134,135,5,8,0,0,135,137,3,14,7,0,136,
+		134,1,0,0,0,136,137,1,0,0,0,137,185,1,0,0,0,138,139,5,9,0,0,139,140,5,
+		18,0,0,140,141,3,28,14,0,141,143,5,22,0,0,142,144,3,20,10,0,143,142,1,
+		0,0,0,143,144,1,0,0,0,144,145,1,0,0,0,145,147,5,22,0,0,146,148,3,14,7,
+		0,147,146,1,0,0,0,147,148,1,0,0,0,148,149,1,0,0,0,149,150,5,19,0,0,150,
+		151,3,14,7,0,151,185,1,0,0,0,152,153,5,10,0,0,153,154,5,18,0,0,154,155,
+		3,20,10,0,155,156,5,19,0,0,156,157,3,14,7,0,157,185,1,0,0,0,158,159,5,
+		11,0,0,159,185,5,22,0,0,160,162,5,12,0,0,161,163,3,28,14,0,162,161,1,0,
+		0,0,162,163,1,0,0,0,163,164,1,0,0,0,164,185,5,22,0,0,165,166,5,13,0,0,
+		166,167,5,18,0,0,167,168,3,34,17,0,168,169,5,19,0,0,169,170,5,22,0,0,170,
+		185,1,0,0,0,171,172,5,14,0,0,172,173,5,18,0,0,173,176,3,28,14,0,174,175,
+		5,23,0,0,175,177,5,41,0,0,176,174,1,0,0,0,176,177,1,0,0,0,177,178,1,0,
+		0,0,178,179,5,19,0,0,179,180,5,22,0,0,180,185,1,0,0,0,181,185,3,16,8,0,
+		182,185,5,2,0,0,183,185,5,22,0,0,184,112,1,0,0,0,184,117,1,0,0,0,184,129,
+		1,0,0,0,184,138,1,0,0,0,184,152,1,0,0,0,184,158,1,0,0,0,184,160,1,0,0,
+		0,184,165,1,0,0,0,184,171,1,0,0,0,184,181,1,0,0,0,184,182,1,0,0,0,184,
+		183,1,0,0,0,185,15,1,0,0,0,186,191,5,16,0,0,187,190,3,4,2,0,188,190,3,
+		14,7,0,189,187,1,0,0,0,189,188,1,0,0,0,190,193,1,0,0,0,191,189,1,0,0,0,
+		191,192,1,0,0,0,192,194,1,0,0,0,193,191,1,0,0,0,194,195,5,17,0,0,195,17,
+		1,0,0,0,196,201,3,28,14,0,197,198,5,23,0,0,198,200,3,28,14,0,199,197,1,
+		0,0,0,200,203,1,0,0,0,201,199,1,0,0,0,201,202,1,0,0,0,202,19,1,0,0,0,203,
+		201,1,0,0,0,204,209,3,22,11,0,205,206,5,28,0,0,206,208,3,22,11,0,207,205,
+		1,0,0,0,208,211,1,0,0,0,209,207,1,0,0,0,209,210,1,0,0,0,210,21,1,0,0,0,
+		211,209,1,0,0,0,212,217,3,24,12,0,213,214,5,29,0,0,214,216,3,24,12,0,215,
+		213,1,0,0,0,216,219,1,0,0,0,217,215,1,0,0,0,217,218,1,0,0,0,218,23,1,0,
+		0,0,219,217,1,0,0,0,220,221,3,28,14,0,221,222,3,36,18,0,222,223,3,28,14,
+		0,223,25,1,0,0,0,224,225,5,18,0,0,225,226,3,12,6,0,226,227,5,19,0,0,227,
+		27,1,0,0,0,228,231,5,37,0,0,229,231,3,26,13,0,230,228,1,0,0,0,230,229,
+		1,0,0,0,230,231,1,0,0,0,231,232,1,0,0,0,232,237,3,30,15,0,233,234,7,0,
+		0,0,234,236,3,30,15,0,235,233,1,0,0,0,236,239,1,0,0,0,237,235,1,0,0,0,
+		237,238,1,0,0,0,238,29,1,0,0,0,239,237,1,0,0,0,240,245,3,32,16,0,241,242,
+		7,1,0,0,242,244,3,32,16,0,243,241,1,0,0,0,244,247,1,0,0,0,245,243,1,0,
+		0,0,245,246,1,0,0,0,246,31,1,0,0,0,247,245,1,0,0,0,248,254,3,34,17,0,249,
+		251,5,18,0,0,250,252,3,18,9,0,251,250,1,0,0,0,251,252,1,0,0,0,252,253,
+		1,0,0,0,253,255,5,19,0,0,254,249,1,0,0,0,254,255,1,0,0,0,255,267,1,0,0,
+		0,256,267,5,41,0,0,257,267,5,44,0,0,258,267,5,43,0,0,259,267,5,45,0,0,
+		260,261,5,15,0,0,261,267,5,42,0,0,262,263,5,18,0,0,263,264,3,28,14,0,264,
+		265,5,19,0,0,265,267,1,0,0,0,266,248,1,0,0,0,266,256,1,0,0,0,266,257,1,
+		0,0,0,266,258,1,0,0,0,266,259,1,0,0,0,266,260,1,0,0,0,266,262,1,0,0,0,
+		267,33,1,0,0,0,268,277,5,42,0,0,269,270,5,24,0,0,270,276,5,42,0,0,271,
+		272,5,20,0,0,272,273,3,28,14,0,273,274,5,21,0,0,274,276,1,0,0,0,275,269,
+		1,0,0,0,275,271,1,0,0,0,276,279,1,0,0,0,277,275,1,0,0,0,277,278,1,0,0,
+		0,278,35,1,0,0,0,279,277,1,0,0,0,280,281,7,2,0,0,281,37,1,0,0,0,30,41,
+		50,52,68,79,86,91,104,110,120,125,136,143,147,162,176,184,189,191,201,
+		209,217,230,237,245,251,254,266,275,277
 	};
 
 	public static readonly ATN _ATN =

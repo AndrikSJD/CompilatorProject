@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/Admin/Desktop/Compi/CompilatorProject\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Proyecto\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -221,25 +221,5 @@ public interface IMiniCSharpParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitRelop([NotNull] MiniCSharpParser.RelopContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="MiniCSharpParser.arrayMethods"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterArrayMethods([NotNull] MiniCSharpParser.ArrayMethodsContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="MiniCSharpParser.arrayMethods"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitArrayMethods([NotNull] MiniCSharpParser.ArrayMethodsContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="MiniCSharpParser.parameters"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterParameters([NotNull] MiniCSharpParser.ParametersContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="MiniCSharpParser.parameters"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitParameters([NotNull] MiniCSharpParser.ParametersContext context);
 }
 } // namespace SyntacticAnalysisGenerated
