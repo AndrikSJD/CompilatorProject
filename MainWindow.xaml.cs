@@ -23,6 +23,8 @@ namespace Proyecto
     public partial class MainWindow
     {
         
+        string nombreArchivo = "";
+        
         public MainWindow() 
         {
             // El System.Diagnostics.Debug.WriteLine es para imprimir en la consola del debugger.
@@ -77,9 +79,7 @@ namespace Proyecto
                 // Elimina el TabItem seleccionado
                 Tab.Items.Remove(selectedTab);
             }
-            // Eliminar la pestaña seleccionada TabItem
-            // Elimina una pestaña del TabControl, tome en cuenta que al eliminar una pestaña 
-            // tambien se debe eliminar el TextBox que esta dentro del TabControl
+           
         }
 
         private void Pantalla_SelectionChanged(object sender, EventArgs e)
@@ -104,6 +104,7 @@ namespace Proyecto
         
         public void Upload_File_Button_Click(object? sender, RoutedEventArgs e) 
         {
+             
             // Aqui va la logica para subir un archivo a la ventana principal
             OpenFileDialog openFileDialog = new OpenFileDialog();
             // Establecer el directorio inicial del diálogo en la carpeta de documentos del usuario
@@ -119,6 +120,9 @@ namespace Proyecto
             {
                 if (File.Exists(openFileDialog.FileName))
                 {
+                    //Cambiamos la ruta del arhivo abierto actualmente
+                    nombreArchivo = openFileDialog.FileName;
+                    //Lee el archivo y coloca la informacion en el text de la pantalla principal
                     TextReader leer = new StreamReader(archivoTexto);
                     Pantalla.Text = leer.ReadToEnd();
                     leer.Close();
@@ -126,6 +130,7 @@ namespace Proyecto
             }
             catch (Exception exception )
             {
+                System.Diagnostics.Debug.WriteLine("Error al subir el archivo");
                 System.Diagnostics.Debug.WriteLine(exception);
                 throw;
             }
@@ -134,6 +139,30 @@ namespace Proyecto
         
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
+            if (!string.IsNullOrEmpty(nombreArchivo))
+            {
+                try
+                {
+                    // Guardar el contenido del TextBox en el archivo
+                    using (StreamWriter escribir = new StreamWriter(nombreArchivo))
+                    {
+                        escribir.Write(Pantalla.Text);
+                    }
+
+                   
+                }
+                catch (Exception exception)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error al guardar el archivo");
+                    System.Diagnostics.Debug.WriteLine(exception);
+                    throw;
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Por favor, abra un archivo antes de guardar los cambios");
+            }
+            
             //Extraer texto de la pantalla principal
             ICharStream input = CharStreams.fromString(Pantalla.Text);
             
@@ -147,9 +176,11 @@ namespace Proyecto
             scanner.RemoveErrorListeners();
             parser.RemoveErrorListeners();
             //Crea un nuevo error listener
-            MyParserErrorListener errorListener = new MyParserErrorListener();
-            scanner.AddErrorListener(errorListener);
-            parser.AddErrorListener(errorListener);
+            ParserErrorListener parserErrorListener = new ParserErrorListener();
+            ScannerErrorListener scannerErrorListener = new ScannerErrorListener();
+            //Agrega los error listener
+            scanner.AddErrorListener(scannerErrorListener);
+            parser.AddErrorListener(parserErrorListener);
             //Obtiene el resultado
             MiniCSharpParser.ProgramContext tree = parser.program();
             
@@ -157,14 +188,15 @@ namespace Proyecto
             
             //Mostrar texto de salida
             Consola salida = new Consola();
-            // salida.SalidaConsola.Text = tree.ToStringTree(parser);
-            if (errorListener.HasErrors())
+            //Verifica si hay errores
+            if (parserErrorListener.HasErrors() || scannerErrorListener.HasErrors())
             {
-                salida.SalidaConsola.Text = errorListener.ToString();
+                salida.SalidaConsola.Text = "SE HAN ENCONTRADO ERRORES!!!\n"+"Errorer de parser= " +parserErrorListener.ToString()  +"\nErrores de escaner="+ scannerErrorListener.ToString();
             }
             else
             {
-                salida.SalidaConsola.Text = "No hay errores";
+                salida.SalidaConsola.Text = "Compilacion Exitosa" + "\n" + tree.ToStringTree(parser) + "\n" ;
+                
             }
             salida.Show();
                 
@@ -174,7 +206,7 @@ namespace Proyecto
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Exit Button Clicked");
+            // Cierra la aplicacion
             Application.Current.Shutdown();
         }
     }
