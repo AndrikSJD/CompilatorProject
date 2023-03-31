@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Antlr4.Runtime;
+using Microsoft.Win32;
 using SyntacticAnalysisGenerated;
 
 
@@ -30,15 +33,50 @@ namespace Proyecto
 
         private void Add_Tab_Button_Click(object sender, EventArgs e)
         {
-            // Aqui va la logica para agregar una nueva pestaña
-            // Al agregar la nueva pestaña tome en consideracion
-            // que se debe agregar un nuevo TabItem y un nuevo TextBox
-            // dentro del TabControl y que dentro del textbox se agrega el texto del archivo.txt que se subio
-          
+            TabItem nuevaTab = new TabItem();
+            TextBox nuevoTextBox = new TextBox();
+            nuevoTextBox.IsReadOnly = true;
+            
+            // Crea un cuadro de diálogo para abrir archivos
+            var openFileDialog = new OpenFileDialog
+            {
+                Title = "Seleccione un archivo de texto",
+                Filter = "Archivos de texto (*.txt)|*.txt"
+            };
+
+            // Muestra el cuadro de diálogo y si se seleccionó un archivo, lo carga en el TextBox
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Establece el encabezado del TabItem como el nombre del archivo seleccionada
+                nuevaTab.Header = openFileDialog.SafeFileName;
+                
+                // Guarda el nombre del archivo seleccionado
+                string archivoTexto = openFileDialog.FileName;
+
+                // Lee el contenido del archivo seleccionado y lo asigna al TextBox
+                TextReader leer = new StreamReader(archivoTexto);
+                nuevoTextBox.Text = leer.ReadToEnd();
+                
+                // Agrega el TextBox al TabItem
+                nuevaTab.Content = nuevoTextBox;
+
+                // Agrega el nuevo TabItem al TabControl
+                Tab.Items.Add(nuevaTab);
+            }
         }
         
         private void closeButton_Click(object sender, EventArgs e)
         {
+            // Obtiene el TabItem seleccionado
+            TabItem selectedTab = Tab.SelectedItem as TabItem;
+            // Verifica que el TabItem seleccionado no sea nulo
+            if (selectedTab != null)
+            {
+                //Elimina el contenido del tab item seleccionado
+                selectedTab.Content = null;
+                // Elimina el TabItem seleccionado
+                Tab.Items.Remove(selectedTab);
+            }
             // Eliminar la pestaña seleccionada TabItem
             // Elimina una pestaña del TabControl, tome en cuenta que al eliminar una pestaña 
             // tambien se debe eliminar el TextBox que esta dentro del TabControl
@@ -66,10 +104,32 @@ namespace Proyecto
         
         public void Upload_File_Button_Click(object? sender, RoutedEventArgs e) 
         {
-            // Aqui va la logica para subir un archivo
-            // AL subir el archivo tome en consideracion
-            // que se agrega el archivo al tabItem y al TextBox que ya esta creado en el MainWindow.xaml
-            // El tabItem tiene por nombre "Principal" y el TextBox tiene por nombre "Pantalla"
+            // Aqui va la logica para subir un archivo a la ventana principal
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            // Establecer el directorio inicial del diálogo en la carpeta de documentos del usuario
+            string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.InitialDirectory = documentsFolder;
+            // Añadimos un nombre para el cuadro de subir archivo
+            openFileDialog.Title = "Seleccione un archivo de texto";
+            // Abre un cuadro de dialogo para subir un archivo
+            openFileDialog.ShowDialog();
+            // Obtiene el nombre del archivo
+            string archivoTexto = openFileDialog.FileName;
+            try
+            {
+                if (File.Exists(openFileDialog.FileName))
+                {
+                    TextReader leer = new StreamReader(archivoTexto);
+                    Pantalla.Text = leer.ReadToEnd();
+                    leer.Close();
+                }
+            }
+            catch (Exception exception )
+            {
+                System.Diagnostics.Debug.WriteLine(exception);
+                throw;
+            }
+            
         }
         
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
@@ -109,10 +169,7 @@ namespace Proyecto
             salida.Show();
                 
                 
-            // Aqui va la logica para correr el codigo
-            // AL correr el codigo tome en consideracion
-            // que el resultado de la compilacion se muestra en una nueva ventana llamada Consola
-            // en el texbox SalidaConsola
+            
         }
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)
