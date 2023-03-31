@@ -1,20 +1,8 @@
 lexer grammar MiniCSharpScanner;
 
 COMMENT : '//' ~[\r\n]* -> skip;
-BLOCKCOMMENT : '/*' ( BLOCKCOMMENT | ~[*/] | COMMENT )* '*/' -> skip;
+BLOCKCOMMENT : '/*' ( BLOCKCOMMENT | ~[*/] | '/' ~'*' )* '*/' -> skip;
 WS  :   [ \t\n\r]+ -> skip;
-
-// Const values
-TYPECHAR : 'char';
-TYPEINT : 'int';
-TYPEDOUBLE : 'double';
-TYPEBOOL : 'bool';
-TYPESTRING : 'string';
-
-// Array methods
-ARRADD : 'add';
-ARRDEL : 'del';
-ARRLEN : 'len';
 
 // Reserved words
 CLASS : 'class';
@@ -62,12 +50,11 @@ MOD : '%';
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];
 fragment EXPRESION : LETTER+;
+fragment LCOMMENT : '/*';
+fragment RCOMMENT : '*/';
 
-NUM : DIGIT+;
+NUM : SUB? (DIGIT+ | DIGIT+ '.' DIGIT*);
 ID : LETTER  (LETTER | DIGIT)*;
-PLAINTEXT : '"' .*? '"';
-CHAR : '"' ~['\\r\n] '"' ;
-BOOLEAN: ('true'|'false');
-DOUBLE: DIGIT+ '.' DIGIT*;
-LCOMMENT : '/*';
-RCOMMENT : '*/';
+STRINGCONST : '"' .*? '"';
+CHARCONST : '"' ~['\\r\n] '"' ;
+BOOLEANCONST: ('true'|'false');

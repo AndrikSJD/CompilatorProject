@@ -17,7 +17,7 @@ methodDecl : (type | VOID) ID LPARENT formPars? RPARENT block;
 
 formPars : type ID (COMMA type ID)*;
 
-type : ((TYPECHAR | TYPEINT | TYPEDOUBLE | TYPEBOOL | TYPESTRING)* | ID) (LBRACK (NUM | ID)? RBRACK)?;
+type : ID (LBRACK RBRACK)?;
 
 statement : designator ASSIGN expr SEMICOLON
           | designator (LPARENT (actPars)? RPARENT | INC | DEC) SEMICOLON
@@ -29,8 +29,7 @@ statement : designator ASSIGN expr SEMICOLON
           | READ LPARENT designator RPARENT SEMICOLON
           | WRITE LPARENT expr (COMMA NUM)? RPARENT SEMICOLON
           | block
-          | arrayMethods
-          | LCOMMENT ALLTHING (LCOMMENT ALLTHING RCOMMENT)* RCOMMENT
+          | BLOCKCOMMENT
           | SEMICOLON;
 
 block : LBRACE (varDecl | statement)* RBRACE;
@@ -49,25 +48,14 @@ expr : (SUB | cast)? term ((ADD | SUB) term)*;
 
 term : factor ((MUL | DIV | MOD) factor)*;
 
-factor : designator (LPARENT (actPars)? RPARENT 
+factor : designator (LPARENT actPars? RPARENT)?
     | NUM
-    | DOUBLE
-    | TYPEDOUBLE 
-    | TYPECHAR 
-    | TYPESTRING 
-    | TYPEBOOL 
-    | TYPEINT
-    | PLAINTEXT
-    | (NEW (ID | type)) 
-    | (LPARENT expr RPARENT))?;
+    | CHARCONST
+    | STRINGCONST
+    | BOOLEANCONST
+    | NEW ID 
+    | LPARENT expr RPARENT;
 
-designator : ID? ((DOT ID) | (LBRACK expr RBRACK))*;
+designator : ID ((DOT ID) | (LBRACK expr RBRACK))*;
 
 relop : (EQUAL | NOTEQUAL | GT | GE | LT | LE);
-
-arrayMethods : ((ARRADD | ARRDEL) LPARENT ID ((DOT ID) 
-    | (LPARENT parameters? RPARENT))*  
-    COMMA (NUM | ID | PLAINTEXT) RPARENT)
-    | ARRLEN LPARENT designator RPARENT SEMICOLON;
-
-parameters : (ID | NUM | PLAINTEXT) (COMMA (ID | NUM | PLAINTEXT))*;
