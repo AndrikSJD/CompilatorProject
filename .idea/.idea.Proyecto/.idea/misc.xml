@@ -6,21 +6,22 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/MiniCSharpScanner.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\kp077\OneDrive\Escritorio\TEC\Quinto_Semestre\Compi\Proyecto\src" />
+          <option name="outputDir" value="C:\Users\user\Desktop\Compi\Proyecto\CompilatorProject\src" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="SyntacticAnalysisGenerated" />
           <option name="language" value="CSharp" />
-          <option name="generateVisitor" value="true" />
+          <option name="generateListener" value="false" />
         </PerGrammarGenerationSettings>
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/MiniCSharpParser.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\kp077\OneDrive\Escritorio\TEC\Quinto_Semestre\Compi\Proyecto\src" />
+          <option name="outputDir" value="C:\Users\user\Desktop\Compi\Proyecto\CompilatorProject\src" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="SyntacticAnalysisGenerated" />
           <option name="language" value="CSharp" />
+          <option name="generateListener" value="false" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
       </list>
