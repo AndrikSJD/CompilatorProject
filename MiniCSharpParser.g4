@@ -7,17 +7,17 @@ options {
 // Reglas sintácticas
 program : using* CLASS ID LBRACE (varDecl | classDecl | methodDecl)* RBRACE EOF     #programAST;
 
-using : USING ID SEMICOLON                                                          #usingAST;
+using : USING ident SEMICOLON                                                          #usingAST;
 
-varDecl : type ID (COMMA ID)* SEMICOLON                                             #varDeclAST;
+varDecl : type ident (COMMA ident)* SEMICOLON                                             #varDeclAST;
 
-classDecl : CLASS ID LBRACE varDecl* RBRACE                                     #classDeclAST;
+classDecl : CLASS ident LBRACE varDecl* RBRACE                                     #classDeclAST;
 
-methodDecl : (type | VOID) ID LPARENT formPars? RPARENT block                   #methodDeclAST;
+methodDecl : (type | VOID) ident LPARENT formPars? RPARENT block                   #methodDeclAST;
 
-formPars : type ID (COMMA type ID)*                                             #formParsAST;
+formPars : type ID (COMMA type ident)*                                             #formParsAST;
 
-type : ID (LBRACK RBRACK)?                                                      #typeAST;
+type : ident (LBRACK RBRACK)?                                                      #typeAST;
 
 statement : designator ASSIGN expr SEMICOLON                                    #assignStatementAST
           | designator (LPARENT (actPars)? RPARENT | INC | DEC) SEMICOLON       #methodCallStatementAST            
@@ -54,10 +54,14 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | CHARCONST                                         #charFactorAST
     | STRINGCONST                                    #stringFactorAST
     | BOOLEANCONST                                  #booleanFactorAST
-    | NEW ID                                        #newFactorAST
+    | NEW ident                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
     ;
 
-designator : ID ((DOT ID) | (LBRACK expr RBRACK))*          #designatorAST;
+                                              
+
+designator : ident ((DOT ident) | (LBRACK expr RBRACK))*          #designatorAST;
+
+ident: ID                                                    #identAST;
 
 relop : (EQUAL | NOTEQUAL | GT | GE | LT | LE)              #relopAST;

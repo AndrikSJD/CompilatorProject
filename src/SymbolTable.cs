@@ -10,7 +10,7 @@ public class SymbolTable
 
     public class Identifier
     {
-        public IToken tok;
+        public IToken token;
         public int type; // This might change to a more structured type
         public int level;
         public int value;
@@ -18,7 +18,7 @@ public class SymbolTable
 
         public Identifier(IToken t, int tp, bool ism)
         {
-            tok = t;
+            token = t;
             type = tp;
             level = currentLevel;
             value = 0;
@@ -43,11 +43,11 @@ public class SymbolTable
         table.AddFirst(i);
     }
 
-    public Identifier Search(string name)
+    public Identifier Search(IToken name)
     {
         foreach (var id in table)
         {
-            if (((Identifier)id).tok.Text == name)
+            if (((Identifier)id).token.Text.Equals(name.Text))
             {
                 return ((Identifier)id);
             }
@@ -85,7 +85,7 @@ public class SymbolTable
         System.Diagnostics.Debug.WriteLine("----- START TABLE ------");
         foreach (var item in table)
         {
-            var s = ((Identifier)item).tok;
+            var s = ((Identifier)item).token;
             System.Diagnostics.Debug.WriteLine("Name: " + s.Text + " - " + ((Identifier)item).level + " - " + ((Identifier)item).type);
         }
         System.Diagnostics.Debug.WriteLine("----- END TABLE ------");

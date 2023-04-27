@@ -28,9 +28,20 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 return "bool";
             case 4:
                 return "void";
-            default:
+            case 5:
                 return "unknown";
+            default:
+                return "No hay un type";
         }
+    }
+    
+    private string showToken(IToken token)
+    {
+        return token.Text + "Fila, columna: (" + token.Line + "," + token.Column + ")";
+    }
+    private bool isMethod(IToken token)
+    {
+        return symbolTable.Search(token).isMethod;
     }
     
     private void PrintError(IToken tok, String msg)
@@ -48,33 +59,96 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             
         }
     }
+
     public override object VisitProgramAST(MiniCSharpParser.ProgramASTContext context)
     {
-        Visit(context.@using(0));
-        for(int i = 0; i < context.@using().Length; i++)
+        symbolTable.OpenScope();
+
+
+        if (context.@using().Length > 0)
         {
-            Visit(context.@using(i));
+            foreach (var child in context.@using())
+            {
+                
+                Visit(child);
+                System.Diagnostics.Debug.WriteLine("visita using: "+ child.GetText());
+                
+            }
+
         }
-        return null;
+        if (context.varDecl().Length > 0)
+        {
+            int i = 0;
+            foreach (var child in context.varDecl())
+            {
+                
+                Visit(child);
+                System.Diagnostics.Debug.WriteLine("visita varDecl" + i +": "+ child.GetText());
+                i++;
+            }
+        }
+        if (context.classDecl().Length > 0)
+        {
+            int i = 0;
+            foreach (var child in context.classDecl())
+            {
+                
+                Visit(child);
+                System.Diagnostics.Debug.WriteLine("visita classDecl" + i +": "+ child.GetText());
+                i++;
+            }
+        }
+        if (context.methodDecl().Length > 0)
+        {
+            int i = 0;
+            foreach (var child in context.methodDecl())
+            {
+                
+                Visit(child);
+                System.Diagnostics.Debug.WriteLine("visita methodDecl" + i +": "+ child.GetText());
+                i++;
+            }
+        }
+        
+
+        symbolTable.CloseScope();
+        return base.VisitProgramAST(context);
     }
+
 
     public override object VisitUsingAST(MiniCSharpParser.UsingASTContext context)
     {
+        System.Diagnostics.Debug.WriteLine("DENTRO using :" + context.ident().GetText());
+        
        return null;
     }
 
     public override object VisitVarDeclAST(MiniCSharpParser.VarDeclASTContext context)
     {
+        System.Diagnostics.Debug.WriteLine("DENTRO varDecl :" + context.GetText());
+        
         return null;
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
     {
+        System.Diagnostics.Debug.WriteLine("DENTRO classDecl :" + context.ident().GetText());
+        if(context.varDecl().Length > 0)
+        {
+            int i = 0;
+            foreach (var child in context.varDecl())
+            {
+                Visit(child);
+                System.Diagnostics.Debug.WriteLine("visita varDecl: " + i +" "+ child.GetText());
+                i++;
+            }
+        }
         return null;
     }
 
     public override object VisitMethodDeclAST(MiniCSharpParser.MethodDeclASTContext context)
     {
+        System.Diagnostics.Debug.WriteLine("DENTRO methodDecl :" + context.ident().GetText());
         return null;
     }
 
@@ -233,5 +307,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
         return null;
     }
-    
+
+    public override object VisitIdentAST(MiniCSharpParser.IdentASTContext context)
+    {
+        System.Diagnostics.Debug.WriteLine("DENTRO ident :" + context.ID().GetText());
+        return base.VisitIdentAST(context);
+    }
 }

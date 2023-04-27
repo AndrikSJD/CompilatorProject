@@ -65,5 +65,5 @@ fragment RCOMMENT : '*/';
 NUM : SUB? (DIGIT+ | DIGIT+ '.' DIGIT*);
 ID : LETTER  (LETTER | DIGIT)*;
 STRINGCONST : '"' .*? '"';
-CHARCONST : '"' ~['\\r\n] '"' ;
+CHARCONST : '\'' ~['\\r\n] '\'' ;
 BOOLEANCONST: ('true'|'false');

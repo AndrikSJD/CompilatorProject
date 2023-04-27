@@ -163,49 +163,63 @@ namespace Proyecto
                 System.Diagnostics.Debug.WriteLine("Por favor, abra un archivo antes de guardar los cambios");
             }
             
-            //Extraer texto de la pantalla principal
-            ICharStream input = CharStreams.fromString(Pantalla.Text);
             
-            //Escanea el texto que se le manda del input
-            MiniCSharpScanner scanner = new MiniCSharpScanner(input);
-            // Organiza los tokens streams
-            CommonTokenStream tokens = new CommonTokenStream(scanner);
-            //Le manda los tokens al parser
-            MiniCSharpParser parser = new MiniCSharpParser(tokens);
-            // Manejo de errores en español
-            MyErrorStrategy errorStrategy = new MyErrorStrategy();
-            //Remueve los error listeners
-            scanner.RemoveErrorListeners();
-            parser.RemoveErrorListeners();
-            //Crea un nuevo error listener
-            ParserErrorListener parserErrorListener = new ParserErrorListener();
-            ScannerErrorListener scannerErrorListener = new ScannerErrorListener();
-            //Agrega los error listener
-            scanner.AddErrorListener(scannerErrorListener);
-            parser.AddErrorListener(parserErrorListener);
-            parser.ErrorHandler = errorStrategy;
-            //Obtiene el resultado
-            MiniCSharpParser.ProgramContext tree = parser.program();
-            
-            
-            
-            //Mostrar texto de salida
-            Consola salida = new Consola();
-            //Verifica si hay errores
-            if (parserErrorListener.HasErrors() || scannerErrorListener.HasErrors())
+            //Aqui va la logica para ejecutar el codigo
+            try
             {
-                salida.SalidaConsola.Text = "Errorer de parser: " + parserErrorListener.ToString()  +
-                                            "\nErrores de escaner: "+ scannerErrorListener.ToString();
-            }
-            else
-            {
-                salida.SalidaConsola.Text = "Compilacion Exitosa";
-                
-            }
-            salida.Show();
-                
-                
+                //Extraer texto de la pantalla principal
+                ICharStream input = CharStreams.fromString(Pantalla.Text);
             
+                //Escanea el texto que se le manda del input
+                MiniCSharpScanner scanner = new MiniCSharpScanner(input);
+                // Organiza los tokens streams
+                CommonTokenStream tokens = new CommonTokenStream(scanner);
+                //Le manda los tokens al parser
+                MiniCSharpParser parser = new MiniCSharpParser(tokens);
+                // Manejo de errores en español
+                MyErrorStrategy errorStrategy = new MyErrorStrategy();
+                //Remueve los error listeners
+                scanner.RemoveErrorListeners();
+                parser.RemoveErrorListeners();
+                //Crea un nuevo error listener
+                ParserErrorListener parserErrorListener = new ParserErrorListener();
+                ScannerErrorListener scannerErrorListener = new ScannerErrorListener();
+                //Agrega los error listener
+                scanner.AddErrorListener(scannerErrorListener);
+                parser.AddErrorListener(parserErrorListener);
+                parser.ErrorHandler = errorStrategy;
+                //Obtiene el resultado
+                MiniCSharpParser.ProgramContext tree = parser.program();
+            
+            
+            
+                //Mostrar texto de salida
+                Consola salida = new Consola();
+                //Verifica si hay errores
+                if (parserErrorListener.HasErrors() || scannerErrorListener.HasErrors())
+                {
+                    salida.SalidaConsola.Text = "Errorer de parser: " + parserErrorListener.ToString()  +
+                                                "\nErrores de escaner: "+ scannerErrorListener.ToString();
+                }
+                else
+                {
+                    AContextual context = new AContextual();
+                    context.Visit(tree);
+                    salida.SalidaConsola.Text = "Compilacion Exitosa";
+                
+                }
+                salida.Show();
+
+
+
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al ejecutar el codigo");
+                System.Diagnostics.Debug.WriteLine(exception);
+                throw;
+            }
+ 
         }
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)
