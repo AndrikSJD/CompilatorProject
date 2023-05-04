@@ -69,16 +69,26 @@ namespace Proyecto
         
         private void closeButton_Click(object sender, EventArgs e)
         {
-            // Obtiene el TabItem seleccionado
-            TabItem selectedTab = Tab.SelectedItem as TabItem;
-            // Verifica que el TabItem seleccionado no sea nulo
-            if (selectedTab != null)
+            //En caso de que tenga ahorita 
+            if (Tab.SelectedIndex == 0)
             {
-                //Elimina el contenido del tab item seleccionado
-                selectedTab.Content = null;
-                // Elimina el TabItem seleccionado
-                Tab.Items.Remove(selectedTab);
+                nombreArchivo = "";
+               Pantalla.Text = ""; 
             }
+            else
+            {
+                // Obtiene el TabItem seleccionado
+                TabItem selectedTab = Tab.SelectedItem as TabItem;
+                // Verifica que el TabItem seleccionado no sea nulo
+                if (selectedTab != null)
+                {
+                    //Elimina el contenido del tab item seleccionado
+                    selectedTab.Content = null;
+                    // Elimina el TabItem seleccionado
+                    Tab.Items.Remove(selectedTab);
+                }
+            }
+            
            
         }
 
@@ -149,6 +159,8 @@ namespace Proyecto
                         escribir.Write(Pantalla.Text);
                     }
 
+                    
+                    
                    
                 }
                 catch (Exception exception)
@@ -157,13 +169,8 @@ namespace Proyecto
                     System.Diagnostics.Debug.WriteLine(exception);
                     throw;
                 }
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Por favor, abra un archivo antes de guardar los cambios");
-            }
-            
-            
+                
+                
             //Aqui va la logica para ejecutar el codigo
             try
             {
@@ -214,11 +221,18 @@ namespace Proyecto
 
             }
             catch (Exception exception)
-            {
+                {
                 System.Diagnostics.Debug.WriteLine("Error al ejecutar el codigo");
                 System.Diagnostics.Debug.WriteLine(exception);
                 throw;
+                }
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Por favor, abra un archivo antes de guardar los cambios");
+            }
+            
+            
  
         }
         

@@ -1,55 +1,42 @@
-﻿
+﻿using System;
 using Antlr4.Runtime;
 using System.Collections.Generic;
+using System.Linq;
+using Proyecto.StructureTypes;
+using Type =Proyecto.StructureTypes.Type;
+
 namespace Proyecto;
 
 public class SymbolTable
 {
-    LinkedList<Identifier> table;
-    private static int currentLevel;
+    LinkedList<Object>table;
+    public int currentLevel;
+    
 
-    public class Identifier
-    {
-        public IToken token;
-        public int type; // This might change to a more structured type
-        public int level;
-        public int value;
-        public bool isMethod;
-
-        public Identifier(IToken t, int tp, bool ism)
-        {
-            token = t;
-            type = tp;
-            level = currentLevel;
-            value = 0;
-            isMethod = ism;
-        }
-
-        public void SetValue(int v)
-        {
-            value = v;
-        }
+    public int getLevel() {
+        return this.currentLevel;
     }
-
     public SymbolTable()
     {
-        table = new LinkedList<Identifier>();
+        table = new LinkedList<Object>();
         currentLevel = -1;
     }
 
-    public void Insert(IToken id, int type, bool ism)
+    //TODO CAMBIARLO A HASHMAP
+    public void Insert(Type typeStruct)
     {
-        Identifier i = new Identifier(id, type, ism);
-        table.AddFirst(i);
+
+        table.AddLast(typeStruct);
+        
     }
 
-    public Identifier Search(IToken name)
+    public Type? Search(string name)
     {
-        foreach (var id in table)
+        foreach (Type id in table)
         {
-            if (((Identifier)id).token.Text.Equals(name.Text))
+            if (id.GetToken().Text.Equals(name))
             {
-                return ((Identifier)id);
+                return id;
             }
         }
         return null;
@@ -63,33 +50,51 @@ public class SymbolTable
     public void CloseScope()
     {
         
-        LinkedListNode<Identifier> current = table.First;
-        while (current != null)
-        {
-            if (current.Value.level == currentLevel)
-            {
-                LinkedListNode<Identifier> next = current.Next;
-                table.Remove(current);
-                current = next;
-            }
-            else
-            { 
-                current = current.Next;
-            }
-        }
+        table.Remove(new Func<Type, bool>(n => n.Level == currentLevel));
         currentLevel--;
     }
 
     public void Print()
     {
-        System.Diagnostics.Debug.WriteLine("----- START TABLE ------");
-        foreach (var item in table)
+        //TODO CAMBIAR IMPRESION
+        System.Diagnostics.Debug.WriteLine("----- INICIO TABLA ------");
+        for (int i = 0; i < table.Count; i++)
         {
-            var s = ((Identifier)item).token;
-            System.Diagnostics.Debug.WriteLine("Name: " + s.Text + " - " + ((Identifier)item).level + " - " + ((Identifier)item).type);
+            IToken s = ((Type)table.ElementAt(i)).GetToken();
+            string printMessage = "Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level + "\n";
+            if(table.ElementAt(i).GetType() == typeof(MethodType))
+            {
+                printMessage += "Tipo dato: " + ((MethodType)table.ElementAt(i)).ReturnTypeGetSet ;
+                printMessage += " - Cuenta de parametros: " + ((MethodType)table.ElementAt(i)).ParamsNumGetSet + "\n";
+                if (((MethodType)table.ElementAt(i)).ParamsNumGetSet > 0)
+                {
+                    ((MethodType)table.ElementAt(i)).PrintMethod();
+                }
+            }
+            if(table.ElementAt(i).GetType() == typeof(ClassVarType))
+            {
+                printMessage += "Tipo dato: " + (( ClassVarType)table.ElementAt(i)).classType ;
+                printMessage += " - Tipo de padre: " + (( ClassVarType)table.ElementAt(i)).Type + "\n";
+            }
+            else if(table.ElementAt(i).GetType() == typeof(PrimaryType))
+            {
+                printMessage += " - Tipo dato: " + ((PrimaryType)table.ElementAt(i)).TypeGetSet + "\n";
+
+            }
+            else if(table.ElementAt(i).GetType() == typeof(ClassType))
+            {
+                printMessage += " - Tipo dato: " + ((ClassType)table.ElementAt(i)).type + "\n";
+            }
+            else if (table.ElementAt(i).GetType() == typeof(ArrayType))
+            {
+                printMessage += " - Tipo dato: " + ((ArrayType)table.ElementAt(i)).Type;
+                printMessage += " - Tipo base: " + ((ArrayType)table.ElementAt(i)).GetSetArrType;
+            }
+            System.Diagnostics.Debug.WriteLine(printMessage);
         }
-        System.Diagnostics.Debug.WriteLine("----- END TABLE ------");
-        
-        
+        System.Diagnostics.Debug.WriteLine("----- FIN TABLA ------");
     }
+        
+        
+    
 }

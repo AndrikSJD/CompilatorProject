@@ -5,7 +5,7 @@ options {
 }
 
 // Reglas sintácticas
-program : using* CLASS ID LBRACE (varDecl | classDecl | methodDecl)* RBRACE EOF     #programAST;
+program : using* CLASS ident LBRACE (varDecl | classDecl | methodDecl)* RBRACE EOF     #programAST;
 
 using : USING ident SEMICOLON                                                          #usingAST;
 
@@ -15,7 +15,7 @@ classDecl : CLASS ident LBRACE varDecl* RBRACE                                  
 
 methodDecl : (type | VOID) ident LPARENT formPars? RPARENT block                   #methodDeclAST;
 
-formPars : type ID (COMMA type ident)*                                             #formParsAST;
+formPars : type ident (COMMA type ident)*                                             #formParsAST;
 
 type : ident (LBRACK RBRACK)?                                                      #typeAST;
 
@@ -27,7 +27,7 @@ statement : designator ASSIGN expr SEMICOLON                                    
           | BREAK SEMICOLON                                                     #breakStatementAST   
           | RETURN expr? SEMICOLON                                              #returnStatementAST                    
           | READ LPARENT designator RPARENT SEMICOLON                           #readStatementAST
-          | WRITE LPARENT expr (COMMA NUM)? RPARENT SEMICOLON                   #writeStatementAST
+          | WRITE LPARENT expr (COMMA INTCONST)? RPARENT SEMICOLON                   #writeStatementAST
           | block                                                               #blockStatementAST
           | BLOCKCOMMENT                                                        #blockCommentStatementAST                        
           | SEMICOLON                                                           #emptyStatementAST
@@ -50,9 +50,10 @@ expr : (SUB | cast)? term ((ADD | SUB) term)*                       #exprAST;
 term : factor ((MUL | DIV | MOD) factor)*                            #termAST;
 
 factor : designator (LPARENT actPars? RPARENT)?                #factorAST
-    | NUM                                                       #numFactorAST
+    | (SUB)? INTCONST                                   #numFactorAST
     | CHARCONST                                         #charFactorAST
     | STRINGCONST                                    #stringFactorAST
+    | DOUBLECONST                                   #doubleFactorAST
     | BOOLEANCONST                                  #booleanFactorAST
     | NEW ident                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
