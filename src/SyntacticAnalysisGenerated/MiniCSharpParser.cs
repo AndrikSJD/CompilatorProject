@@ -716,6 +716,16 @@ public partial class MiniCSharpParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
+	public partial class SemicolonStatementASTContext : StatementContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(MiniCSharpParser.SEMICOLON, 0); }
+		public SemicolonStatementASTContext(StatementContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitSemicolonStatementAST(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
 	public partial class ReadStatementASTContext : StatementContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode READ() { return GetToken(MiniCSharpParser.READ, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENT() { return GetToken(MiniCSharpParser.LPARENT, 0); }
@@ -782,36 +792,6 @@ public partial class MiniCSharpParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBreakStatementAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class EmptyStatementASTContext : StatementContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(MiniCSharpParser.SEMICOLON, 0); }
-		public EmptyStatementASTContext(StatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEmptyStatementAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MethodCallStatementASTContext : StatementContext {
-		[System.Diagnostics.DebuggerNonUserCode] public DesignatorContext designator() {
-			return GetRuleContext<DesignatorContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(MiniCSharpParser.SEMICOLON, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENT() { return GetToken(MiniCSharpParser.LPARENT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPARENT() { return GetToken(MiniCSharpParser.RPARENT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INC() { return GetToken(MiniCSharpParser.INC, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEC() { return GetToken(MiniCSharpParser.DEC, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ActParsContext actPars() {
-			return GetRuleContext<ActParsContext>(0);
-		}
-		public MethodCallStatementASTContext(StatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMethodCallStatementAST(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -884,6 +864,26 @@ public partial class MiniCSharpParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
+	public partial class DesignatorStatementASTContext : StatementContext {
+		[System.Diagnostics.DebuggerNonUserCode] public DesignatorContext designator() {
+			return GetRuleContext<DesignatorContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(MiniCSharpParser.SEMICOLON, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENT() { return GetToken(MiniCSharpParser.LPARENT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPARENT() { return GetToken(MiniCSharpParser.RPARENT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INC() { return GetToken(MiniCSharpParser.INC, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEC() { return GetToken(MiniCSharpParser.DEC, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ActParsContext actPars() {
+			return GetRuleContext<ActParsContext>(0);
+		}
+		public DesignatorStatementASTContext(StatementContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitDesignatorStatementAST(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
 	public partial class BlockCommentStatementASTContext : StatementContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BLOCKCOMMENT() { return GetToken(MiniCSharpParser.BLOCKCOMMENT, 0); }
 		public BlockCommentStatementASTContext(StatementContext context) { CopyFrom(context); }
@@ -919,7 +919,7 @@ public partial class MiniCSharpParser : Parser {
 				}
 				break;
 			case 2:
-				_localctx = new MethodCallStatementASTContext(_localctx);
+				_localctx = new DesignatorStatementASTContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
 				State = 119;
@@ -1139,7 +1139,7 @@ public partial class MiniCSharpParser : Parser {
 				}
 				break;
 			case 12:
-				_localctx = new EmptyStatementASTContext(_localctx);
+				_localctx = new SemicolonStatementASTContext(_localctx);
 				EnterOuterAlt(_localctx, 12);
 				{
 				State = 185;
@@ -1587,7 +1587,7 @@ public partial class MiniCSharpParser : Parser {
 			base.CopyFrom(context);
 		}
 	}
-	public partial class ExprASTContext : ExprContext {
+	public partial class ExpressionASTContext : ExprContext {
 		[System.Diagnostics.DebuggerNonUserCode] public TermContext[] term() {
 			return GetRuleContexts<TermContext>();
 		}
@@ -1605,11 +1605,11 @@ public partial class MiniCSharpParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ADD(int i) {
 			return GetToken(MiniCSharpParser.ADD, i);
 		}
-		public ExprASTContext(ExprContext context) { CopyFrom(context); }
+		public ExpressionASTContext(ExprContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitExprAST(this);
+			if (typedVisitor != null) return typedVisitor.VisitExpressionAST(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -1620,7 +1620,7 @@ public partial class MiniCSharpParser : Parser {
 		EnterRule(_localctx, 28, RULE_expr);
 		int _la;
 		try {
-			_localctx = new ExprASTContext(_localctx);
+			_localctx = new ExpressionASTContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 232;

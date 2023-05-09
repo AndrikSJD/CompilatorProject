@@ -63,4 +63,9 @@ public class MethodType : Type
         get => returnType;
         set => returnType = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    public override string GetStructureType()
+    {
+        return this.returnType;
+    }
 }

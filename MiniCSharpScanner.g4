@@ -54,7 +54,12 @@ ADD : '+';
 SUB : '-';
 MUL : '*';
 DIV : '/';
-MOD : '%';      
+MOD : '%'; 
+
+//Lists
+ADDARRAY: 'add';
+DELARRAY: 'del';
+LENARRAY: 'len';    
 
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];

@@ -124,7 +124,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <return>The visitor result.</return>
 	public virtual Result VisitAssignStatementAST([NotNull] MiniCSharpParser.AssignStatementASTContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>methodCallStatementAST</c>
+	/// Visit a parse tree produced by the <c>designatorStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -133,7 +133,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitMethodCallStatementAST([NotNull] MiniCSharpParser.MethodCallStatementASTContext context) { return VisitChildren(context); }
+	public virtual Result VisitDesignatorStatementAST([NotNull] MiniCSharpParser.DesignatorStatementASTContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ifStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
@@ -234,7 +234,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <return>The visitor result.</return>
 	public virtual Result VisitBlockCommentStatementAST([NotNull] MiniCSharpParser.BlockCommentStatementASTContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>emptyStatementAST</c>
+	/// Visit a parse tree produced by the <c>semicolonStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -243,7 +243,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEmptyStatementAST([NotNull] MiniCSharpParser.EmptyStatementASTContext context) { return VisitChildren(context); }
+	public virtual Result VisitSemicolonStatementAST([NotNull] MiniCSharpParser.SemicolonStatementASTContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>blockAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.block"/>.
@@ -311,7 +311,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <return>The visitor result.</return>
 	public virtual Result VisitCastAST([NotNull] MiniCSharpParser.CastASTContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>exprAST</c>
+	/// Visit a parse tree produced by the <c>expressionAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.expr"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -320,7 +320,7 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitExprAST([NotNull] MiniCSharpParser.ExprASTContext context) { return VisitChildren(context); }
+	public virtual Result VisitExpressionAST([NotNull] MiniCSharpParser.ExpressionASTContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>termAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.term"/>.

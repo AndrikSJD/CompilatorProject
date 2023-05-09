@@ -20,7 +20,7 @@ formPars : type ident (COMMA type ident)*                                       
 type : ident (LBRACK RBRACK)?                                                      #typeAST;
 
 statement : designator ASSIGN expr SEMICOLON                                    #assignStatementAST
-          | designator (LPARENT (actPars)? RPARENT | INC | DEC) SEMICOLON       #methodCallStatementAST            
+          | designator (LPARENT (actPars)? RPARENT | INC | DEC) SEMICOLON       #designatorStatementAST            
           | IF LPARENT condition RPARENT statement (ELSE statement)?            #ifStatementAST
           | FOR LPARENT expr SEMICOLON condition? SEMICOLON statement? RPARENT statement #forStatementAST
           | WHILE LPARENT condition RPARENT statement                           #whileStatementAST
@@ -30,7 +30,7 @@ statement : designator ASSIGN expr SEMICOLON                                    
           | WRITE LPARENT expr (COMMA INTCONST)? RPARENT SEMICOLON                   #writeStatementAST
           | block                                                               #blockStatementAST
           | BLOCKCOMMENT                                                        #blockCommentStatementAST                        
-          | SEMICOLON                                                           #emptyStatementAST
+          | SEMICOLON                                                           #semicolonStatementAST
           ;
 
 block : LBRACE (varDecl | statement)* RBRACE                        #blockAST;      
@@ -45,7 +45,7 @@ condFact : expr relop expr                                          #condFactAST
 
 cast : LPARENT type RPARENT                                         #castAST;         
 
-expr : (SUB | cast)? term ((ADD | SUB) term)*                       #exprAST;
+expr : (SUB | cast)? term ((ADD | SUB) term)*                       #expressionAST;
 
 term : factor ((MUL | DIV | MOD) factor)*                            #termAST;
 
@@ -57,6 +57,7 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | BOOLEANCONST                                  #booleanFactorAST
     | NEW ident                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
+    | 
     ;
 
                                               

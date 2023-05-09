@@ -422,35 +422,82 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return parameters;
     }
 
+    //TODO: Revsar el visit de type
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
+        System.Diagnostics.Debug.WriteLine("Is an array :" + context.GetText());
+        if (context.LBRACK() != null)
+        {
+            return "list";
+        } else
+        {
+            return "not list";
+        }
         
-        return null;
     }
 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
+        Visit(context.designator());
+        Visit(context.expr());
         return null;
     }
 
-    public override object VisitMethodCallStatementAST(MiniCSharpParser.MethodCallStatementASTContext context)
+    public override object VisitDesignatorStatementAST(MiniCSharpParser.DesignatorStatementASTContext context)
     {
+        Visit(context.designator());
+        if (context.actPars() != null)
+        {
+            Visit(context.actPars());
+        }
         return null;
-    } 
+        
+    }
 
     public override object VisitIfStatementAST(MiniCSharpParser.IfStatementASTContext context)
     {
+        _symbolTable.OpenScope();
+        Visit(context.condition());
+        Visit(context.statement(0));
+        if (context.statement(1)!= null)
+        {
+            _symbolTable.OpenScope();
+            Visit(context.statement(1));
+            _symbolTable.CloseScope();
+        }
+        _symbolTable.CloseScope();
         return null;
         
     }
 
     public override object VisitForStatementAST(MiniCSharpParser.ForStatementASTContext context)
     {
+        _symbolTable.OpenScope();
+        Visit(context.expr());//visitamos la expresion
+        if (context.condition()!= null)
+        {
+            Visit(context.condition());
+        }
+
+        if (context.statement().Length > 1)
+        {
+            Visit(context.statement(0));
+            Visit(context.statement(1));
+        }
+        else
+        {
+            Visit(context.statement(0));
+        }
+        _symbolTable.CloseScope();
         return null;
     }
 
     public override object VisitWhileStatementAST(MiniCSharpParser.WhileStatementASTContext context)
     {
+        _symbolTable.OpenScope();
+        Visit(context.condition());
+        Visit(context.statement());
+        _symbolTable.CloseScope();
         return null;
     }
 
@@ -461,16 +508,23 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitReturnStatementAST(MiniCSharpParser.ReturnStatementASTContext context)
     {
+      
+        if (context.expr() != null)
+        {
+            Visit(context.expr());
+        }
         return null;
     }
 
     public override object VisitReadStatementAST(MiniCSharpParser.ReadStatementASTContext context)
     {
+        Visit(context.designator());
         return null;
     }
 
     public override object VisitWriteStatementAST(MiniCSharpParser.WriteStatementASTContext context)
     {
+        Visit(context.expr());
         return null;
     }
 
@@ -485,18 +539,16 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return null;
     }
 
-    public override object VisitEmptyStatementAST(MiniCSharpParser.EmptyStatementASTContext context)
-    {
-        return null;
-    }
+    
 
     public override object VisitBlockAST(MiniCSharpParser.BlockASTContext context)
     {   
+        
         _symbolTable.OpenScope();
         System.Diagnostics.Debug.WriteLine(context.varDecl().Length);
         System.Diagnostics.Debug.WriteLine(context.children.Count);
 
-        if (context.varDecl().Length > 0)
+        if ( context.varDecl() !=null && context.varDecl().Length > 0 )
         {
             foreach (var var in context.varDecl())
             {
@@ -504,7 +556,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
         }
 
-        if (context.statement().Length > 0)
+        if (context.statement() != null && context.statement().Length > 0)
         {
             foreach (var statement in context.statement())
             {
@@ -517,36 +569,88 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
+        Visit(context.expr(0));
+        if (context.expr().Length > 1)
+        {
+            for (int i = 1; i < context.expr().Length; i++)
+            {
+                Visit(context.expr(i));
+            }
+        }
         return null;
     }
 
     public override object VisitConditionAST(MiniCSharpParser.ConditionASTContext context)
-    {
+    {   
+        Visit(context.condTerm(0));
+        if (context.condTerm().Length > 1)
+        {
+            for (int i = 1; i < context.condTerm().Length; i++)
+            {
+                Visit(context.condTerm(i));
+            }
+        }
         return null;
     }
 
     public override object VisitCondTermAST(MiniCSharpParser.CondTermASTContext context)
     {
+        Visit(context.condFact(0));
+        if (context.condFact().Length > 1)
+        {
+            for (int i = 1; i < context.condFact().Length; i++)
+            {
+                Visit(context.condFact(i));
+            }
+        }
         return null;
     }
 
     public override object VisitCondFactAST(MiniCSharpParser.CondFactASTContext context)
     {
+        Visit(context.expr(0));
+        Visit(context.relop());
+        Visit(context.expr(1));
         return null;
     }
 
     public override object VisitCastAST(MiniCSharpParser.CastASTContext context)
     {
+        Visit(context.type());
         return null;
     }
 
-    public override object VisitExprAST(MiniCSharpParser.ExprASTContext context)
+    public override object VisitExpressionAST(MiniCSharpParser.ExpressionASTContext context)
     {
+        if (context.cast() != null)
+        {
+            Visit(context.cast());
+        }
+
+        Visit(context.term(0));
+        if (context.term().Length > 1)
+        {
+            for (int i = 1; i < context.term().Length; i++)
+            {
+                Visit(context.term(i));
+            }
+        }
+        
         return null;
+        
     }
 
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
+        Visit(context.factor(0));
+        if (context.factor().Length > 1)
+        {
+            for (int i = 1; i < context.factor().Length; i++)
+            {
+                Visit(context.factor(i));
+            }
+        }
+        
         return null;
     }
 
@@ -577,16 +681,32 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitNewFactorAST(MiniCSharpParser.NewFactorASTContext context)
     {
+        //TODO: METER VALIDACION DE QUE LA CLASE EXISTA EN LA TABLA DE SIMBOLOS
+        Visit(context.ident());
         return null;
     }
 
     public override object VisitParenFactorAST(MiniCSharpParser.ParenFactorASTContext context)
     {
+        Visit(context.expr());
         return null;
     }
 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
-    {
+    {   
+        Visit(context.ident(0));
+        if (context.ident().Length > 1)
+        {
+            Visit(context.ident(1));
+        }
+
+        if (context.expr()!= null)
+        {
+            foreach (var exp in context.expr())
+            {
+                Visit(exp);
+            }
+        }
         return null;
     }
 
@@ -605,7 +725,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
         return null;
     }
-    
-    
-    
+
+    public override object VisitSemicolonStatementAST(MiniCSharpParser.SemicolonStatementASTContext context)
+    {
+        return null;
+    }
 }

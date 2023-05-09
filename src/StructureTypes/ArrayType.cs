@@ -34,4 +34,10 @@ public class ArrayType : Type
         get => arrType;
         set => arrType = value;
     }
+
+
+    public override string GetStructureType()
+    {
+        return this.arrType.ToString();
+    }
 }

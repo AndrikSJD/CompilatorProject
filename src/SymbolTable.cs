@@ -83,7 +83,7 @@ public class SymbolTable
             }
             else if(table.ElementAt(i).GetType() == typeof(ClassType))
             {
-                printMessage += " - Tipo dato: " + ((ClassType)table.ElementAt(i)).type + "\n";
+                printMessage += " - Tipo dato: " + ((ClassType)table.ElementAt(i)).Type + "\n";
             }
             else if (table.ElementAt(i).GetType() == typeof(ArrayType))
             {

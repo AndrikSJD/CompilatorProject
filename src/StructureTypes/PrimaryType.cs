@@ -44,4 +44,9 @@ public class PrimaryType: Type
         get => Type;
         set => Type = value;
     }
+
+    public override string GetStructureType()
+    {
+        return this.Type.ToString();
+    }
 }

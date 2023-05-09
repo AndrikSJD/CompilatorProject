@@ -12,4 +12,9 @@ public class ClassVarType : Type
         classType = tf;
         
     }
+
+    public override string GetStructureType()
+    {
+        return this.classType;
+    }
 }

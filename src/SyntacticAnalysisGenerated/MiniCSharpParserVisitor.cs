@@ -89,12 +89,12 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAssignStatementAST([NotNull] MiniCSharpParser.AssignStatementASTContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>methodCallStatementAST</c>
+	/// Visit a parse tree produced by the <c>designatorStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitMethodCallStatementAST([NotNull] MiniCSharpParser.MethodCallStatementASTContext context);
+	Result VisitDesignatorStatementAST([NotNull] MiniCSharpParser.DesignatorStatementASTContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ifStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
@@ -159,12 +159,12 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBlockCommentStatementAST([NotNull] MiniCSharpParser.BlockCommentStatementASTContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>emptyStatementAST</c>
+	/// Visit a parse tree produced by the <c>semicolonStatementAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.statement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEmptyStatementAST([NotNull] MiniCSharpParser.EmptyStatementASTContext context);
+	Result VisitSemicolonStatementAST([NotNull] MiniCSharpParser.SemicolonStatementASTContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>blockAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.block"/>.
@@ -208,12 +208,12 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitCastAST([NotNull] MiniCSharpParser.CastASTContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>exprAST</c>
+	/// Visit a parse tree produced by the <c>expressionAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.expr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitExprAST([NotNull] MiniCSharpParser.ExprASTContext context);
+	Result VisitExpressionAST([NotNull] MiniCSharpParser.ExpressionASTContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>termAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.term"/>.

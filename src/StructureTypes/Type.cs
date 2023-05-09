@@ -28,4 +28,7 @@ public  abstract class Type
         get => level;
         set => level = value;
     }
+    
+    //metodo abstracto para obtener el tipo de estructura
+    public abstract string GetStructureType();
 }
