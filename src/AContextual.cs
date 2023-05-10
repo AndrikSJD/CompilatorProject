@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Antlr4.Runtime;
 using SyntacticAnalysisGenerated;
 using Proyecto.StructureTypes;
@@ -109,55 +110,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             {
                 Visit(child);
             }
-            // if (context.@using().Length > 0)
-            // {
-            //     foreach (var child in context.@using())
-            //     {
-            //
-            //         Visit(child);
-            //         System.Diagnostics.Debug.WriteLine("---visita using: " + child.GetText());
-            //
-            //     }
-            //
-            // }
-            //
-            // if (context.varDecl().Length > 0)
-            // {
-            //     int i = 0;
-            //     foreach (var child in context.varDecl())
-            //     {
-            //
-            //         Visit(child);
-            //         System.Diagnostics.Debug.WriteLine("---visita varDecl" + i + ": " + child.GetText());
-            //         i++;
-            //     }
-            // }
-            //
-            // if (context.classDecl().Length > 0)
-            // {
-            //     int i = 0;
-            //     foreach (var child in context.classDecl())
-            //     {
-            //
-            //         Visit(child);
-            //         System.Diagnostics.Debug.WriteLine("---visita classDecl" + i + ": " + child.GetText());
-            //         i++;
-            //     }
-            // }
-            //
-            // if (context.methodDecl().Length > 0)
-            // {
-            //     int i = 0;
-            //     foreach (var child in context.methodDecl())
-            //     {
-            //
-            //         Visit(child);
-            //         System.Diagnostics.Debug.WriteLine("---visita methodDecl" + i + ": " + child.GetText());
-            //         i++;
-            //     }
-            //     
-            //
-            // }
             _symbolTable.CloseScope();
         }
         catch (Exception e)
@@ -186,14 +138,16 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         bool isArray = false;
         bool isClassVarType = false;
         bool isError = false;
-      
+        
+        LinkedList<Type> lista = new LinkedList<Type>();
+
         //verificamos si es un array
         if(context.type().GetText().Contains('['))
         {
             isArray = true;
             //quitamos los corchetes
             varType = PrimaryType.showType(context.type().GetText().Substring(0, context.type().GetText().Length - 2).Trim());
-            if (varType is PrimaryType.PrimaryTypes.Unknown && 
+            if (varType is PrimaryType.PrimaryTypes.Unknown &&
                 _symbolTable.Search(context.type().GetText().Substring(0, context.type().GetText().Length - 2)
                     .Trim()) != null)
             {
@@ -206,7 +160,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             
         } else
-        
         {
             varType = PrimaryType.showType(context.type().GetText());
             if (varType is PrimaryType.PrimaryTypes.Unknown && 
@@ -221,7 +174,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             
         }
-
         if (!isError)
         {
             foreach (var child in context.ident())
@@ -232,11 +184,16 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 {
                     if (varType is PrimaryType.PrimaryTypes.Int)
                         {
-                            _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
+                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                            _symbolTable.Insert(array);
+                            lista.AddFirst(array);
+                            
                         }
                         else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                         {
-                            _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
+                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                            _symbolTable.Insert(array);
+                            lista.AddFirst(array);
                         }
                         
                         
@@ -246,11 +203,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     //si la variable es de un tipo de clase
                     if(isClassVarType)
                     {
-                        _symbolTable.Insert(new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText()));
+                        ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                        _symbolTable.Insert(element);
+                        lista.AddFirst(element);
                     }
                     else //es de un tipo primario
                     {
-                        _symbolTable.Insert(new PrimaryType(token,varType, _symbolTable.currentLevel));
+                        PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel);
+                        _symbolTable.Insert(element);
+                        lista.AddFirst(element);
                     }
 
                 }
@@ -264,7 +225,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
 
-        return null;
+        return lista;
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
@@ -272,12 +233,21 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         ClassType classDcl = new ClassType((IToken)Visit(context.ident()), _symbolTable.currentLevel);
         _symbolTable.Insert(classDcl);
         _symbolTable.OpenScope();
-        if(context.varDecl().Length > 0)
+        if(context.varDecl().Length > 0 && context.varDecl()!= null)
         {
+            LinkedList<Type> listaAttributes = new LinkedList<Type>();
             foreach (var child in context.varDecl())
             {
-                Visit(child);
+                 LinkedList<Type> list = (LinkedList<Type>)Visit(child);
+                    if(list != null)
+                    {
+                        foreach (var type in list)
+                        {
+                            classDcl.parametersL.AddFirst(type);
+                        }
+                    }
             }
+            
         }
         _symbolTable.CloseScope();
         return null;
@@ -426,33 +396,44 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
         System.Diagnostics.Debug.WriteLine("Is an array :" + context.GetText());
-        if (context.LBRACK() != null)
-        {
-            return "list";
-        } else
-        {
-            return "not list";
-        }
-        
+        IToken type = (IToken)Visit(context.ident());
+
+        //se retorna el identificador del tipo
+        return type.Text;
+
     }
 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
-        Visit(context.designator());
-        Visit(context.expr());
-        return null;
-    }
-
-    public override object VisitDesignatorStatementAST(MiniCSharpParser.DesignatorStatementASTContext context)
-    {
-        Visit(context.designator());
-        if (context.actPars() != null)
+        string tipoDesignator = (string)Visit(context.designator());
+        System.Diagnostics.Debug.WriteLine("visit assignstatement");
+        if(context.expr()!=null) //asignacion
         {
-            Visit(context.actPars());
+            string tipoExpresion = (string)Visit(context.expr());
+            if (tipoDesignator != tipoExpresion)
+            {
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + tipoDesignator + " is not the same as the type of the expression: " + tipoExpresion);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " is the same as the type of the expression: " + tipoExpresion);
+            }
+        }
+        else if (context.LPARENT() != null) //llamada a metodo
+        {
+            if(context.actPars()!=null )Visit(context.actPars());
+        }
+        else if (context.INC()!=null)
+        {
+            
+        }
+        else if (context.DEC()!=null)
+        {
+            
         }
         return null;
-        
     }
+    
 
     public override object VisitIfStatementAST(MiniCSharpParser.IfStatementASTContext context)
     {
@@ -545,8 +526,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {   
         
         _symbolTable.OpenScope();
-        System.Diagnostics.Debug.WriteLine(context.varDecl().Length);
-        System.Diagnostics.Debug.WriteLine(context.children.Count);
 
         if ( context.varDecl() !=null && context.varDecl().Length > 0 )
         {
@@ -622,91 +601,181 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitExpressionAST(MiniCSharpParser.ExpressionASTContext context)
     {
+        
+        //verificar mullop porque no se visita esta directo
+        
+        
         if (context.cast() != null)
         {
             Visit(context.cast());
         }
 
-        Visit(context.term(0));
+        
+        string tipo = (string) Visit(context.term(0));
+        if (tipo == null)
+        {
+            Console.WriteLine("Error de tipos");
+            return null;
+        }
         if (context.term().Length > 1)
         {
             for (int i = 1; i < context.term().Length; i++)
             {
-                Visit(context.term(i));
+                //verificar despues lo del addop porque no se visita
+                string tipoLista = (string) Visit(context.term(i));
+                if (tipo != tipoLista)
+                {
+                    Console.WriteLine("Error de tipos");
+                    return null;
+                }
             }
         }
         
-        return null;
+        return tipo;
         
     }
 
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
-        Visit(context.factor(0));
+        string tipo = (string)Visit(context.factor(0));
+        
         if (context.factor().Length > 1)
         {
             for (int i = 1; i < context.factor().Length; i++)
-            {
-                Visit(context.factor(i));
+            {   
+               
+                string tipoLista = (string) Visit(context.factor(i));
+                if(tipo != tipoLista)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error de tipos son diferentes");
+                    return null;
+                }
+                
             }
         }
         
-        return null;
+        return tipo;
     }
 
     public override object VisitFactorAST(MiniCSharpParser.FactorASTContext context)
     {
+        string tipo = (string)Visit(context.designator());
+        if (context.actPars() != null) Visit(context.actPars());
+        //TODO: POR QUE SIEMPRE ES TRUE ESTE IF
+        if (tipo != null)
+        {
+            return tipo;
+        }
         return null;
     }
 
     public override object VisitNumFactorAST(MiniCSharpParser.NumFactorASTContext context)
     {
-        return null;
+        return "Int";
     }
 
     public override object VisitCharFactorAST(MiniCSharpParser.CharFactorASTContext context)
     {
-        return null;
+        return "Char";
     }
 
     public override object VisitStringFactorAST(MiniCSharpParser.StringFactorASTContext context)
     {
-        return null;
+        return "String";
     }
 
     public override object VisitBooleanFactorAST(MiniCSharpParser.BooleanFactorASTContext context)
     {
-        return null;
+        return "Boolean";
     }
 
     public override object VisitNewFactorAST(MiniCSharpParser.NewFactorASTContext context)
     {
         //TODO: METER VALIDACION DE QUE LA CLASE EXISTA EN LA TABLA DE SIMBOLOS
-        Visit(context.ident());
+        string ident = (string) Visit(context.type());
+        Type? tipo = _symbolTable.Search(ident);
+
+        if (tipo != null)
+        {
+            return tipo.GetStructureType();
+        }
+        System.Diagnostics.Debug.WriteLine("Error de tipos");
         return null;
     }
 
     public override object VisitParenFactorAST(MiniCSharpParser.ParenFactorASTContext context)
     {
-        Visit(context.expr());
+        string tipo = (string)Visit(context.expr());
+        if(tipo != null) return tipo;
         return null;
     }
 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
-        Visit(context.ident(0));
-        if (context.ident().Length > 1)
+         if(context.ident().Length > 1) // mas de un id
         {
-            Visit(context.ident(1));
+            //algo.perro // 2
+            //algo.perro.escoba
+            //perro.x
+            // retornar el ultimo y el penultimo
+            System.Diagnostics.Debug.WriteLine(context.ident(0).GetText() + " DESIGNATOR mas de 1 id");
+          
+            ClassVarType tipo = (ClassVarType) _symbolTable.Search(context.ident(context.ident().Length - 2).GetText());
+            if (tipo != null)
+            {
+                ClassType classType = (ClassType)_symbolTable.Search(tipo.classType);
+                if (classType != null)
+                {
+                    // cast to classtype
+                    
+                    foreach (var enterito in  classType.parametersL)
+                    {
+                        System.Diagnostics.Debug.WriteLine(enterito.GetToken().Text + "COMPARANDO" + context.ident(context.ident().Length - 1));
+                        if (enterito.GetToken().Text.Equals(context.ident(context.ident().Length - 1).GetText()))
+                        {
+                            System.Diagnostics.Debug.WriteLine(enterito.GetToken().Text + "Se encontro en dicha clase");
+                            return enterito.GetStructureType();
+                        }
+                    }
+                    System.Diagnostics.Debug.WriteLine(" No se encontro en dicha clase designator");
+
+                    return null;
+                
+                }
+            }
+           
+
+            System.Diagnostics.Debug.WriteLine(" No se encontro en dicha clase " +
+                                               context.ident(context.ident().Length - 2).GetText());
+            return null;
+        }
+        
+        if (context.ident().Length == 1) // solo hay un id
+        {
+            //enterito = 1
+            Type tipo = _symbolTable.Search(context.ident(0).GetText());
+            System.Diagnostics.Debug.WriteLine(context.ident(0).GetText()+ " DESIGNATOR");
+            if (tipo != null)
+            {
+                return tipo.GetStructureType();
+            }
+            System.Diagnostics.Debug.WriteLine( " No se encontro");
+            return null;
+        }
+        //expression
+        if (context.expr() != null)
+        {
+            //int char //point no
+            //msg[0] // msg[0][0] no
+            Type tipo = _symbolTable.Search(context.ident(0).GetText());
+            if (tipo != null )
+            {
+                return tipo.GetStructureType();
+            }
+
+            return null;
         }
 
-        if (context.expr()!= null)
-        {
-            foreach (var exp in context.expr())
-            {
-                Visit(exp);
-            }
-        }
         return null;
     }
 
@@ -723,7 +792,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitDoubleFactorAST(MiniCSharpParser.DoubleFactorASTContext context)
     {
-        return null;
+       
+        return "Double";
     }
 
     public override object VisitSemicolonStatementAST(MiniCSharpParser.SemicolonStatementASTContext context)

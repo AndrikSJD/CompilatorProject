@@ -71,5 +71,5 @@ DOUBLECONST : DIGIT+ '.' DIGIT (DIGIT)*;
 INTCONST : DIGIT (DIGIT)*;
 ID : LETTER  (LETTER | DIGIT)*;
 STRINGCONST : '"' .*? '"';
-CHARCONST : '\'' ~['\\r\n] '\'' ;
+CHARCONST : '\'' [a-zA-Z_0-9] '\'' ;
 BOOLEANCONST: ('true'|'false');

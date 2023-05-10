@@ -19,8 +19,7 @@ formPars : type ident (COMMA type ident)*                                       
 
 type : ident (LBRACK RBRACK)?                                                      #typeAST;
 
-statement : designator ASSIGN expr SEMICOLON                                    #assignStatementAST
-          | designator (LPARENT (actPars)? RPARENT | INC | DEC) SEMICOLON       #designatorStatementAST            
+statement : designator (ASSIGN expr | LPARENT actPars? RPARENT | INC | DEC) SEMICOLON #assignStatementAST        
           | IF LPARENT condition RPARENT statement (ELSE statement)?            #ifStatementAST
           | FOR LPARENT expr SEMICOLON condition? SEMICOLON statement? RPARENT statement #forStatementAST
           | WHILE LPARENT condition RPARENT statement                           #whileStatementAST
@@ -55,7 +54,7 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | STRINGCONST                                    #stringFactorAST
     | DOUBLECONST                                   #doubleFactorAST
     | BOOLEANCONST                                  #booleanFactorAST
-    | NEW ident                                       #newFactorAST
+    | NEW type                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
     ;
 
