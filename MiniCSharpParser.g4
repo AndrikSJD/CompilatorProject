@@ -57,7 +57,6 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | BOOLEANCONST                                  #booleanFactorAST
     | NEW ident                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
-    | 
     ;
 
                                               

@@ -5,12 +5,15 @@ namespace Proyecto.StructureTypes;
 public class ArrayType : Type
 {
     public readonly string Type = "array";
+    public int size = 0;
+    
     public enum ArrTypes
     {
         Int,
         Char,
         Unknown,
     }
+    
 
     private ArrTypes arrType;
 
@@ -34,7 +37,12 @@ public class ArrayType : Type
         get => arrType;
         set => arrType = value;
     }
-
+    
+    public int Size
+    {
+        get => size;
+        set => size = value;
+    }
 
     public override string GetStructureType()
     {
