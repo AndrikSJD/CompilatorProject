@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Linq;
 using Antlr4.Runtime;
 using SyntacticAnalysisGenerated;
 using Proyecto.StructureTypes;
@@ -17,57 +18,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
         _symbolTable = new SymbolTable();
     }
-    
-    // private String GetTypeName(int type)
-    // {
-    //     switch (type)
-    //     {
-    //         case 0:
-    //             return "int";
-    //         case 1:
-    //             return "float";
-    //         case 2:
-    //             return "char";
-    //         case 3:
-    //             return "string";
-    //         case 4:
-    //             return "bool";
-    //         case 5:
-    //             return "void";
-    //         case 6:
-    //             return "unknown";
-    //         case 7:
-    //             return "class";
-    //         default:
-    //             return "No hay un type";
-    //     }
-    // }
-    
-    // private int GetType(String type)
-    // {
-    //     switch (type)
-    //     {
-    //         case "int":
-    //             return 0;
-    //         case "float":
-    //             return 1;
-    //         case "char":
-    //             return 2;
-    //         case "string":
-    //             return 3;
-    //         case "bool":
-    //             return 4;
-    //         case "void":
-    //             return 5;
-    //         case "unknown":
-    //             return 6;
-    //         case "class":
-    //             return 7;
-    //         default: //no tiene tipo
-    //             return -1;
-    //     }
-    // }
-    
     
     
     
@@ -142,7 +92,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         LinkedList<Type> lista = new LinkedList<Type>();
 
         //verificamos si es un array
-        if(context.type().GetText().Contains('['))
+        if(context.type().GetText().Contains("[]"))
         {
             isArray = true;
             //quitamos los corchetes
@@ -235,7 +185,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         _symbolTable.OpenScope();
         if(context.varDecl().Length > 0 && context.varDecl()!= null)
         {
-            LinkedList<Type> listaAttributes = new LinkedList<Type>();
+           
             foreach (var child in context.varDecl())
             {
                  LinkedList<Type> list = (LinkedList<Type>)Visit(child);
@@ -243,7 +193,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     {
                         foreach (var type in list)
                         {
-                            classDcl.parametersL.AddFirst(type);
+                            if (child is PrimaryType)
+                            {
+                                classDcl.parametersL.AddFirst(type);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("The type of the variable is not valid" + child.GetType());
+                            }
+                            
                         }
                     }
             }
@@ -267,7 +225,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (context.type()!= null)
         {
             //verificamos si es un array
-            if(context.type().GetText().Contains('['))
+            if(context.type().GetText().Contains("[]"))
             {
                 isArray = true;
                 //quitamos los corchetes
@@ -348,17 +306,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             string type = context.type(i).GetText();
             PrimaryType.PrimaryTypes varType;
             //verificamos si es un array
-            if (type.Contains('['))
+            if (type.Contains("[]"))
             {
                 varType = PrimaryType.showType(context.type(i).GetText().Substring(0, context.type(i).GetText().Length - 2).Trim());
                 
                 if (varType is PrimaryType.PrimaryTypes.Int)
                 {
-                    parameters.AddFirst(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
+                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Char)
                 {
-                    parameters.AddFirst(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
+                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
                 }
                 else
                 {
@@ -375,7 +333,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if (varType is PrimaryType.PrimaryTypes.Unknown &&
                     paramT != null)
                 {
-                    parameters.AddFirst(new ClassVarType(token, _symbolTable.currentLevel, type));
+                    parameters.AddLast(new ClassVarType(token, _symbolTable.currentLevel, type));
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Unknown &&
                     paramT == null)
@@ -384,7 +342,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else
                 {
-                    parameters.AddFirst(new PrimaryType(token, varType, _symbolTable.currentLevel));
+                    parameters.AddLast(new PrimaryType(token, varType, _symbolTable.currentLevel));
                 }
             }
             
@@ -407,7 +365,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
         string tipoDesignator = (string)Visit(context.designator());
         System.Diagnostics.Debug.WriteLine("visit assignstatement");
-        if(context.expr()!=null) //asignacion
+        if(context.expr()!=null) // si es una asignacion 
         {
             string tipoExpresion = (string)Visit(context.expr());
             if (tipoDesignator != tipoExpresion)
@@ -419,9 +377,140 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " is the same as the type of the expression: " + tipoExpresion);
             }
         }
-        else if (context.LPARENT() != null) //llamada a metodo
+        else if (context.LPARENT() != null) // si es llamada a metodo
         {
-            if(context.actPars()!=null )Visit(context.actPars());
+            Type? type = _symbolTable.Search(context.designator().GetText());
+            
+            if (context.designator().GetText() == "del")
+            {
+                if (context.actPars() != null)
+                {
+                    //obtener lista de parametros
+                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    //Recibe dos parametros, la lista, el indice
+                    
+
+                    foreach (var pars in parametros)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Parametros DEL: " + pars.GetToken().Text);
+                    }
+                    if (parametros.Count == 2)
+                    {
+                        if (parametros.ElementAt(0) is ArrayType && parametros.ElementAt(1).GetStructureType().Equals("Int"))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el del");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Error de parametros, tipos de parametros no coinciden en el del");
+                        }
+                    }
+                    else if (parametros.Count != 2)
+                    {
+                        //TODO: verificar orden de los parametros que pueden tener orden diferente
+                       
+                            System.Diagnostics.Debug.WriteLine("Error en los parametros, cantidad de parametros metodo DEL");
+                        
+                    }
+
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR METODO: Faltan los parametros para el metodo del");
+                }
+                
+            }
+            else if (context.designator().GetText() == "len")
+            {
+                
+            }
+            else if (context.designator().GetText() == "add")
+            {
+                if (context.actPars() != null)
+                {
+                    //obtener lista de parametros
+                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    //Recibe dos parametros, la lista, el indice
+                    System.Diagnostics.Debug.WriteLine("Cuenta de parametros ADD: " + parametros.Count);
+                    foreach (var VARIABLE in parametros)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Parametros ADD: " + VARIABLE.GetToken().Text);
+                    }
+                    
+                    if (parametros.Count == 2)
+                    {
+                        if (parametros.ElementAt(0).GetStructureType().Equals(parametros.ElementAt(1).GetStructureType()))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el add");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Error de parametros, tipos de parametros no coinciden en el del");
+                        }
+                    }
+                    else if (parametros.Count != 2)
+                    {
+                        //TODO: verificar orden de los parametros que pueden tener orden diferente
+                       
+                        System.Diagnostics.Debug.WriteLine("Error en los parametros, cantidad de parametros en el ADD");
+                        
+                    }
+
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR METODO ADD: Faltan los parametros para el metodo del");
+                }
+                
+            }
+           
+            else if (type is MethodType method)
+            {
+                if (context.actPars() != null)
+                {
+                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    if (parametros.Count == method.parametersL.Count)
+                    {
+                        for (int i = 0; i < method.parametersL.Count; i++)
+                        {
+                            if (method.parametersL.ElementAt(i).GetStructureType().ToString() !=
+                                parametros.ElementAt(i).GetStructureType())
+                            {
+                                System.Diagnostics.Debug.WriteLine("Error de asignacion: " +
+                                                                   method.parametersL.ElementAt(i).GetStructureType()
+                                                                       .ToString() +
+                                                                   " is not the same as the type of the expression: " +
+                                                                   parametros.ElementAt(i));
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
+                                                                   method.parametersL.ElementAt(i).GetStructureType()
+                                                                       .ToString() +
+                                                                   " is the same as the type of the expression: " +
+                                                                   parametros.ElementAt(i));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Error de asignacion: " + method.parametersL.Count +
+                                                           " is not the same as the type of the expression: " +
+                                                           parametros.Count);
+
+                    }
+                }
+                else if (method.parametersL.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error de parametros,faltan parametros : " + method.GetToken().Text);
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + context.designator().GetText() + " is not a method");
+            }
+            
+           
         }
         else if (context.INC()!=null)
         {
@@ -548,15 +637,26 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
-        Visit(context.expr(0));
-        if (context.expr().Length > 1)
+
+        LinkedList<Type> tipos = new LinkedList<Type>();
+        foreach (var child in context.expr())
         {
-            for (int i = 1; i < context.expr().Length; i++)
+            string tipoExpression = (string)Visit(child);
+            ;
+            Type? tipoTabla = _symbolTable.Search(child.GetText());
+            if (tipoTabla != null)
             {
-                Visit(context.expr(i));
+                tipos.AddLast(tipoTabla);
+            }
+            else
+            {
+                if (tipoExpression != null)
+                    tipos.AddLast(new PrimaryType(child.Start, PrimaryType.showType(tipoExpression.ToLower()),
+                        _symbolTable.currentLevel));
             }
         }
-        return null;
+
+        return tipos;
     }
 
     public override object VisitConditionAST(MiniCSharpParser.ConditionASTContext context)
@@ -712,32 +812,29 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
-         if(context.ident().Length > 1) // mas de un id
+        //TODO validar el tipo de arreglo que sea correcto y q este en el alcance
+        if(context.ident().Length > 1) // mas de un id
         {
-            //algo.perro // 2
-            //algo.perro.escoba
-            //perro.x
-            // retornar el ultimo y el penultimo
-            System.Diagnostics.Debug.WriteLine(context.ident(0).GetText() + " DESIGNATOR mas de 1 id");
-          
-            ClassVarType tipo = (ClassVarType) _symbolTable.Search(context.ident(context.ident().Length - 2).GetText());
-            if (tipo != null)
+            Type? tipo1 =  _symbolTable.Search(context.ident(context.ident().Length - 2).GetText());
+
+            
+            if (tipo1 != null)
             {
-                ClassType classType = (ClassType)_symbolTable.Search(tipo.classType);
+                ClassVarType tipo = (ClassVarType)tipo1;
+                ClassType classType = (ClassType)_symbolTable.Search(tipo.GetStructureType());
                 if (classType != null)
                 {
                     // cast to classtype
-                    
+                
                     foreach (var enterito in  classType.parametersL)
                     {
-                        System.Diagnostics.Debug.WriteLine(enterito.GetToken().Text + "COMPARANDO" + context.ident(context.ident().Length - 1));
                         if (enterito.GetToken().Text.Equals(context.ident(context.ident().Length - 1).GetText()))
                         {
                             System.Diagnostics.Debug.WriteLine(enterito.GetToken().Text + "Se encontro en dicha clase");
                             return enterito.GetStructureType();
                         }
                     }
-                    System.Diagnostics.Debug.WriteLine(" No se encontro en dicha clase designator");
+                    System.Diagnostics.Debug.WriteLine(" No se encontro en dicha clase");
 
                     return null;
                 
@@ -753,16 +850,20 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (context.ident().Length == 1) // solo hay un id
         {
             //enterito = 1
+            if (context.ident(0).GetText().Equals("del") || context.ident(0).GetText().Equals("add") || context.ident(0).GetText().Equals("len"))
+            {
+                return null; //REVISAR
+            }
+            
             Type tipo = _symbolTable.Search(context.ident(0).GetText());
             System.Diagnostics.Debug.WriteLine(context.ident(0).GetText()+ " DESIGNATOR");
             if (tipo != null)
             {
                 return tipo.GetStructureType();
             }
-            System.Diagnostics.Debug.WriteLine( " No se encontro");
+            System.Diagnostics.Debug.WriteLine( " No se encontro en la tabla: " + context.ident(0).GetText() );
             return null;
         }
-        //expression
         if (context.expr() != null)
         {
             //int char //point no

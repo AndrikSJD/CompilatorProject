@@ -56,10 +56,6 @@ MUL : '*';
 DIV : '/';
 MOD : '%'; 
 
-//Lists
-ADDARRAY: 'add';
-DELARRAY: 'del';
-LENARRAY: 'len';    
 
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];

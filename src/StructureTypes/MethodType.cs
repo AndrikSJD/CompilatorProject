@@ -48,7 +48,7 @@ public class MethodType : Type
             
             
         }
-        System.Diagnostics.Debug.WriteLine("-------------------- FIN METHOD -------------------");
+        System.Diagnostics.Debug.WriteLine("-------------------- FIN METHOD -------------------"+ "\n");
         
     }
 

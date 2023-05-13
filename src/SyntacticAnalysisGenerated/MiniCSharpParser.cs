@@ -42,8 +42,8 @@ public partial class MiniCSharpParser : Parser {
 		RBRACE=17, LPARENT=18, RPARENT=19, LBRACK=20, RBRACK=21, SEMICOLON=22, 
 		COMMA=23, DOT=24, ASSIGN=25, INC=26, DEC=27, OR=28, AND=29, EQUAL=30, 
 		NOTEQUAL=31, GT=32, GE=33, LT=34, LE=35, ADD=36, SUB=37, MUL=38, DIV=39, 
-		MOD=40, ADDARRAY=41, DELARRAY=42, LENARRAY=43, DOUBLECONST=44, INTCONST=45, 
-		ID=46, STRINGCONST=47, CHARCONST=48, BOOLEANCONST=49;
+		MOD=40, DOUBLECONST=41, INTCONST=42, ID=43, STRINGCONST=44, CHARCONST=45, 
+		BOOLEANCONST=46;
 	public const int
 		RULE_program = 0, RULE_using = 1, RULE_varDecl = 2, RULE_classDecl = 3, 
 		RULE_methodDecl = 4, RULE_formPars = 5, RULE_type = 6, RULE_statement = 7, 
@@ -61,16 +61,15 @@ public partial class MiniCSharpParser : Parser {
 		"'for'", "'while'", "'break'", "'return'", "'read'", "'write'", "'new'", 
 		"'{'", "'}'", "'('", "')'", "'['", "']'", "';'", "','", "'.'", "'='", 
 		"'++'", "'--'", "'||'", "'&&'", "'=='", "'!='", "'>'", "'>='", "'<'", 
-		"'<='", "'+'", "'-'", "'*'", "'/'", "'%'", "'add'", "'del'", "'len'"
+		"'<='", "'+'", "'-'", "'*'", "'/'", "'%'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "COMMENT", "BLOCKCOMMENT", "WS", "CLASS", "USING", "VOID", "IF", 
 		"ELSE", "FOR", "WHILE", "BREAK", "RETURN", "READ", "WRITE", "NEW", "LBRACE", 
 		"RBRACE", "LPARENT", "RPARENT", "LBRACK", "RBRACK", "SEMICOLON", "COMMA", 
 		"DOT", "ASSIGN", "INC", "DEC", "OR", "AND", "EQUAL", "NOTEQUAL", "GT", 
-		"GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD", "ADDARRAY", "DELARRAY", 
-		"LENARRAY", "DOUBLECONST", "INTCONST", "ID", "STRINGCONST", "CHARCONST", 
-		"BOOLEANCONST"
+		"GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD", "DOUBLECONST", "INTCONST", 
+		"ID", "STRINGCONST", "CHARCONST", "BOOLEANCONST"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -189,7 +188,7 @@ public partial class MiniCSharpParser : Parser {
 			State = 54;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70368744177744L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8796093022288L) != 0)) {
 				{
 				State = 52;
 				ErrorHandler.Sync(this);
@@ -916,7 +915,7 @@ public partial class MiniCSharpParser : Parser {
 					State = 119;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
-					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1108445160046592L) != 0)) {
+					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 138675904348160L) != 0)) {
 						{
 						State = 118;
 						actPars();
@@ -989,7 +988,7 @@ public partial class MiniCSharpParser : Parser {
 				State = 142;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1108445160046592L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 138675904348160L) != 0)) {
 					{
 					State = 141;
 					condition();
@@ -1001,7 +1000,7 @@ public partial class MiniCSharpParser : Parser {
 				State = 146;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70368748469892L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8796097314436L) != 0)) {
 					{
 					State = 145;
 					statement();
@@ -1049,7 +1048,7 @@ public partial class MiniCSharpParser : Parser {
 				State = 161;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1108445160046592L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 138675904348160L) != 0)) {
 					{
 					State = 160;
 					expr();
@@ -1193,7 +1192,7 @@ public partial class MiniCSharpParser : Parser {
 			State = 190;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70368748469892L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8796097314436L) != 0)) {
 				{
 				State = 188;
 				ErrorHandler.Sync(this);
@@ -1881,7 +1880,7 @@ public partial class MiniCSharpParser : Parser {
 					State = 250;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
-					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1108445160046592L) != 0)) {
+					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 138675904348160L) != 0)) {
 						{
 						State = 249;
 						actPars();
@@ -2197,7 +2196,7 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,49,288,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,46,288,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,1,0,5,0,42,8,0,10,0,
 		12,0,45,9,0,1,0,1,0,1,0,1,0,1,0,1,0,5,0,53,8,0,10,0,12,0,56,9,0,1,0,1,
@@ -2256,7 +2255,7 @@ public partial class MiniCSharpParser : Parser {
 		14,0,161,160,1,0,0,0,161,162,1,0,0,0,162,163,1,0,0,0,163,184,5,22,0,0,
 		164,165,5,13,0,0,165,166,5,18,0,0,166,167,3,34,17,0,167,168,5,19,0,0,168,
 		169,5,22,0,0,169,184,1,0,0,0,170,171,5,14,0,0,171,172,5,18,0,0,172,175,
-		3,28,14,0,173,174,5,23,0,0,174,176,5,45,0,0,175,173,1,0,0,0,175,176,1,
+		3,28,14,0,173,174,5,23,0,0,174,176,5,42,0,0,175,173,1,0,0,0,175,176,1,
 		0,0,0,176,177,1,0,0,0,177,178,5,19,0,0,178,179,5,22,0,0,179,184,1,0,0,
 		0,180,184,3,16,8,0,181,184,5,2,0,0,182,184,5,22,0,0,183,114,1,0,0,0,183,
 		128,1,0,0,0,183,137,1,0,0,0,183,151,1,0,0,0,183,157,1,0,0,0,183,159,1,
@@ -2281,15 +2280,15 @@ public partial class MiniCSharpParser : Parser {
 		17,0,248,250,5,18,0,0,249,251,3,18,9,0,250,249,1,0,0,0,250,251,1,0,0,0,
 		251,252,1,0,0,0,252,254,5,19,0,0,253,248,1,0,0,0,253,254,1,0,0,0,254,270,
 		1,0,0,0,255,257,5,37,0,0,256,255,1,0,0,0,256,257,1,0,0,0,257,258,1,0,0,
-		0,258,270,5,45,0,0,259,270,5,48,0,0,260,270,5,47,0,0,261,270,5,44,0,0,
-		262,270,5,49,0,0,263,264,5,15,0,0,264,270,3,12,6,0,265,266,5,18,0,0,266,
+		0,258,270,5,42,0,0,259,270,5,45,0,0,260,270,5,44,0,0,261,270,5,41,0,0,
+		262,270,5,46,0,0,263,264,5,15,0,0,264,270,3,12,6,0,265,266,5,18,0,0,266,
 		267,3,28,14,0,267,268,5,19,0,0,268,270,1,0,0,0,269,247,1,0,0,0,269,256,
 		1,0,0,0,269,259,1,0,0,0,269,260,1,0,0,0,269,261,1,0,0,0,269,262,1,0,0,
 		0,269,263,1,0,0,0,269,265,1,0,0,0,270,33,1,0,0,0,271,280,3,36,18,0,272,
 		273,5,24,0,0,273,279,3,36,18,0,274,275,5,20,0,0,275,276,3,28,14,0,276,
 		277,5,21,0,0,277,279,1,0,0,0,278,272,1,0,0,0,278,274,1,0,0,0,279,282,1,
 		0,0,0,280,278,1,0,0,0,280,281,1,0,0,0,281,35,1,0,0,0,282,280,1,0,0,0,283,
-		284,5,46,0,0,284,37,1,0,0,0,285,286,7,2,0,0,286,39,1,0,0,0,31,43,52,54,
+		284,5,43,0,0,284,37,1,0,0,0,285,286,7,2,0,0,286,39,1,0,0,0,31,43,52,54,
 		70,81,88,93,106,112,119,124,135,142,146,161,175,183,188,190,200,208,216,
 		229,236,244,250,253,256,269,278,280
 	};
