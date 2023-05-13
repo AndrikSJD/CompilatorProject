@@ -501,7 +501,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else if (parametros.Count != 2)
                     {
-                        //TODO: verificar orden de los parametros que pueden tener orden diferente
+                        
                        
                         System.Diagnostics.Debug.WriteLine("Error en los parametros, cantidad de parametros en el ADD");
                         
@@ -743,9 +743,21 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitCondFactAST(MiniCSharpParser.CondFactASTContext context)
     {
-        Visit(context.expr(0));
+        string  typeFirstExpression = (string)Visit(context.expr(0));
         Visit(context.relop());
-        Visit(context.expr(1));
+        string  typeSecondExpression = (string) Visit(context.expr(1));
+        
+        if(typeFirstExpression == null || typeSecondExpression == null)
+        {
+            Console.WriteLine("Error en el tipo de la condicion");
+            return false;
+        }
+        
+        
+        
+        
+        
+        
         return null;
     }
 
