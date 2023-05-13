@@ -42,6 +42,18 @@ public class SymbolTable
         }
         return null;
     }
+    public bool Sacar(string id)
+    {
+        foreach (Type? i in table)
+        {
+            if (i.GetToken().Text.Equals(id) && i.Level == currentLevel)
+            {
+                table.Remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void OpenScope()
     {

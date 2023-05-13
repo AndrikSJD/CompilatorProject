@@ -53,7 +53,7 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | CHARCONST                                         #charFactorAST
     | STRINGCONST                                    #stringFactorAST
     | DOUBLECONST                                   #doubleFactorAST
-    | BOOLEANCONST                                  #booleanFactorAST
+    | (TrueCONST|FalseCONST)                                 #booleanFactorAST
     | NEW type                                       #newFactorAST
     | LPARENT expr RPARENT                      #parenFactorAST
     ;

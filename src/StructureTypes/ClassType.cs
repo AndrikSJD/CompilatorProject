@@ -14,6 +14,6 @@ public class ClassType: Type
 
     public override string GetStructureType()
     {
-        return this.Type;
+        return this.GetToken().Text;
     }
 }

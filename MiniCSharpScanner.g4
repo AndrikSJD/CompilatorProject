@@ -56,6 +56,9 @@ MUL : '*';
 DIV : '/';
 MOD : '%'; 
 
+//Boolean operators
+TrueCONST : 'true';
+FalseCONST : 'false';
 
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z]|[A-Z];
@@ -68,4 +71,3 @@ INTCONST : DIGIT (DIGIT)*;
 ID : LETTER  (LETTER | DIGIT)*;
 STRINGCONST : '"' .*? '"';
 CHARCONST : '\'' [a-zA-Z_0-9] '\'' ;
-BOOLEANCONST: ('true'|'false');
