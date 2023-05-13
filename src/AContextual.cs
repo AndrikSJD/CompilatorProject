@@ -105,7 +105,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else if (varType != PrimaryType.PrimaryTypes.Char && varType != PrimaryType.PrimaryTypes.Int)
             {
-                System.Diagnostics.Debug.WriteLine("The type of the array can be only int or char, current type is not valid ");
+                System.Diagnostics.Debug.WriteLine("El tipo del array solo puede ser int o char, el tipo actual no es valido ");
                 isError = true;
             }
             
@@ -172,7 +172,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
         else
         {
-            System.Diagnostics.Debug.WriteLine("The declaration type of the variable is not valid");
+            System.Diagnostics.Debug.WriteLine("El tipo de declaracion de la variable no es valida");
         }
 
 
@@ -245,7 +245,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else if (methodType != PrimaryType.PrimaryTypes.Char && methodType != PrimaryType.PrimaryTypes.Int)
                 {
-                    System.Diagnostics.Debug.WriteLine("The type of the array can be only int or char, current type is not valid METHOD DECL ");
+                    // TODO revisar
+                    //System.Diagnostics.Debug.WriteLine("The type of the array can be only int or char, current type is not valid METHOD DECL ");
+                    System.Diagnostics.Debug.WriteLine("El tipo del arreglo solo puede ser int o char, el tipo actual no es valido ");
                     isError = true;
                 }
             
@@ -303,7 +305,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
-            System.Diagnostics.Debug.WriteLine("The type of the method is not valid");
+            System.Diagnostics.Debug.WriteLine("El tipo del metodo no es valido");
         }
         
         _symbolTable.CloseScope();
@@ -338,7 +340,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("The type of the array can be only int or char, current type is not valid");
+                    System.Diagnostics.Debug.WriteLine("El tipo del arreglo solo puede ser int o char, el tipo actual no es valido");
                 }
                 
             }
@@ -359,7 +361,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 else if (varType is PrimaryType.PrimaryTypes.Unknown &&
                     paramT == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("The type of the parameter: " + token.Text +" is not valid");
+                    System.Diagnostics.Debug.WriteLine("El tipo de parametro: " + token.Text +" no es valido");
                 }
                 else
                 {
@@ -376,7 +378,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     //TODO: Revsar el visit de type
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
-        System.Diagnostics.Debug.WriteLine("Is an array :" + context.GetText());
+        System.Diagnostics.Debug.WriteLine("Es un array :" + context.GetText());
         IToken type = (IToken)Visit(context.ident());
 
         //se retorna el identificador del tipo
@@ -387,17 +389,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
         string tipoDesignator = (string)Visit(context.designator());
-        System.Diagnostics.Debug.WriteLine("visit assignstatement");
+        System.Diagnostics.Debug.WriteLine("visita assignstatement");
         if(context.expr()!=null) // si es una asignacion 
         {
             string tipoExpresion = (string)Visit(context.expr());
             if (tipoDesignator != tipoExpresion)
             {
-                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + tipoDesignator + " is not the same as the type of the expression: " + tipoExpresion);
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + tipoDesignator + " no es el mismo que el tipo de la expresion: " + tipoExpresion);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " is the same as the type of the expression: " + tipoExpresion);
+                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " es el mismo que el tipo de la expresion: " + tipoExpresion);
             }
         }
         else if (context.LPARENT() != null) // si es llamada a metodo
@@ -439,7 +441,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("ERROR METODO: Faltan los parametros para el metodo del");
+                    System.Diagnostics.Debug.WriteLine("ERROR DE METODO: Faltan los parametros para el metodo del");
                 }
                 
             }
@@ -502,7 +504,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 System.Diagnostics.Debug.WriteLine("Error de asignacion: " +
                                                                    method.parametersL.ElementAt(i).GetStructureType()
                                                                        .ToString() +
-                                                                   " is not the same as the type of the expression: " +
+                                                                   " no es el mismo que el tipo de la expresion: " +
                                                                    parametros.ElementAt(i));
                             }
                             else
@@ -510,7 +512,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
                                                                    method.parametersL.ElementAt(i).GetStructureType()
                                                                        .ToString() +
-                                                                   " is the same as the type of the expression: " +
+                                                                   " es el mismo que el tipo de la expresion: " +
                                                                    parametros.ElementAt(i));
                             }
                         }
@@ -518,19 +520,19 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     else
                     {
                         System.Diagnostics.Debug.WriteLine("Error de asignacion: " + method.parametersL.Count +
-                                                           " is not the same as the type of the expression: " +
+                                                           " no es el mismo que el tipo de la expresion: " +
                                                            parametros.Count);
 
                     }
                 }
                 else if (method.parametersL.Count > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Error de parametros,faltan parametros : " + method.GetToken().Text);
+                    System.Diagnostics.Debug.WriteLine("Error de parametros, faltan parametros : " + method.GetToken().Text);
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + context.designator().GetText() + " is not a method");
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + context.designator().GetText() + " no es un metodo");
             }
             
            
