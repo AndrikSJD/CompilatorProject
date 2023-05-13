@@ -802,7 +802,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             bool conditionType = (bool) Visit(factor);
             if (conditionType == false)
             {
-                Debug.WriteLine("Error: No coinciden los tipos en la VisitConditionTermAST " + " y " + conditionType); 
+                Debug.WriteLine("Error: No coinciden los tipos en la VisitConditionTermAST " + conditionType); 
                 return false;
             }
         }
