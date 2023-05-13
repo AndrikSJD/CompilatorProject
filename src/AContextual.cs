@@ -791,15 +791,47 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         //TODO: verificar que la cantidad de parametros sea correcta
         //TODO: verificar que el orden y tipos de los parametros sean correctos
         string tipo = (string)Visit(context.designator());
-        if (context.actPars() != null) 
-            Visit(context.actPars());
-        //TODO: POR QUE SIEMPRE ES TRUE ESTE IF
-        if (tipo != null)
+        if (context.LPARENT() != null)
+        {
+            LinkedList<Type> tipos = (LinkedList<Type>)Visit(context.actPars());
+
+            Type? metodo = (Type)_symbolTable.Search(context.designator().GetText());
+            if (metodo is MethodType)
+            {
+                if (((MethodType)metodo).parametersL.Count == tipos.Count)
+                {
+                    for (int i = 0; i < ((MethodType)metodo).parametersL.Count; i++)
+                    {
+                        if (((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() !=
+                            tipos.ElementAt(i).GetStructureType())
+                        {
+                            System.Diagnostics.Debug.WriteLine("ERROR: TIPO DE PARAMETRO INCORRECTO, se esperaba :" + 
+                                                               ((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() +
+                                                               ", se obtuvo: " + tipos.ElementAt(i).GetStructureType());
+                            return null;
+                        }
+                    }
+
+                    return ((MethodType)metodo).ReturnTypeGetSet;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR: CANTIDAD DE PARAMETROS INCORRECTA");
+                    return null;
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("ERROR: NO SE ENCONTRO EL METODO");
+                return null;
+            }
+        }
+        else
         {
             return tipo;
         }
-        return null;
     }
+    
 
     public override object VisitNumFactorAST(MiniCSharpParser.NumFactorASTContext context)
     {
