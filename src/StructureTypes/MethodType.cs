@@ -8,7 +8,7 @@ public class MethodType : Type
 {
     private readonly string Type = "method";
     private int ParamsNum;
-    private string returnType;
+    private string returnType; //SOLO TIPOS BASICOS
     
     
     //TODO CAMBIARLO A HASMAP
