@@ -101,10 +101,10 @@ public class SymbolTable
             else if(table.ElementAt(i).GetType() == typeof(ClassType))
             {
 
-                System.Diagnostics.Debug.WriteLine("\n"+"-------------------- CLASS ------------------");
+                System.Diagnostics.Debug.WriteLine("\n"+"-------------------- CLASE ------------------");
                 System.Diagnostics.Debug.WriteLine("Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level);
                 System.Diagnostics.Debug.WriteLine(" - Tipo dato: " + ((ClassType)table.ElementAt(i)).Type);
-                System.Diagnostics.Debug.WriteLine("-------------------- FIN CLASS -----------------" + "\n");
+                System.Diagnostics.Debug.WriteLine("-------------------- FIN CLASE -----------------" + "\n");
 
             }
             else if (table.ElementAt(i).GetType() == typeof(ArrayType))

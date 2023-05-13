@@ -23,32 +23,32 @@ public class MethodType : Type
     
     public void PrintMethod()
     {
-        System.Diagnostics.Debug.WriteLine("-------------------- METHOD -------------------");
-        System.Diagnostics.Debug.WriteLine("MethodType "+ this.GetToken().Text + " Level: " + Level);
-        System.Diagnostics.Debug.WriteLine("ParamCount: " + ParamsNum);
-        System.Diagnostics.Debug.WriteLine("ReturnType: " + returnType);
-        System.Diagnostics.Debug.WriteLine("Parameters: ");
+        System.Diagnostics.Debug.WriteLine("-------------------- Metodo -------------------");
+        System.Diagnostics.Debug.WriteLine("Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
+        System.Diagnostics.Debug.WriteLine("Contador de parametros: " + ParamsNum);
+        System.Diagnostics.Debug.WriteLine("Tipo de retorno: " + returnType);
+        System.Diagnostics.Debug.WriteLine("Parametros: ");
         foreach (var parameter in parametersL)
         {
             if (parameter is ClassVarType classVarType)
             {
-                System.Diagnostics.Debug.WriteLine("    Name: "+ classVarType.GetToken().Text +" Type: "+ classVarType.Type + " - TypeOf " + classVarType.classType);
-                System.Diagnostics.Debug.WriteLine("    Name: "+ classVarType.GetToken().Text+" Level: "+(classVarType.Level));  
+                System.Diagnostics.Debug.WriteLine("    Nombre: "+ classVarType.GetToken().Text +" Tipo: "+ classVarType.Type + " - Tipo de " + classVarType.classType);
+                System.Diagnostics.Debug.WriteLine("    Nombre: "+ classVarType.GetToken().Text+" Nivel: "+(classVarType.Level));  
             }
             
             if (parameter is PrimaryType primaryType)
             {
-                System.Diagnostics.Debug.WriteLine("    Name: "+ primaryType.GetToken().Text+" Type: "+ primaryType.TypeGetSet + " - Level " + primaryType.Level);
+                System.Diagnostics.Debug.WriteLine("    Nombre: "+ primaryType.GetToken().Text+" Tipo: "+ primaryType.TypeGetSet + " - Nivel " + primaryType.Level);
             }
 
             if (parameter is ArrayType arrType)
             {
-                System.Diagnostics.Debug.WriteLine("    Name: "+ arrType.GetToken().Text+" Type: "+ arrType.Type + " - Level " + arrType.Level + " - typeArray " + arrType.GetSetArrType);
+                System.Diagnostics.Debug.WriteLine("    Nombre: "+ arrType.GetToken().Text+" Tipo: "+ arrType.Type + " - Nivel " + arrType.Level + " - Tipo de array " + arrType.GetSetArrType);
             }
             
             
         }
-        System.Diagnostics.Debug.WriteLine("-------------------- FIN METHOD -------------------"+ "\n");
+        System.Diagnostics.Debug.WriteLine("-------------------- Fin del Metodo -------------------"+ "\n");
         
     }
 
