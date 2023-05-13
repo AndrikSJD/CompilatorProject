@@ -447,7 +447,33 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else if (context.designator().GetText() == "len")
             {
-                
+                if (context.actPars() != null)
+                {
+                    //obtener lista de parametros
+                    LinkedList<Type> lenPars = (LinkedList<Type>)Visit(context.actPars());
+
+                    if (lenPars.Count == 1)
+                    {
+                        if (lenPars.ElementAt(0) is ArrayType)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el len");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine(
+                                "Error de parametros, tipos de parametros no coinciden en el len");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("ERROR DE METODO: cantidad de parametros distinta len");
+                    }
+                    
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR DE METODO: Faltan los parametros para el metodo len");
+                }
             }
             else if (context.designator().GetText() == "add")
             {
@@ -798,7 +824,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             LinkedList<Type> tipos = (LinkedList<Type>)Visit(context.actPars());
 
             Type? metodo = (Type)_symbolTable.Search(context.designator().GetText());
-            if (metodo is MethodType)
+            if (metodo is MethodType method)
             {
                 if (((MethodType)metodo).parametersL.Count == tipos.Count)
                 {
@@ -857,15 +883,25 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitNewFactorAST(MiniCSharpParser.NewFactorASTContext context)
     {
-        //TODO: METER VALIDACION DE QUE LA CLASE EXISTA EN LA TABLA DE SIMBOLOS
+        
         string ident = (string) Visit(context.type());
+        //Busca en la tabla para ver si es una clase
         Type? tipo = _symbolTable.Search(ident);
 
         if (tipo != null)
         {
             return tipo.GetStructureType();
         }
-        System.Diagnostics.Debug.WriteLine("Error de tipos, error clase: "+ '"'+ident +'"'+" no encontrada en la declaracion new de instancia de clase");
+        
+        //Verifica si es un arreglo de tipo basico (int o char)
+        ArrayType.ArrTypes arrType = ArrayType.showType(ident);
+        
+        if(arrType != ArrayType.ArrTypes.Unknown)
+        {
+            return arrType.ToString();
+        }
+        
+        System.Diagnostics.Debug.WriteLine("Error de tipos, el tipo del new no existe en tabla simbolos ni es un arreglo de tipo basico");
         return null;
     }
 
@@ -944,7 +980,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 return "Int";
             }
 
-            Type tipo = _symbolTable.Search(context.ident(0).GetText());
+            Type? tipo = _symbolTable.Search(context.ident(0).GetText());
             System.Diagnostics.Debug.WriteLine(context.ident(0).GetText()+ " DESIGNATOR");
             if (tipo != null)
             {
