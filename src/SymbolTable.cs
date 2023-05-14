@@ -11,6 +11,7 @@ public class SymbolTable
 {
     LinkedList<Object>table;
     public int currentLevel;
+    public MethodType currentMethod;
     
 
     public int getLevel() {
@@ -42,17 +43,42 @@ public class SymbolTable
         }
         return null;
     }
-    public bool Sacar(string id)
+    public void Sacar(string nombreMetodo)
     {
-        foreach (Type? i in table)
+        int posMethod=0;
+        LinkedList<Object> slicedList = new LinkedList<Object>();
+        
+        // Busco la posicion del metodo en la tabla
+        for (int i = 0; i <table.Count ; i++)
         {
-            if (i.GetToken().Text.Equals(id) && i.Level == currentLevel)
+            if (((Type)table.ElementAt(i)).GetToken().Text.Equals(nombreMetodo))
             {
-                table.Remove(i);
-                return true;
+                posMethod = i;
             }
         }
-        return false;
+        System.Diagnostics.Debug.WriteLine("Posicion del metodo: " + posMethod);
+        if (posMethod ==0)
+        {
+            System.Diagnostics.Debug.WriteLine("No se encontro el metodo");
+        }
+        else
+        {
+            // Agrego a la lista los elementos que estan antes del metodo
+            for (int j = 0; j < table.Count; j++)
+            {
+                if (j <= posMethod)
+                {
+                    slicedList.AddLast(table.ElementAt(j));
+                }
+            }
+            
+            table.Clear();
+            foreach (var child in slicedList)
+            {
+                table.AddLast(child);
+            }
+        }
+
     }
 
     public void OpenScope()

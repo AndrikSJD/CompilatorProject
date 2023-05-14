@@ -11,7 +11,7 @@ public class MethodType : Type
     private string returnType;
     
     
-    //TODO CAMBIARLO A HASMAP
+   
     public LinkedList<Type> parametersL;
     
     public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList) : base(tok, level)

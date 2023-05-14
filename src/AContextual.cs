@@ -283,30 +283,39 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             {
                 method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters);
                 _symbolTable.Insert(method);
+                _symbolTable.currentMethod = method;
             }
             else
             {
                 method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, "Void", parameters);
                 _symbolTable.Insert(method);
+                _symbolTable.currentMethod = method;
             }
         
-            if (context.block() != null)
-            {
-                Visit(context.block());
-            }
+            foreach (var child in parameters)
+        {
+            _symbolTable.Insert(child);
+        }
+ 
+            //string? methodReturnType = (string)
+        Visit(context.block());
+        
+        
 
-            //TODO: REVISAR me esta eliminando la variable x que esta dentro de la clase de la tabla porque hay otro parametro que tambien se llama x y seguro el scope es nivel 1 tamb
-            foreach (var pars in parameters)
-            {
-                _symbolTable.Sacar(pars.GetToken().Text);
-            }
-
-
+        
+    
+        System.Diagnostics.Debug.WriteLine("Cerrando scope de metodo " + token.Text);
+        
+        _symbolTable.Sacar(token.Text);
+        
+        // _symbolTable.CloseScope();
+        // return null;
         }
         else
         {
             System.Diagnostics.Debug.WriteLine("El tipo del metodo no es valido");
         }
+
         
         _symbolTable.CloseScope();
         
@@ -330,13 +339,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 {
                     parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
                     //los agrega tambien a la tabla
-                    _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
+                    // _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Char)
                 {
                     parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
                     //los agrega a la tabla
-                    _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
+                    // _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
                 }
                 else
                 {
@@ -355,7 +364,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 {
                     parameters.AddLast(new ClassVarType(token, _symbolTable.currentLevel, type));
                     //los agrega tambien a la tabla
-                    _symbolTable.Insert(new ClassVarType(token, _symbolTable.currentLevel, type));
+                    // _symbolTable.Insert(new ClassVarType(token, _symbolTable.currentLevel, type));
                     
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Unknown &&
@@ -367,7 +376,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 {
                     parameters.AddLast(new PrimaryType(token, varType, _symbolTable.currentLevel));
                     //los agrega tambien a la tabla
-                    _symbolTable.Insert(new PrimaryType(token, varType, _symbolTable.currentLevel));
+                    // _symbolTable.Insert(new PrimaryType(token, varType, _symbolTable.currentLevel));
                 }
             }
             
@@ -694,7 +703,27 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
       
         if (context.expr() != null)
         {
-            Visit(context.expr());
+
+            string typeReturn = (string)Visit(context.expr());
+            if (_symbolTable.currentMethod.ReturnTypeGetSet == "void")
+            {
+                System.Diagnostics.Debug.WriteLine("ERROR de Retorno : El metodo void no puede retornar datos: " + _symbolTable.currentMethod.GetToken().Text);
+            }
+            //no le pudo identificar el tipo de retorno en caso de que sea null
+            if (typeReturn != null)
+            {
+                if(typeReturn.ToLower() != _symbolTable.currentMethod.ReturnTypeGetSet.ToLower())
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR de Retorno : El metodo " + _symbolTable.currentMethod.GetToken().Text + 
+                                                       " no puede retornar datos de tipo " + typeReturn);
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("ERROR de Retorno : El metodo el valor de retorno no coincide con algun tipo valido ");
+            }
+           
+            
         }
         return null;
     }
@@ -836,22 +865,25 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitCastAST(MiniCSharpParser.CastASTContext context)
     {
-        Visit(context.type());
-        return null;
+        string type = (string)Visit(context.type());
+        if (type == null)
+        {
+            System.Diagnostics.Debug.WriteLine("Error en el cast, el valor es nulo");
+        }
+        return type;
     }
 
     public override object VisitExpressionAST(MiniCSharpParser.ExpressionASTContext context)
     {
         
-        //verificar mullop porque no se visita esta directo
-        
         
         if (context.cast() != null)
         {
-            Visit(context.cast());
+            string type = (string) Visit(context.cast());
+            return type;
+           
         }
 
-        
         string tipo = (string) Visit(context.term(0));
         if (tipo == null)
         {
@@ -861,7 +893,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
      
         for (int i = 1; i < context.term().Length; i++)
         {
-            //verificar despues lo del addop porque no se visita
             string tipoLista = (string) Visit(context.term(i));
             if (tipo != tipoLista)
             {
