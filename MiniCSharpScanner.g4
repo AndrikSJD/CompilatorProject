@@ -66,8 +66,8 @@ fragment EXPRESION : LETTER+;
 fragment LCOMMENT : '/*';
 fragment RCOMMENT : '*/';
 
-DOUBLECONST : DIGIT+ '.' DIGIT (DIGIT)*;
-INTCONST : DIGIT (DIGIT)*;
+DOUBLECONST : DIGIT+ '.' DIGIT+ ;
+INTCONST : DIGIT+;
 ID : LETTER  (LETTER | DIGIT)*;
 STRINGCONST : '"' .*? '"';
 CHARCONST : '\'' [a-zA-Z_0-9] '\'' ;

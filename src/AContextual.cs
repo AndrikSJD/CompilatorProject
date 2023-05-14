@@ -76,7 +76,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitUsingAST(MiniCSharpParser.UsingASTContext context)
     {
-        System.Diagnostics.Debug.WriteLine("DENTRO using :" + context.ident().GetText());
+       
         //TODO : implementar using 
         
        return null;
@@ -221,7 +221,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitMethodDeclAST(MiniCSharpParser.MethodDeclASTContext context)
     {
         _symbolTable.OpenScope();
-        System.Diagnostics.Debug.WriteLine("DENTRO methodDecl :" + context.ident().GetText());
+       
         //probar con visit(context.ident()) para ver si funciona
         IToken token = (IToken)Visit(context.ident());
         //inicializamos en unknown para validar que el tipo de retorno sea valido y que nos permita accesar cuando
@@ -392,7 +392,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
         if(context.expr()!=null)// si es una asignacion 
         {
-            string tipoDesignator = (string)Visit(context.designator());
+            string tipoDesignator = (string)Visit(context.designator()); 
             string tipoExpresion = ((string)Visit(context.expr())).ToLower(); //tolower para que no haya problemas con mayusculas y minusculas
 
 
@@ -401,16 +401,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
             if (tipoDesignator != null && tipoExpresion != null)
             {
+                tipoDesignator = tipoDesignator.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
                 if (tipoDesignator.Contains("[]") && context.expr().GetText().Contains("new"))
                 {
-                    System.Diagnostics.Debug.WriteLine("ENTREEEEE");
+          
                     if (!(tipoDesignator.ToLower().Contains(tipoExpresion)))
                     {
                         System.Diagnostics.Debug.WriteLine("Error de asignacion: " + tipoDesignator + " no es el mismo que el tipo de la expresion: " + tipoExpresion);
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " es el mismo que el tipo de la expresion: " + tipoExpresion);
+                        // System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " es el mismo que el tipo de la expresion: " + tipoExpresion);
                     }
 
                     return null;
@@ -423,7 +424,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " es el mismo que el tipo de la expresion: " + tipoExpresion);
+                    // System.Diagnostics.Debug.WriteLine("Asignacion correcta: " + tipoDesignator + " es el mismo que el tipo de la expresion: " + tipoExpresion);
                     return null;
                 }
                 
@@ -448,16 +449,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
                     //Recibe dos parametros, la lista, el indice
                     
-
-                    foreach (var pars in parametros)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Parametros DEL: " + pars.GetToken().Text);
-                    }
+                    
                     if (parametros.Count == 2)
                     {
                         if (parametros.ElementAt(0) is ArrayType && parametros.ElementAt(1).GetStructureType().Equals("Int"))
                         {
-                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el del");
+                            // System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el del");
                         }
                         else
                         {
@@ -490,7 +487,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     {
                         if (lenPars.ElementAt(0) is ArrayType)
                         {
-                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el len");
+                            // System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el len");
                         }
                         else
                         {
@@ -521,7 +518,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     {
                         if (parametros.ElementAt(0).GetStructureType().Equals(parametros.ElementAt(1).GetStructureType()))
                         {
-                            System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el add");
+                            // System.Diagnostics.Debug.WriteLine("Todo bien, todo correcto en el add");
                         }
                         else
                         {
@@ -564,11 +561,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                             else
                             {
-                                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
-                                                                   method.parametersL.ElementAt(i).GetStructureType()
-                                                                       .ToString() +
-                                                                   " es el mismo que el tipo de la expresion: " +
-                                                                   parametros.ElementAt(i));
+                                // System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
+                                //                                    method.parametersL.ElementAt(i).GetStructureType()
+                                //                                        .ToString() +
+                                //                                    " es el mismo que el tipo de la expresion: " +
+                                //                                    parametros.ElementAt(i));
                             }
                         }
                     }
@@ -614,7 +611,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
-            System.Diagnostics.Debug.WriteLine("ERROR: Tipo en la condicion if, es falsa" + context.condition().GetText());
+            System.Diagnostics.Debug.WriteLine("ERROR: Tipo en la condicion if, es falsa: "+'"' + context.condition().GetText()+'"');
             if (context.statement(1) != null)
             {
                 _symbolTable.OpenScope();
@@ -817,9 +814,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         Visit(context.relop());
         string  typeSecondExpression = (string) Visit(context.expr(1));
         
+        System.Diagnostics.Debug.WriteLine("TIPO DE LA PRIMERA EXPRESION " + typeFirstExpression);
+        System.Diagnostics.Debug.WriteLine("TIPO DE LA SEGUNDA EXPRESION " + typeSecondExpression);
+        
         if(typeFirstExpression == null || typeSecondExpression == null)
         {
-            Console.WriteLine("Error en el tipo de la condicion, no se puede comparar con null");
+            System.Diagnostics.Debug.WriteLine("Error Condition Factor en el tipo de la condicion, no se puede comparar con null");
             return false;
         }
         
@@ -828,7 +828,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             return true;
         }
        
-        Console.WriteLine("Error en el tipo de la condicion, no coinciden " + typeFirstExpression + " y " + typeSecondExpression);
+        System.Diagnostics.Debug.WriteLine("Error Condition Factor en el tipo de la condicion, no coinciden " + typeFirstExpression + " y " + typeSecondExpression);
         return false;
         
         
@@ -1017,7 +1017,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     {
                         if (enterito.GetToken().Text.Equals(context.ident(1).GetText()))
                         {
-                            System.Diagnostics.Debug.WriteLine( "El atributo: "+'"'+enterito.GetToken().Text +'"'+ " se encontro en la clase: " + classType.GetToken().Text);
+                            // System.Diagnostics.Debug.WriteLine( "El atributo: "+'"'+enterito.GetToken().Text +'"'+ " se encontro en la clase: " + classType.GetToken().Text);
                             return enterito.GetStructureType();
                         }
                     }
@@ -1038,7 +1038,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (typeIdent is ArrayType && context.expr().Length == 1) //cuando es arreglo
         {
             string typeExpr = (string) Visit(context.expr(0));
-            System.Diagnostics.Debug.WriteLine("El tipo del arreglo es: " + typeIdent.GetStructureType());
+            // System.Diagnostics.Debug.WriteLine("El tipo del arreglo es: " + typeIdent.GetStructureType());
             if (typeExpr != null)
             {
                 if(typeExpr.Equals("Int"))
