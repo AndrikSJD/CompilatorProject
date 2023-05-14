@@ -90,7 +90,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         bool isClassVarType = false;
         bool isError = false;
         
-        LinkedList<Type> lista = new LinkedList<Type>();
+        // LinkedList<Type> lista = new LinkedList<Type>();
 
         //verificamos si es un array
         if(context.type().GetText().Contains("[]"))
@@ -133,19 +133,60 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 //verificamos si es un array
                 if(isArray) 
                 {
-                    if (varType is PrimaryType.PrimaryTypes.Int)
+
+                    if (_symbolTable.currentClass != null)
+                    {
+                       System.Diagnostics.Debug.WriteLine("Dentro de la clase solo se pueden crear variables de tipo basico"); 
+                    }
+                    else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
+                    {
+                        IToken tok = (IToken)Visit(child);
+                        Type typeVariable = _symbolTable.Search(token.Text);
+                        if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
+                        {
+                            System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + tok.Text + '"' + " ya existe ");
+                        }
+                        else
                         {
                             ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
                             _symbolTable.Insert(array);
-                            lista.AddFirst(array);
-                            
                         }
-                        else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
+                    }
+                    else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
+                    {
+                        IToken tok = (IToken)Visit(child);
+                        Type typeVariable = _symbolTable.Search(token.Text);
+                        if (typeVariable!= null )
                         {
-                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
-                            _symbolTable.Insert(array);
-                            lista.AddFirst(array);
+                            System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + tok.Text + '"' + " ya existe ");
                         }
+                        else
+                        {
+                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                            _symbolTable.Insert(array);
+                        }
+                    }
+                    
+                    
+                    // else
+                    // {
+                    //     if (varType is PrimaryType.PrimaryTypes.Int)
+                    //     {
+                    //         ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                    //         _symbolTable.Insert(array);
+                    //         // lista.AddFirst(array);
+                    //         
+                    //     }
+                    //     else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
+                    //     {
+                    //         ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                    //         _symbolTable.Insert(array);
+                    //         // lista.AddFirst(array);
+                    //     }
+                    //     
+                    // }
+                    
+                    
                         
                         
                 }
@@ -154,16 +195,96 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     //si la variable es de un tipo de clase
                     if(isClassVarType)
                     {
-                        ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
-                        _symbolTable.Insert(element);
-                        lista.AddFirst(element);
+                        
+                        
+                       
+                        
+                        if(_symbolTable.currentClass != null) //si esta dentro en una clase
+                        {
+                            System.Diagnostics.Debug.WriteLine("Dentro de la clase solo se pueden crear variables de tipo basico");
+                            
+                        }
+                        else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
+                        {
+                            IToken tok = (IToken)Visit(child);
+                            Type typeVariable = _symbolTable.Search(token.Text);
+                            if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + tok.Text + '"' + " ya existe ");
+                            }
+                            else
+                            {
+                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                                _symbolTable.Insert(element);
+                            }
+                        }
+                        else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
+                        {
+                            IToken tok = (IToken)Visit(child);
+                            Type typeVariable = _symbolTable.Search(token.Text);
+                            if (typeVariable!= null )
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + tok.Text + '"' + " ya existe ");
+                            }
+                            else
+                            {
+                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                                _symbolTable.Insert(element);
+                            }
+                        }
+                        
+                        
+                        
+                        // else
+                        // {
+                        //     ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                        //     _symbolTable.Insert(element);
+                        //     // lista.AddFirst(element);
+                        //     
+                        // }
+                        //
+                        
+                        
+                       
                     }
                     else //es de un tipo primario
                     {
-     
                         PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel);
-                        _symbolTable.Insert(element);
-                        lista.AddFirst(element);
+                        if(_symbolTable.currentClass != null) //si estamos dentro de una clase
+                        {
+
+                            if (!_symbolTable.currentClass.BuscarAtributo(element.GetToken().Text))
+                            {
+                                _symbolTable.Insert(element);
+                                _symbolTable.currentClass.parametersL.AddLast(element);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable "+'"'+token.Text +'"'+ " ya existe en la clase");
+                            }
+                           
+                            
+                        }
+                        else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
+                        {
+                            Type variableglobal = _symbolTable.Search(token.Text);
+                            if (variableglobal!= null && variableglobal.Level == 0)
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + token.Text + '"' + " ya existe como variable global");
+                            }
+                            else
+                            {
+                                _symbolTable.Insert(element);
+                            }
+                        }
+                        else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
+                        {
+                            _symbolTable.Insert(element);
+                            // lista.AddFirst(element);
+                        }
+     
+                       
+                        
                     }
 
                 }
@@ -177,53 +298,74 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
 
-        return lista;
+        // return lista;
+
+        return null;
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
     {
+
+
+        if (_symbolTable.Search(context.ident().GetText()) != null)
+        {
+            System.Diagnostics.Debug.WriteLine("ERROR CLASS DECLARATION, la clase " + '"' + context.ident().GetText() + '"' + " ya existe ");
+            return null;
+        }
+        
         ClassType classDcl = new ClassType((IToken)Visit(context.ident()), _symbolTable.currentLevel);
         _symbolTable.Insert(classDcl);
+        _symbolTable.currentClass = classDcl; //saber en la clase actual sobre la que estoy trabajando
         _symbolTable.OpenScope();
-        if(context.varDecl().Length > 0 && context.varDecl()!= null)
+        if(context.varDecl()!= null)
         {
            
             foreach (var child in context.varDecl())
             {
-                LinkedList<Type> list = (LinkedList<Type>)Visit(child);
-                    if(list != null)
-                    {
-                        foreach (var type in list)
-                        {
-                            if (type is PrimaryType)
-                            {
-                                classDcl.parametersL.AddFirst(type);
-                            }
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine("El tipo de variable"+ child.GetType()  + " no se puede agregar a la clase" + context.ident().GetText() );
-                            }
-                            
-                        }
-                    }
+
+                Visit(child);
+                // LinkedList<Type> list = (LinkedList<Type>)Visit(child);
+                //     if(list != null)
+                //     {
+                //         foreach (var type in list)
+                //         {
+                //             if (type is PrimaryType)
+                //             {
+                //                 classDcl.parametersL.AddFirst(type);
+                //             }
+                //             else
+                //             {
+                //                 System.Diagnostics.Debug.WriteLine("El tipo de variable"+ child.GetType()  + " no se puede agregar a la clase" + context.ident().GetText() );
+                //             }
+                //             
+                //         }
+                //     }
             }
-            // foreach (var attri in classDcl.parametersL)
-            // {
-            //     System.Diagnostics.Debug.WriteLine("Atributo de la clase " + classDcl.GetToken().Text + " : " + attri.GetToken().Text + " tipo: " + attri.GetStructureType() + " nivel: " + attri.Level + "");
-            // }
+            
             
         }
        
         _symbolTable.CloseScope();
+        _symbolTable.currentClass = null; //volvemos null la clase actual
         return null;
     }
 
     public override object VisitMethodDeclAST(MiniCSharpParser.MethodDeclASTContext context)
     {
-        _symbolTable.OpenScope();
+        
        
         //probar con visit(context.ident()) para ver si funciona
         IToken token = (IToken)Visit(context.ident());
+        Type? type = _symbolTable.Search(token.Text);
+        if (type == null)
+        {
+            System.Diagnostics.Debug.WriteLine("ES NULOOOOOOOO METHOD DECL");
+        }
+        if (type != null && type is MethodType)
+        {
+            System.Diagnostics.Debug.WriteLine("ERROR DECLARACION DE METODO: El nombre" + token.Text + " ya existe en el contexto actual y es de tipo " + type.GetType());
+            return null;
+        }
         //inicializamos en unknown para validar que el tipo de retorno sea valido y que nos permita accesar cuando
         PrimaryType.PrimaryTypes methodType = PrimaryType.PrimaryTypes.Unknown;
         bool isArray = false;
@@ -274,8 +416,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             
             if(context.formPars() != null)
             {
+                _symbolTable.OpenScope();
                 parameters = (LinkedList<Type>)Visit(context.formPars());
-                 
+                _symbolTable.CloseScope();
             
             }
             MethodType method;
@@ -298,11 +441,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
  
             //string? methodReturnType = (string)
-        Visit(context.block());
+            _symbolTable.OpenScope();
+            Visit(context.block());
+            _symbolTable.CloseScope();
         
         
-
-        
+            
     
         System.Diagnostics.Debug.WriteLine("Cerrando scope de metodo " + token.Text);
         
@@ -317,13 +461,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
         
-        _symbolTable.CloseScope();
-        
+        _symbolTable.currentMethod = null;
         return null;
     }
 
     public override object VisitFormParsAST(MiniCSharpParser.FormParsASTContext context)
     {
+        
+        
         LinkedList<Type> parameters = new LinkedList<Type>();
         for (int i = 0; i < context.ident().Length; i++)
         {
@@ -843,8 +988,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         Visit(context.relop());
         string  typeSecondExpression = (string) Visit(context.expr(1));
         
-        System.Diagnostics.Debug.WriteLine("TIPO DE LA PRIMERA EXPRESION " + typeFirstExpression);
-        System.Diagnostics.Debug.WriteLine("TIPO DE LA SEGUNDA EXPRESION " + typeSecondExpression);
         
         if(typeFirstExpression == null || typeSecondExpression == null)
         {
@@ -1034,9 +1177,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         //TODO validar el tipo de arreglo que sea correcto y q este en el alcance
         if(context.ident().Length > 1) // mas de un id
         {
-            Type? tipo1 =  _symbolTable.Search(context.ident(0).GetText());
 
-            
+            Type? tipo1 = _symbolTable.BuscarCustomVar(context.ident(0).GetText());       
             if (tipo1 != null)
             {
                 ClassVarType tipo = (ClassVarType)tipo1;

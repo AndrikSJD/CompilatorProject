@@ -12,6 +12,7 @@ public class SymbolTable
     LinkedList<Object>table;
     public int currentLevel;
     public MethodType currentMethod;
+    public ClassType? currentClass;
     
 
     public int getLevel() {
@@ -43,6 +44,19 @@ public class SymbolTable
         }
         return null;
     }
+    
+    public Type? BuscarCustomVar(string id)
+    {
+        foreach (Type? i in table)
+        {
+            //&& i.Level <= nivelActual
+            if (i.GetToken().Text.Equals(id) && i is ClassVarType)
+                return i;
+        }
+        return null;
+    }
+    
+    
     public void Sacar(string nombreMetodo)
     {
         int posMethod=0;
