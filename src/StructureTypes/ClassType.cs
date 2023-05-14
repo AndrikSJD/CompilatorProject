@@ -12,6 +12,14 @@ public class ClassType: Type
         
     }
 
+    public void PrintClass(IToken s, int level, string type)
+    {
+        System.Diagnostics.Debug.WriteLine($"Nombre: {s.Text}");
+        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
+        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
+        System.Diagnostics.Debug.WriteLine("\n");
+    }
+
     public override string GetStructureType()
     {
         return this.GetToken().Text;

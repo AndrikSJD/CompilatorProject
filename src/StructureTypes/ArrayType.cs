@@ -44,6 +44,15 @@ public class ArrayType : Type
         set => size = value;
     }
 
+    public void PrintArrayType(IToken s, int level, string type, ArrTypes baseType)
+    {
+        System.Diagnostics.Debug.WriteLine($"Nombre {s.Text}");
+        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
+        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
+        System.Diagnostics.Debug.WriteLine($" - Tipo base: {baseType}");
+        System.Diagnostics.Debug.WriteLine("\n");
+    }
+
     public override string GetStructureType()
     {
         return this.arrType.ToString();

@@ -69,56 +69,39 @@ public class SymbolTable
 
     public void Print()
     {
-        //TODO CAMBIAR IMPRESION
-        System.Diagnostics.Debug.WriteLine("*************** INICIO TABLA  *****************");
+        System.Diagnostics.Debug.WriteLine("--------------- INICIA TABLA ---------------");
         for (int i = 0; i < table.Count; i++)
         {
             IToken s = ((Type)table.ElementAt(i)).GetToken();
-            if(table.ElementAt(i).GetType() == typeof(MethodType))
+            if(table.ElementAt(i).GetType() == typeof(ClassType))
             {
-          
-                    ((MethodType)table.ElementAt(i)).PrintMethod();
-
-               
+                ((ClassType)table.ElementAt(i)).PrintClass(s, ((Type)table.ElementAt(i)).Level, ((ClassType)table.ElementAt(i)).Type);
             }
-            if(table.ElementAt(i).GetType() == typeof(ClassVarType))
+            else if(table.ElementAt(i).GetType() == typeof(ClassVarType))
             {
-                System.Diagnostics.Debug.WriteLine("Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level);
-                System.Diagnostics.Debug.WriteLine("Tipo dato: " + (( ClassVarType)table.ElementAt(i)).classType);
-                System.Diagnostics.Debug.WriteLine(" - Tipo de padre: " + (( ClassVarType)table.ElementAt(i)).Type );
-                System.Diagnostics.Debug.WriteLine("\n");
-
+                ((ClassVarType)table.ElementAt(i)).PrintClassVarType(s, ((Type)table.ElementAt(i)).Level, 
+                    ((ClassVarType)table.ElementAt(i)).Type, ((ClassVarType)table.ElementAt(i)).Type);
+            }
+            else if(table.ElementAt(i).GetType() == typeof(MethodType))
+            {
+                ((MethodType)table.ElementAt(i)).PrintMethod();
             }
             else if(table.ElementAt(i).GetType() == typeof(PrimaryType))
             {
-
-                System.Diagnostics.Debug.WriteLine("Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level);
-                System.Diagnostics.Debug.WriteLine(" - Tipo dato: " + ((PrimaryType)table.ElementAt(i)).TypeGetSet );
-                System.Diagnostics.Debug.WriteLine("\n");
-
-
-            }
-            else if(table.ElementAt(i).GetType() == typeof(ClassType))
-            {
-
-                System.Diagnostics.Debug.WriteLine("\n"+"-------------------- CLASE ------------------");
-                System.Diagnostics.Debug.WriteLine("Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level);
-                System.Diagnostics.Debug.WriteLine(" - Tipo dato: " + ((ClassType)table.ElementAt(i)).Type);
-                System.Diagnostics.Debug.WriteLine("-------------------- FIN CLASE -----------------" + "\n");
-
+                ((PrimaryType)table.ElementAt(i)).PrintPrimaryType(s, ((Type)table.ElementAt(i)).Level, ((PrimaryType)table.ElementAt(i)).TypeGetSet);
             }
             else if (table.ElementAt(i).GetType() == typeof(ArrayType))
             {
-                System.Diagnostics.Debug.WriteLine("Nombre " + s.Text + " - Nivel global: " + ((Type)table.ElementAt(i)).Level);
-                System.Diagnostics.Debug.WriteLine(" - Tipo dato: " + ((ArrayType)table.ElementAt(i)).Type);
-                System.Diagnostics.Debug.WriteLine(" - Tipo base: " + ((ArrayType)table.ElementAt(i)).GetSetArrType);
-                System.Diagnostics.Debug.WriteLine("\n");
-
+                ((ArrayType)table.ElementAt(i)).PrintArrayType(s, ((Type)table.ElementAt(i)).Level, 
+                    ((ArrayType)table.ElementAt(i)).Type, ((ArrayType)table.ElementAt(i)).GetSetArrType);
             }
         }
-        System.Diagnostics.Debug.WriteLine("**************** FIN TABLA ****************");
+        System.Diagnostics.Debug.WriteLine("--------------- TERMINA TABLA ---------------");
     }
-        
-        
-    
+
+        private string GetIndentation(int indentationLevel)
+        {
+            return new string(' ', indentationLevel * 2);
+        }
+
 }

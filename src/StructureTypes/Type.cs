@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Antlr4.Runtime;
 
 
@@ -13,8 +12,8 @@ public  abstract class Type
 
     protected Type(IToken token, int level)
     {
-    this._token = token;
-    this.level = level;
+        this._token = token;
+        this.level = level;
     }
 
     public IToken GetToken()

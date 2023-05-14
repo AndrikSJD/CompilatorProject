@@ -1,5 +1,4 @@
-﻿
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 
 namespace Proyecto.StructureTypes;
 
@@ -15,6 +14,14 @@ public class ClassVarType : Type
         
     }
 
+    public void PrintClassVarType(IToken s, int level, string type, string fatherType)
+    {
+        System.Diagnostics.Debug.WriteLine($"Nombre: {s.Text}");
+        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
+        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
+        System.Diagnostics.Debug.WriteLine($" - Tipo de padre: {fatherType}");
+        System.Diagnostics.Debug.WriteLine("\n");
+    }
     
     public override string GetStructureType()
     {
