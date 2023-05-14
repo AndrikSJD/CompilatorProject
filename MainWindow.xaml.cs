@@ -198,8 +198,7 @@ namespace Proyecto
                 //Obtiene el resultado
                 MiniCSharpParser.ProgramContext tree = parser.program();
             
-            
-            
+                
                 //Mostrar texto de salida
                 Consola salida = new Consola();
                 //Verifica si hay errores
@@ -210,8 +209,8 @@ namespace Proyecto
                 }
                 else
                 {
-                    AContextual context = new AContextual();
-                    context.Visit(tree);
+                    AContextual contextA = new AContextual();
+                    contextA.Visit(tree);
                     salida.SalidaConsola.Text = "Compilacion Exitosa";
                 
                 }
@@ -229,7 +228,8 @@ namespace Proyecto
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Por favor, abra un archivo antes de guardar los cambios");
+                MessageBox.Show("Por favor, abra un archivo antes de ejecutar el codigo");
+                
             }
             
             

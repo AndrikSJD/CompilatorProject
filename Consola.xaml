@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Proyecto"
         mc:Ignorable="d"
-        Background="Teal"
+        Background="#333C42"
         ResizeMode="NoResize"
         Title="Consola" Height="300" Width="830">
     <Grid>
@@ -13,7 +13,7 @@
             FontFamily="Consolas"
             FontSize="14"
             Name="SalidaConsola"
-            Background="Azure"
+            Background="#28242c"
             HorizontalAlignment="Left"
             Height="245"
             Width="795"
@@ -23,6 +23,7 @@
             AcceptsTab="True" 
             AcceptsReturn="True"
             VerticalScrollBarVisibility="Visible"
+            Foreground="White"
         ></TextBox>
     </Grid>
 </Window>

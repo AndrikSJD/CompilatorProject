@@ -24,7 +24,7 @@ public class SymbolTable
         currentLevel = -1;
     }
 
-    //TODO CAMBIARLO A HASHMAP
+   
     public void Insert(Type typeStruct)
     {
 
@@ -70,7 +70,7 @@ public class SymbolTable
                 posMethod = i;
             }
         }
-        System.Diagnostics.Debug.WriteLine("Posicion del metodo: " + posMethod);
+        // System.Diagnostics.Debug.WriteLine("Posicion del metodo: " + posMethod);
         if (posMethod ==0)
         {
             System.Diagnostics.Debug.WriteLine("No se encontro el metodo");

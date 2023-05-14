@@ -20,10 +20,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         _symbolTable = new SymbolTable();
     }
     
-    
-    
- 
-    
     private string ShowToken(IToken token)
     {
         return token.Text + "Fila, columna: (" + token.Line + "," + token.Column + ")";
@@ -69,15 +65,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             throw;
         }
         _symbolTable.Print();
-        return base.VisitProgramAST(context);
-        
+
+        return null;
+
     }
 
 
     public override object VisitUsingAST(MiniCSharpParser.UsingASTContext context)
     {
-       
-        //TODO : implementar using 
+        
         
        return null;
     }
@@ -90,7 +86,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         bool isClassVarType = false;
         bool isError = false;
         
-        // LinkedList<Type> lista = new LinkedList<Type>();
 
         //verificamos si es un array
         if(context.type().GetText().Contains("[]"))
@@ -148,8 +143,19 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
-                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
-                            _symbolTable.Insert(array);
+                            if (varType is PrimaryType.PrimaryTypes.Int)
+                            {
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                                _symbolTable.Insert(array);
+                                // lista.AddFirst(array);
+                                
+                            }
+                            else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
+                            {
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                                _symbolTable.Insert(array);
+                                // lista.AddFirst(array);
+                            }
                         }
                     }
                     else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
@@ -162,33 +168,21 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
-                            ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
-                            _symbolTable.Insert(array);
+                            if (varType is PrimaryType.PrimaryTypes.Int)
+                            {
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                                _symbolTable.Insert(array);
+                                
+                                
+                            }
+                            else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
+                            {
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                                _symbolTable.Insert(array);
+                                
+                            }
                         }
                     }
-                    
-                    
-                    // else
-                    // {
-                    //     if (varType is PrimaryType.PrimaryTypes.Int)
-                    //     {
-                    //         ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
-                    //         _symbolTable.Insert(array);
-                    //         // lista.AddFirst(array);
-                    //         
-                    //     }
-                    //     else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
-                    //     {
-                    //         ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
-                    //         _symbolTable.Insert(array);
-                    //         // lista.AddFirst(array);
-                    //     }
-                    //     
-                    // }
-                    
-                    
-                        
-                        
                 }
                 else
                 {
@@ -233,19 +227,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                         }
                         
-                        
-                        
-                        // else
-                        // {
-                        //     ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
-                        //     _symbolTable.Insert(element);
-                        //     // lista.AddFirst(element);
-                        //     
-                        // }
-                        //
-                        
-                        
-                       
+      
                     }
                     else //es de un tipo primario
                     {
@@ -268,7 +250,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                         {
                             Type variableglobal = _symbolTable.Search(token.Text);
-                            if (variableglobal!= null && variableglobal.Level == 0)
+                            if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel)
                             {
                                 System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, la variable " + '"' + token.Text + '"' + " ya existe como variable global");
                             }
@@ -279,12 +261,20 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                         {
+                            
+                            Type variableglobal = _symbolTable.Search(token.Text);
+                            if (variableglobal!= null )
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR VAR DECLARATION, el identificador " + '"' + token.Text + '"' + " ya existe y es de tipo " + '"' + variableglobal.GetStructureType()  + '"');
+                            }
+                            else
+                            {
+                                _symbolTable.Insert(element);
+                            }
                             _symbolTable.Insert(element);
                             // lista.AddFirst(element);
                         }
-     
-                       
-                        
+
                     }
 
                 }
@@ -357,13 +347,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         //probar con visit(context.ident()) para ver si funciona
         IToken token = (IToken)Visit(context.ident());
         Type? type = _symbolTable.Search(token.Text);
-        if (type == null)
-        {
-            System.Diagnostics.Debug.WriteLine("ES NULOOOOOOOO METHOD DECL");
-        }
+        
         if (type != null && type is MethodType)
         {
-            System.Diagnostics.Debug.WriteLine("ERROR DECLARACION DE METODO: El nombre" + token.Text + " ya existe en el contexto actual y es de tipo " + type.GetType());
+            System.Diagnostics.Debug.WriteLine("ERROR DECLARACION DE METODO: El nombre: " +'"'+ token.Text +'"' + " ya existe en el contexto actual y es de tipo " + type.GetType());
             return null;
         }
         //inicializamos en unknown para validar que el tipo de retorno sea valido y que nos permita accesar cuando
@@ -389,7 +376,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 else if (methodType != PrimaryType.PrimaryTypes.Char && methodType != PrimaryType.PrimaryTypes.Int)
                 {
                     // TODO revisar
-                    //System.Diagnostics.Debug.WriteLine("The type of the array can be only int or char, current type is not valid METHOD DECL ");
                     System.Diagnostics.Debug.WriteLine("El tipo del arreglo solo puede ser int o char, el tipo actual no es valido ");
                     isError = true;
                 }
@@ -424,9 +410,19 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             MethodType method;
             if (context.type() != null)
             {
-                method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters);
-                _symbolTable.Insert(method);
-                _symbolTable.currentMethod = method;
+                if(isArray)
+                {
+                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() + "[]", parameters);
+                    _symbolTable.Insert(method);
+                    _symbolTable.currentMethod = method;
+                }
+                else
+                {
+                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters);
+                    _symbolTable.Insert(method);
+                    _symbolTable.currentMethod = method;
+                    
+                }
             }
             else
             {
@@ -447,13 +443,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
         
             
-    
-        System.Diagnostics.Debug.WriteLine("Cerrando scope de metodo " + token.Text);
+            
         
         _symbolTable.Sacar(token.Text);
         
-        // _symbolTable.CloseScope();
-        // return null;
+  
         }
         else
         {
@@ -543,14 +537,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
        
 
-        
+        string tipoDesignator = (string)Visit(context.designator());
         if(context.expr()!=null)// si es una asignacion 
         {
-            string tipoDesignator = (string)Visit(context.designator()); 
+             
             string tipoExpresion = ((string)Visit(context.expr())).ToLower(); //tolower para que no haya problemas con mayusculas y minusculas
-
-
-
+            
             //verificamos si el tipodesignator viene nulo es decir el indice no es null
 
             if (tipoDesignator != null && tipoExpresion != null)
@@ -676,7 +668,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine("Error de parametros, tipos de parametros no coinciden en el del");
+                            System.Diagnostics.Debug.WriteLine("Error de parametros, tipos de parametros no coinciden en el add");
                         }
                     }
                     else if (parametros.Count != 2)
@@ -690,16 +682,24 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("ERROR METODO ADD: Faltan los parametros para el metodo del");
+                    System.Diagnostics.Debug.WriteLine("ERROR METODO ADD: Faltan los parametros para el metodo add");
                 }
                 
             }
            
             else if (type is MethodType method)
             {
+                
+                System.Diagnostics.Debug.WriteLine("Es un metodo" + method.GetToken().Text);
+                
+                
                 if (context.actPars() != null)
                 {
                     LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    
+                    
+                    
+                    
                     if (parametros.Count == method.parametersL.Count)
                     {
                         for (int i = 0; i < method.parametersL.Count; i++)
@@ -715,11 +715,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                             else
                             {
-                                // System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
-                                //                                    method.parametersL.ElementAt(i).GetStructureType()
-                                //                                        .ToString() +
-                                //                                    " es el mismo que el tipo de la expresion: " +
-                                //                                    parametros.ElementAt(i));
+                                System.Diagnostics.Debug.WriteLine("Asignacion correcta: " +
+                                                                   method.parametersL.ElementAt(i).GetStructureType()
+                                                                       .ToString() +
+                                                                   " es el mismo que el tipo de la expresion: " +
+                                                                   parametros.ElementAt(i));
                             }
                         }
                     }
@@ -745,10 +745,18 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else if (context.INC()!=null)
         {
+            if(tipoDesignator.ToLower() != "int")
+            {
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + context.designator().GetText()+ " solo se puede incrementar " +'"'+"++"+'"' +" un entero");
+            }
             
         }
         else if (context.DEC()!=null)
         {
+            if(tipoDesignator.ToLower() != "int")
+            {
+                System.Diagnostics.Debug.WriteLine("Error de asignacion: " + context.designator().GetText()+ " solo se puede decrementar " +'"'+"--"+'"' +" un entero");
+            }
             
         }
         return null;
@@ -769,6 +777,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             if (context.statement(1) != null)
             {
                 _symbolTable.OpenScope();
+                System.Diagnostics.Debug.WriteLine("VISITANDO ELSE: " + context.statement(1).GetText());
                 Visit(context.statement(1));
                 _symbolTable.CloseScope();
             }
