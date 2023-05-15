@@ -84,23 +84,63 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitVarDeclAST(MiniCSharpParser.VarDeclASTContext context)
     {
+        // IToken currentToken = context.Start;
+        // //Para validar que el tipo de la variable sea valido
+        // PrimaryType.PrimaryTypes varType;
+        // bool isArray = false;
+        // bool isClassVarType = false;
+        // bool isError = false;
+        //
+        //
+        // //verificamos si es un array
+        // if(context.type().GetText().Contains("[]"))
+        // {
+        //     isArray = true;
+        //     //quitamos los corchetes
+        //     varType = PrimaryType.showType(context.type().GetText().Substring(0, context.type().GetText().Length - 2).Trim());
+        //     if (varType is PrimaryType.PrimaryTypes.Unknown &&
+        //         _symbolTable.Search(context.type().GetText().Substring(0, context.type().GetText().Length - 2)
+        //             .Trim()) != null)
+        //     {
+        //         isClassVarType = true;
+        //     }
+        //     else if (varType != PrimaryType.PrimaryTypes.Char && varType != PrimaryType.PrimaryTypes.Int)
+        //     {
+        //         consola.SalidaConsola.AppendText($"Error: El tipo de datos del array es incorrecto. Se requiere un tipo válido, como int o char. {ShowToken(currentToken)} \n");
+        //         isError = true;
+        //     }
+        //     
+        // }
+        // else
+        // {
+        //     varType = PrimaryType.showType(context.type().GetText());
+        //     if (varType is PrimaryType.PrimaryTypes.Unknown && 
+        //         _symbolTable.Search(context.type().GetText()) != null)
+        //     {
+        //         isClassVarType = true;
+        //     }
+        //     else if (varType is PrimaryType.PrimaryTypes.Unknown && 
+        //              _symbolTable.Search(context.type().GetText()) == null)
+        //     {
+        //         isError = true;
+        //     }
+        //     
+        // }
+        
+        // Inicia nuevo code
         IToken currentToken = context.Start;
-        //Para validar que el tipo de la variable sea valido
+        string typeText = context.type().GetText();
         PrimaryType.PrimaryTypes varType;
-        bool isArray = false;
+        bool isArray = typeText.Contains("[]");
         bool isClassVarType = false;
         bool isError = false;
-        
 
-        //verificamos si es un array
-        if(context.type().GetText().Contains("[]"))
+        if (isArray)
         {
-            isArray = true;
-            //quitamos los corchetes
-            varType = PrimaryType.showType(context.type().GetText().Substring(0, context.type().GetText().Length - 2).Trim());
-            if (varType is PrimaryType.PrimaryTypes.Unknown &&
-                _symbolTable.Search(context.type().GetText().Substring(0, context.type().GetText().Length - 2)
-                    .Trim()) != null)
+            string elementTypeText = typeText.Substring(0, typeText.Length - 2).Trim();
+            varType = PrimaryType.showType(elementTypeText);
+
+            if (varType is PrimaryType.PrimaryTypes.Unknown && _symbolTable.Search(elementTypeText) != null)
             {
                 isClassVarType = true;
             }
@@ -109,25 +149,37 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 consola.SalidaConsola.AppendText($"Error: El tipo de datos del array es incorrecto. Se requiere un tipo válido, como int o char. {ShowToken(currentToken)} \n");
                 isError = true;
             }
-            
-        } else
+        }
+        else
         {
-            varType = PrimaryType.showType(context.type().GetText());
-            if (varType is PrimaryType.PrimaryTypes.Unknown && 
-                _symbolTable.Search(context.type().GetText()) != null)
+            varType = PrimaryType.showType(typeText);
+            if (varType is PrimaryType.PrimaryTypes.Unknown && _symbolTable.Search(typeText) != null)
             {
                 isClassVarType = true;
             }
-            else if (varType is PrimaryType.PrimaryTypes.Unknown && 
-                     _symbolTable.Search(context.type().GetText()) == null)
+            else if (varType is PrimaryType.PrimaryTypes.Unknown && _symbolTable.Search(typeText) == null)
             {
                 isError = true;
             }
-            
         }
+        // Termina nuevo code
+
         if (!isError)
         {
-            foreach (var child in context.ident())
+            CheckVariableErrors(context, currentToken, isArray, varType, isClassVarType);
+        }
+        else
+        {
+            consola.SalidaConsola.AppendText($"Error: El tipo de declaración de la variable no es válido. {ShowToken(currentToken)} \n");
+        }
+
+        return null;
+    }
+
+    public void CheckVariableErrors(MiniCSharpParser.VarDeclASTContext context, IToken currentToken, bool isArray,
+        PrimaryType.PrimaryTypes varType, bool isClassVarType)
+    {
+        foreach (var child in context.ident())
             {      
                 IToken token = (IToken)Visit(child);
                 //verificamos si es un array
@@ -152,14 +204,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
                                 _symbolTable.Insert(array);
-                                // lista.AddFirst(array);
                                 
                             }
                             else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
                                 ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
                                 _symbolTable.Insert(array);
-                                // lista.AddFirst(array);
                             }
                         }
                     }
@@ -275,16 +325,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
 
                 }
-            }  
-            
-        }
-
-        else
-        {
-            consola.SalidaConsola.AppendText($"Error: El tipo de declaración de la variable no es válido. {ShowToken(currentToken)} \n");
-        }
-
-        return null;
+            }
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
@@ -1353,6 +1394,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Si el tipo de la expresión es nulo, retornamos también nulo
         return null;
     }
+    
 
     public override object? VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
