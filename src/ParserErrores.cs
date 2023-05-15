@@ -10,12 +10,7 @@ using SyntacticAnalysisGenerated;
 
 namespace Proyecto;
 
-
-
 using Antlr4.Runtime;
-
-
-
 
 public class ParserErrorListener : BaseErrorListener
 {

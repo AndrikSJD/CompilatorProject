@@ -45,7 +45,8 @@ public class SymbolTable
         }
         return null;
     }
-    
+
+
     public Type? BuscarCustomVar(string id)
     {
         foreach (Type? i in table)

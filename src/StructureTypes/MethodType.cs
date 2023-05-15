@@ -4,6 +4,9 @@ using Antlr4.Runtime;
 
 namespace Proyecto.StructureTypes;
 
+/// <summary>
+/// Clase que representa un tipo de datos método.
+/// </summary>
 public class MethodType : Type
 {
     private readonly string Type = "method";
@@ -14,6 +17,14 @@ public class MethodType : Type
    
     public LinkedList<Type> parametersL;
     
+    /// <summary>
+    /// Constructor de la clase MethodType.
+    /// </summary>
+    /// <param name="tok">Token asociado al tipo de datos método.</param>
+    /// <param name="level">Nivel de ámbito.</param>
+    /// <param name="parN">Número de parámetros del método.</param>
+    /// <param name="rt">Tipo de retorno del método.</param>
+    /// <param name="parsList">Lista enlazada de parámetros del método.</param>
     public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList) : base(tok, level)
     {
         this.ParamsNum = parN;
@@ -21,6 +32,9 @@ public class MethodType : Type
         this.parametersL = parsList;
     }
     
+    /// <summary>
+    /// Imprime los detalles del tipo de datos método en la salida de depuración.
+    /// </summary>
     public void PrintMethod()
     {
         System.Diagnostics.Debug.WriteLine("Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
@@ -61,18 +75,18 @@ public class MethodType : Type
         
     }
 
-    public int ParamsNumGetSet
-    {
-        get => ParamsNum;
-        set => ParamsNum = value;
-    }
-
+    /// <summary>
+    /// Propiedad para obtener o establecer el tipo de retorno del método.
+    /// </summary>
     public string ReturnTypeGetSet
     {
         get => returnType;
         set => returnType = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    /// <summary>
+    /// Retorna el tipo de estructura, que en este caso es el tipo de retorno del método.
+    /// </summary>
     public override string GetStructureType()
     {
         return this.returnType;
