@@ -2,6 +2,7 @@
 using Antlr4.Runtime;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 using Proyecto.StructureTypes;
 using Type =Proyecto.StructureTypes.Type;
 
@@ -55,44 +56,40 @@ public class SymbolTable
         }
         return null;
     }
-    
-    
-    public void Sacar(string nombreMetodo)
+
+    public int searchIndex(string nombreMetodo)
     {
-        int posMethod=0;
-        LinkedList<Object> slicedList = new LinkedList<Object>();
-        
         // Busco la posicion del metodo en la tabla
-        for (int i = 0; i <table.Count ; i++)
+        for (int i = 0; i < table.Count; i++)
         {
             if (((Type)table.ElementAt(i)).GetToken().Text.Equals(nombreMetodo))
             {
-                posMethod = i;
-            }
-        }
-        // System.Diagnostics.Debug.WriteLine("Posicion del metodo: " + posMethod);
-        if (posMethod ==0)
-        {
-            System.Diagnostics.Debug.WriteLine("No se encontro el metodo");
-        }
-        else
-        {
-            // Agrego a la lista los elementos que estan antes del metodo
-            for (int j = 0; j < table.Count; j++)
-            {
-                if (j <= posMethod)
-                {
-                    slicedList.AddLast(table.ElementAt(j));
-                }
-            }
-            
-            table.Clear();
-            foreach (var child in slicedList)
-            {
-                table.AddLast(child);
+                return i;
             }
         }
 
+        return 0;
+    }
+
+    public void DeleteParametersBody(string nombreMetodo)
+    {
+        int posMethod = searchIndex(nombreMetodo);
+        LinkedList<object> slicedList = new LinkedList<object>();
+
+        if (posMethod != 0)
+        {
+            // Agrego a la lista los elementos que estan antes del metodo
+            for (int j = 0; j <= posMethod; j++)
+            {
+                slicedList.AddLast(table.ElementAt(j));
+            }
+
+            table = slicedList;
+
+            return;
+        }
+        
+        System.Diagnostics.Debug.WriteLine("No se encontro el metodo");
     }
 
     public void OpenScope()

@@ -14,9 +14,11 @@ namespace Proyecto;
 public class AContextual : MiniCSharpParserBaseVisitor<object> {
     
     private SymbolTable _symbolTable;
+    private Consola consola;
     
-    public AContextual()
+    public AContextual(Consola consola)
     {
+        this.consola = consola;
         _symbolTable = new SymbolTable();
     }
     
@@ -77,6 +79,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitVarDeclAST(MiniCSharpParser.VarDeclASTContext context)
     {
+        IToken currentToken = context.Start;
         //Para validar que el tipo de la variable sea valido
         PrimaryType.PrimaryTypes varType;
         bool isArray = false;
@@ -98,6 +101,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else if (varType != PrimaryType.PrimaryTypes.Char && varType != PrimaryType.PrimaryTypes.Int)
             {
+                consola.SalidaConsola.AppendText("Error: El tipo de datos del array es incorrecto. Se requiere un tipo válido, como int o char. \n");
                 System.Diagnostics.Debug.WriteLine("Error: El tipo de datos del array es incorrecto. Se requiere un tipo válido, como int o char.");
                 isError = true;
             }
@@ -128,6 +132,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
                     if (_symbolTable.currentClass != null)
                     {
+                        consola.SalidaConsola.AppendText("Error: Solo se permiten variables de tipos básicos dentro de la clase. \n");
                         System.Diagnostics.Debug.WriteLine("Error: Solo se permiten variables de tipos básicos dentro de la clase.");
                     }
                     else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
@@ -136,6 +141,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         Type typeVariable = _symbolTable.Search(token.Text);
                         if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
                         {
+                            consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. \n");
                             System.Diagnostics.Debug.WriteLine($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente.");
                         }
                         else
@@ -161,6 +167,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         Type typeVariable = _symbolTable.Search(token.Text);
                         if (typeVariable!= null )
                         {
+                            consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. \n");
                             System.Diagnostics.Debug.WriteLine($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente.");
                         }
                         else
@@ -168,9 +175,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             if (varType is PrimaryType.PrimaryTypes.Int)
                             {
                                 ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
-                                _symbolTable.Insert(array);
-                                
-                                
+                                _symbolTable.Insert(array);    
                             }
                             else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
@@ -187,11 +192,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     if(isClassVarType)
                     {
                         
-                        
-                       
-                        
                         if(_symbolTable.currentClass != null) //si esta dentro en una clase
                         {
+                            consola.SalidaConsola.AppendText("Error: Solo se permiten variables de tipos básicos dentro de una clase. \n");
                             System.Diagnostics.Debug.WriteLine("Error: Solo se permiten variables de tipos básicos dentro de una clase.");
                         }
                         else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
@@ -200,6 +203,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             Type typeVariable = _symbolTable.Search(token.Text);
                             if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
                             {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. \n");
                                 System.Diagnostics.Debug.WriteLine($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente.");
                             }
                             else
@@ -214,6 +218,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             Type typeVariable = _symbolTable.Search(token.Text);
                             if (typeVariable!= null )
                             {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. \n");
                                 System.Diagnostics.Debug.WriteLine($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente.");
                             }
                             else
@@ -237,7 +242,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 _symbolTable.currentClass.parametersL.AddLast(element);
                             }
                             else
-                            {
+                            { 
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada en la clase. \n");
                                 System.Diagnostics.Debug.WriteLine($"Error: La variable \"{token.Text}\" ya ha sido declarada en la clase.");
                             }
                            
@@ -247,7 +253,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         {
                             Type variableglobal = _symbolTable.Search(token.Text);
                             if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel)
-                            {
+                            { 
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable local. \n");
                                 System.Diagnostics.Debug.WriteLine($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable global.");
                             }
                             else
@@ -261,14 +268,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             Type variableglobal = _symbolTable.Search(token.Text);
                             if (variableglobal!= null )
                             {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable global. \n");
                                 System.Diagnostics.Debug.WriteLine($"Error: El identificador \"{token.Text}\" ya existe y es de tipo \"{variableglobal.GetStructureType()}\".");
                             }
                             else
                             {
                                 _symbolTable.Insert(element);
                             }
-                            _symbolTable.Insert(element);
-                            // lista.AddFirst(element);
                         }
 
                     }
@@ -283,18 +289,16 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             System.Diagnostics.Debug.WriteLine("Error: El tipo de declaración de la variable no es válido.");
         }
 
-
-        // return lista;
-
         return null;
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
     {
-
+        IToken currentToken = context.Start;
 
         if (_symbolTable.Search(context.ident().GetText()) != null)
         {
+            consola.SalidaConsola.AppendText($"Error: La clase \"{context.ident().GetText()}\" ya ha sido declarada anteriormente. \n");
             System.Diagnostics.Debug.WriteLine($"Error: La clase \"{context.ident().GetText()}\" ya ha sido declarada anteriormente.");
 
             return null;
@@ -309,48 +313,32 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
            
             foreach (var child in context.varDecl())
             {
-
                 Visit(child);
-                // LinkedList<Type> list = (LinkedList<Type>)Visit(child);
-                //     if(list != null)
-                //     {
-                //         foreach (var type in list)
-                //         {
-                //             if (type is PrimaryType)
-                //             {
-                //                 classDcl.parametersL.AddFirst(type);
-                //             }
-                //             else
-                //             {
-                //                 System.Diagnostics.Debug.WriteLine("El tipo de variable"+ child.GetType()  + " no se puede agregar a la clase" + context.ident().GetText() );
-                //             }
-                //             
-                //         }
-                //     }
             }
-            
-            
         }
        
         _symbolTable.CloseScope();
         _symbolTable.currentClass = null; //volvemos null la clase actual
+        
         return null;
     }
 
     public override object VisitMethodDeclAST(MiniCSharpParser.MethodDeclASTContext context)
     {
+        IToken currentToken = context.Start;  
         
-       
-        //probar con visit(context.ident()) para ver si funciona
         IToken token = (IToken)Visit(context.ident());
-        Type? type = _symbolTable.Search(token.Text);
-        
-        if (type != null && type is MethodType)
+        string methodName = token.Text;
+        Type? existingType = _symbolTable.Search(methodName);
+
+        if (existingType != null && existingType is MethodType)
         {
-            System.Diagnostics.Debug.WriteLine($"Error: La declaración del método \"{token.Text}\" ya existe en el contexto actual y es del tipo \"{type.GetType()}\".");
+            consola.SalidaConsola.AppendText($"Error: La declaración del método \"{methodName}\" ya existe en el contexto actual\n");
+            System.Diagnostics.Debug.WriteLine($"Error: La declaración del método \"{methodName}\" ya existe en el contexto actual.");
 
             return null;
         }
+
         //inicializamos en unknown para validar que el tipo de retorno sea valido y que nos permita accesar cuando
         PrimaryType.PrimaryTypes methodType = PrimaryType.PrimaryTypes.Unknown;
         bool isArray = false;
@@ -373,11 +361,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
                 else if (methodType != PrimaryType.PrimaryTypes.Char && methodType != PrimaryType.PrimaryTypes.Int)
                 {
+                    consola.SalidaConsola.AppendText("Error: El tipo del arreglo debe ser \"int\" o \"char\", pero se encontró un tipo no válido. \n");
                     System.Diagnostics.Debug.WriteLine("Error: El tipo del arreglo debe ser \"int\" o \"char\", pero se encontró un tipo no válido.");
                     isError = true;
                 }
             
-            }else
+            }
+            else
             {
                 methodType = PrimaryType.showType(context.type().GetText());
                 if (methodType is PrimaryType.PrimaryTypes.Unknown && 
@@ -429,36 +419,32 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
         
             foreach (var child in parameters)
-        {
-            _symbolTable.Insert(child);
-        }
+            {
+                _symbolTable.Insert(child);
+            }
  
             //string? methodReturnType = (string)
             _symbolTable.OpenScope();
             Visit(context.block());
             _symbolTable.CloseScope();
         
-        
-            
-            
-        
-        _symbolTable.Sacar(token.Text);
-        
-  
+            _symbolTable.DeleteParametersBody(token.Text);
+
         }
         else
         {
+            consola.SalidaConsola.AppendText("El tipo del metodo no es valido");
             System.Diagnostics.Debug.WriteLine("El tipo del metodo no es valido");
         }
 
-        
         _symbolTable.currentMethod = null;
+        
         return null;
     }
 
     public override object VisitFormParsAST(MiniCSharpParser.FormParsASTContext context)
     {
-        
+        IToken currentToken = context.Start;  
         
         LinkedList<Type> parameters = new LinkedList<Type>();
         for (int i = 0; i < context.ident().Length; i++)
@@ -474,17 +460,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if (varType is PrimaryType.PrimaryTypes.Int)
                 {
                     parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
-                    //los agrega tambien a la tabla
-                    // _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Char)
                 {
                     parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
-                    //los agrega a la tabla
-                    // _symbolTable.Insert(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
                 }
                 else
                 {
+                    consola.SalidaConsola.AppendText("Error: El tipo del arreglo debe ser int o char. El tipo actual no es válido. \n");
                     System.Diagnostics.Debug.WriteLine("Error: El tipo del arreglo debe ser int o char. El tipo actual no es válido.");
                 }
                 
@@ -506,6 +489,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 else if (varType is PrimaryType.PrimaryTypes.Unknown &&
                     paramT == null)
                 {
+                    consola.SalidaConsola.AppendText($"Error: El tipo de parámetro \"{token.Text}\" no es válido. \n");
                     System.Diagnostics.Debug.WriteLine($"Error: El tipo de parámetro \"{token.Text}\" no es válido.");
                 }
                 else
@@ -532,13 +516,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
-       
-
+        IToken currentToken = context.Start;   
+    
         string tipoDesignator = (string)Visit(context.designator());
         if(context.expr()!=null)// si es una asignacion 
         {
              
-            string tipoExpresion = ((string)Visit(context.expr())).ToLower(); //tolower para que no haya problemas con mayusculas y minusculas
+            string tipoExpresion = ((string)Visit(context.expr())); //tolower para que no haya problemas con mayusculas y minusculas
             
             //verificamos si el tipodesignator viene nulo es decir el indice no es null
 
@@ -548,9 +532,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if (tipoDesignator.Contains("[]") && context.expr().GetText().Contains("new"))
                 {
           
-                    if (!(tipoDesignator.ToLower().Contains(tipoExpresion)))
+                    if (!(tipoDesignator.ToLower().Contains(tipoExpresion.ToLower())))
                     {
-                        System.Diagnostics.Debug.WriteLine($"Error de asignación: El tipo \"{tipoDesignator}\" no coincide con el tipo de la expresión \"{tipoExpresion}\".");
+                        consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{tipoDesignator}\" no coincide con el tipo de la expresión \"{tipoExpresion.ToLower()}\". \n");
+                        System.Diagnostics.Debug.WriteLine($"Error de asignación: El tipo \"{tipoDesignator}\" no coincide con el tipo de la expresión \"{tipoExpresion.ToLower()}\".");
                     }
                     else
                     {
@@ -562,6 +547,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             
                 if (tipoDesignator != tipoExpresion)
                 {
+                    consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{tipoDesignator}\" no es compatible con el tipo de la expresión \"{tipoExpresion}\". \n");
                     System.Diagnostics.Debug.WriteLine($"Error de asignación: El tipo \"{tipoDesignator}\" no es compatible con el tipo de la expresión \"{tipoExpresion}\".");
 
                     return null;
@@ -575,6 +561,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else
             {
+                consola.SalidaConsola.AppendText("Error en la asignación: Los tipos del designador y de la expresión no son válidos. \n");
                 System.Diagnostics.Debug.WriteLine("Error en la asignación: Los tipos del designador y de la expresión no son válidos.");
 
                 return null;
@@ -603,17 +590,20 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
+                            consola.SalidaConsola.AppendText("Error de parámetros: Los tipos de parámetros no coinciden en el método del. \n");
                             System.Diagnostics.Debug.WriteLine("Error de parámetros: Los tipos de parámetros no coinciden en el método del.");
                         }
                     }
                     else if (parametros.Count != 2)
                     {
+                        consola.SalidaConsola.AppendText("Error en los parámetros: Cantidad incorrecta de parámetros para el método del. \n");
                         System.Diagnostics.Debug.WriteLine("Error en los parámetros: Cantidad incorrecta de parámetros para el método del.");
                     }
 
                 }
                 else
                 {
+                    consola.SalidaConsola.AppendText("Error en el método: Faltan los parámetros para el método del. \n");
                     System.Diagnostics.Debug.WriteLine("Error en el método: Faltan los parámetros para el método del.");
                 }
                 
@@ -633,17 +623,20 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
+                            consola.SalidaConsola.AppendText("Error de parámetros: Los tipos de parámetros no coinciden en el método len. \n");
                             System.Diagnostics.Debug.WriteLine("Error de parámetros: Los tipos de parámetros no coinciden en el método len.");
                         }
                     }
                     else
                     {
+                        consola.SalidaConsola.AppendText("Error en los parámetros: Cantidad incorrecta de parámetros para el método len. \n");
                         System.Diagnostics.Debug.WriteLine("Error en los parámetros: Cantidad incorrecta de parámetros para el método len.");
                     }
                     
                 }
                 else
-                {
+                { 
+                    consola.SalidaConsola.AppendText("Error en el método: Faltan los parámetros para el método len. \n");
                     System.Diagnostics.Debug.WriteLine("Error en el método: Faltan los parámetros para el método len.");
                 }
             }
@@ -663,16 +656,19 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else
                         {
+                            consola.SalidaConsola.AppendText("Error de parámetros: Los tipos de parámetros no coinciden en el método add. \n");
                             System.Diagnostics.Debug.WriteLine("Error de parámetros: Los tipos de parámetros no coinciden en el método add.");
                         }
                     }
                     else if (parametros.Count != 2)
                     {
+                        consola.SalidaConsola.AppendText("Error en los parámetros: Cantidad incorrecta de parámetros para el método add. \n");
                         System.Diagnostics.Debug.WriteLine("Error en los parámetros: Cantidad incorrecta de parámetros para el método add.");
                     }
                 }
                 else
                 {
+                    consola.SalidaConsola.AppendText("Error en el método: Faltan los parámetros para el método add. \n");
                     System.Diagnostics.Debug.WriteLine("Error en el método: Faltan los parámetros para el método add.");
                 }
                 
@@ -695,27 +691,32 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             if (method.parametersL.ElementAt(i).GetStructureType().ToString() !=
                                 parametros.ElementAt(i).GetStructureType())
                             {
+                                consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} no coincide con el tipo de la expresión \"{parametros.ElementAt(i)}\". \n");
                                 System.Diagnostics.Debug.WriteLine($"Error de asignación: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} no coincide con el tipo de la expresión \"{parametros.ElementAt(i)}\".");
 
                             }
                             else
                             {
+                                consola.SalidaConsola.AppendText($"Asignación correcta: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} coincide con el tipo de la expresión \"{parametros.ElementAt(i)}\". \n");
                                 System.Diagnostics.Debug.WriteLine($"Asignación correcta: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} coincide con el tipo de la expresión \"{parametros.ElementAt(i)}\".");
                             }
                         }
                     }
                     else
                     {
+                        consola.SalidaConsola.AppendText($"Error de asignación: El número de parámetros ({method.parametersL.Count}) no coincide con el número de expresiones ({parametros.Count}). \n");
                         System.Diagnostics.Debug.WriteLine($"Error de asignación: El número de parámetros ({method.parametersL.Count}) no coincide con el número de expresiones ({parametros.Count}).");
                     }
                 }
                 else if (method.parametersL.Count > 0)
                 {
+                    consola.SalidaConsola.AppendText($"Error de parámetros: Faltan parámetros en el método \"{method.GetToken().Text}\". \n");
                     System.Diagnostics.Debug.WriteLine($"Error de parámetros: Faltan parámetros en el método \"{method.GetToken().Text}\".");
                 }
             }
             else
             {
+                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" no es un método. \n");
                 System.Diagnostics.Debug.WriteLine($"Error de asignación: \"{context.designator().GetText()}\" no es un método.");
             }
             
@@ -725,6 +726,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             if(tipoDesignator.ToLower() != "int")
             {
+                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede incrementar utilizando el operador ++ en enteros. \n");
                 System.Diagnostics.Debug.WriteLine($"Error de asignación: \"{context.designator().GetText()}\" solo se puede incrementar utilizando el operador ++ en enteros.");
             }
             
@@ -733,6 +735,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             if(tipoDesignator.ToLower() != "int")
             {
+                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede decrementar utilizando el operador -- en enteros. \n");
                 System.Diagnostics.Debug.WriteLine($"Error de asignación: \"{context.designator().GetText()}\" solo se puede decrementar utilizando el operador -- en enteros.");
             }
             
@@ -743,6 +746,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitIfStatementAST(MiniCSharpParser.IfStatementASTContext context)
     {
+        IToken currentToken = context.Start;
+        
         _symbolTable.OpenScope();
         bool conditionValue = (bool)Visit(context.condition());
         if (conditionValue)
@@ -751,11 +756,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
+            consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del if es falsa: \"{context.condition().GetText()}\". \n");
             System.Diagnostics.Debug.WriteLine($"ERROR: El tipo en la condición del if es falsa: \"{context.condition().GetText()}\".");
             if (context.statement(1) != null)
             {
                 _symbolTable.OpenScope();
-                System.Diagnostics.Debug.WriteLine($"VISITANDO ELSE: \"{context.statement(1).GetText()}\".");
                 Visit(context.statement(1));
                 _symbolTable.CloseScope();
             }
@@ -768,6 +773,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitForStatementAST(MiniCSharpParser.ForStatementASTContext context)
     {
+        IToken currentToken = context.Start;
+        
         _symbolTable.OpenScope();
         Visit(context.expr());//visitamos la expresion
         if (context.condition()!= null)
@@ -789,6 +796,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else
             {
+                consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del for es falsa: \"{context.condition().GetText()}\". \n");
                 System.Diagnostics.Debug.WriteLine($"ERROR: El tipo en la condición del for es falsa: \"{context.condition().GetText()}\".");
 
             }
@@ -812,6 +820,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitWhileStatementAST(MiniCSharpParser.WhileStatementASTContext context)
     {
+        IToken currentToken = context.Start;
+        
         _symbolTable.OpenScope();
         bool conditionValue = (bool)Visit(context.condition());
         if (conditionValue)
@@ -820,6 +830,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
+            consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del while es falsa: \"{context.condition().GetText()}\". \n");
             System.Diagnostics.Debug.WriteLine($"ERROR: El tipo en la condición del while es falsa: \"{context.condition().GetText()}\".");
         }
         _symbolTable.CloseScope();
@@ -830,34 +841,43 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     {
         return null;
     }
-
+    
     public override object VisitReturnStatementAST(MiniCSharpParser.ReturnStatementASTContext context)
     {
-      
+        IToken token = context.Start;
+
         if (context.expr() != null)
         {
+            string returnType = (string)Visit(context.expr());
 
-            string typeReturn = (string)Visit(context.expr());
             if (_symbolTable.currentMethod.ReturnTypeGetSet == "void")
             {
-                System.Diagnostics.Debug.WriteLine($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" es de tipo void y no puede retornar datos.");
+                consola.SalidaConsola.AppendText($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" es de tipo void y no puede tener un valor de retorno. \n");
+                System.Diagnostics.Debug.WriteLine($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" es de tipo void y no puede tener un valor de retorno.");
             }
-            //no le pudo identificar el tipo de retorno en caso de que sea null
-            if (typeReturn != null)
+            else if (!IsReturnTypeValid(returnType))
             {
-                if(typeReturn.ToLower() != _symbolTable.currentMethod.ReturnTypeGetSet.ToLower())
-                {
-                    System.Diagnostics.Debug.WriteLine($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" no puede retornar datos de tipo \"{typeReturn}\".");
-                }
+                consola.SalidaConsola.AppendText($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" no puede retornar un valor de tipo \"{returnType}\". \n");
+                System.Diagnostics.Debug.WriteLine($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" no puede retornar un valor de tipo \"{returnType}\".");
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR de Retorno: El valor de retorno en el método no coincide con ningún tipo válido.");
-            }
-           
-            
         }
+        else
+        {
+            consola.SalidaConsola.AppendText("ERROR de Retorno: El método no tiene un valor de retorno válido. \n");
+            System.Diagnostics.Debug.WriteLine("ERROR de Retorno: El método no tiene un valor de retorno válido.");
+        }
+
         return null;
+    }
+
+    private bool IsReturnTypeValid(string returnType)
+    {
+        if (returnType == null)
+        {
+            return false;
+        }
+
+        return string.Equals(returnType, _symbolTable.currentMethod.ReturnTypeGetSet, StringComparison.OrdinalIgnoreCase);
     }
 
     public override object VisitReadStatementAST(MiniCSharpParser.ReadStatementASTContext context)
@@ -883,11 +903,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return null;
     }
 
-    
-
     public override object VisitBlockAST(MiniCSharpParser.BlockASTContext context)
     {
-
+        IToken currentToken = context.Start;
+        
         //validar en orden y que traigan el tipo que deben
         foreach (var child in context.children)
         {
@@ -904,100 +923,134 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
               }
               else
               {
-                  System.Diagnostics.Debug.WriteLine("Error en el bloque: Se esperaba una declaración de variable o una sentencia en VisitBlockAST.");
+                consola.SalidaConsola.AppendText("Error en el bloque: Se esperaba una declaración de variable o una sentencia en VisitBlockAST. \n");
+                System.Diagnostics.Debug.WriteLine("Error en el bloque: Se esperaba una declaración de variable o una sentencia en VisitBlockAST.");
               }
 
               
         }
-        return null;
         
+        return null;
     }
 
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
-
-        LinkedList<Type> tipos = new LinkedList<Type>();
+        LinkedList<Type> parametersTypes = new LinkedList<Type>();
+        
         foreach (var child in context.expr())
         {
-            string tipoExpression = (string)Visit(child);
-            ;
-            Type? tipoTabla = _symbolTable.Search(child.GetText());
-            if (tipoTabla != null)
+            string expressionType = (string)Visit(child);
+            Type? tableType = _symbolTable.Search(child.GetText());
+            
+            if (expressionType != null)
             {
-                tipos.AddLast(tipoTabla);
+                parametersTypes.AddLast(new PrimaryType(child.Start, PrimaryType.showType(expressionType.ToLower()),
+                    _symbolTable.currentLevel));
             }
-            else
+            else if (tableType != null)
             {
-                if (tipoExpression != null)
-                    //TODO: revisar que es ese Start
-                    tipos.AddLast(new PrimaryType(child.Start, PrimaryType.showType(tipoExpression.ToLower()),
-                        _symbolTable.currentLevel));
+                parametersTypes.AddLast(tableType);
             }
         }
 
-        return tipos;
+        return parametersTypes;
     }
-
+    
     public override object VisitConditionAST(MiniCSharpParser.ConditionASTContext context)
-    {   
+    {
+        IToken token = context.Start;
+        bool hasValidCondition = false;
+
         foreach (var term in context.condTerm())
         {
-            bool conditionType = (bool) Visit(term);
+            bool conditionType = (bool)Visit(term);
             if (conditionType)
             {
-                
-                return true;
+                hasValidCondition = true;
+                break;
             }
         }
-        System.Diagnostics.Debug.WriteLine("Error: Comparación inválida, una de las partes evaluó como falso.");
-        return false;
+
+        if (hasValidCondition)
+        {
+            return true;
+        }
+        else
+        {
+            consola.SalidaConsola.AppendText("Error: Los tipos que se están comparando no son compatibles. \n");
+            System.Diagnostics.Debug.WriteLine("Error: Los tipos que se están comparando no son compatibles.");
+            
+            return false;
+        }
     }
 
     public override object VisitCondTermAST(MiniCSharpParser.CondTermASTContext context)
     {
+        IToken currentToken = context.Start;
+        bool allConditionsTrue = true;
+
         foreach (var factor in context.condFact())
         {
-            bool conditionType = (bool) Visit(factor);
-            if (conditionType == false)
+            bool conditionType = (bool)Visit(factor);
+            if (!conditionType)
             {
-                System.Diagnostics.Debug.WriteLine($"Error: No coinciden los tipos en la VisitConditionTermAST: {conditionType}");
+                consola.SalidaConsola.AppendText($"Error: Los tipos no coinciden en VisitConditionTermAST: {conditionType} \n");
+                System.Diagnostics.Debug.WriteLine($"Error: Los tipos no coinciden en VisitConditionTermAST: {conditionType}");
                 return false;
             }
         }
-        return true;
 
-        
+        return allConditionsTrue;
     }
 
     public override object VisitCondFactAST(MiniCSharpParser.CondFactASTContext context)
     {
-        string  typeFirstExpression = (string)Visit(context.expr(0));
+        IToken token = context.Start;
+        string firstExprType = (string)Visit(context.expr(0));
         Visit(context.relop());
-        string  typeSecondExpression = (string) Visit(context.expr(1));
-        
-        
-        if(typeFirstExpression == null || typeSecondExpression == null)
-        {
-            System.Diagnostics.Debug.WriteLine("Error en el Factor de Condición: No se puede comparar el tipo de condición con null.");
+        string secondExprType = (string)Visit(context.expr(1));
 
-            return false;
-        }
-        
-        if(typeFirstExpression == typeSecondExpression)
+        if (IsComparisonValid(firstExprType, secondExprType))
         {
             return true;
         }
-       
-        System.Diagnostics.Debug.WriteLine($"Error en el Factor de Condición: Los tipos de condición no coinciden. Se esperaba {typeFirstExpression} pero se encontró {typeSecondExpression}.");
+        else
+        {
+            consola.SalidaConsola.AppendText(GetErrorComparisonMessage(firstExprType, secondExprType));
+            System.Diagnostics.Debug.WriteLine(GetErrorComparisonMessage(firstExprType, secondExprType));
+            
+            return false;
+        }
+    }
 
-        return false;
+    private bool IsComparisonValid(string firstType, string secondType)
+    {
+        if (firstType == null || secondType == null)
+        {
+            return false;
+        }
+
+        return firstType == secondType;
+    }
+
+    private string GetErrorComparisonMessage(string expectedType, string actualType)
+    {
+        if (expectedType == null || actualType == null)
+        {
+            return "Error en el Factor de Condición: No se puede comparar el tipo de condición con null.";
+        }
+
+        return $"Error en el Factor de Condición: Los tipos de condición no coinciden. Se esperaba {expectedType} pero se encontró {actualType}.";
     }
 
     public override object VisitCastAST(MiniCSharpParser.CastASTContext context)
     {
+        IToken currentToken = context.Start;
+        
         string type = (string)Visit(context.type());
         if (type == null)
         {
+            consola.SalidaConsola.AppendText("Error en el cast: El valor a castear es nulo. \n");
             System.Diagnostics.Debug.WriteLine("Error en el cast: El valor a castear es nulo.");
         }
         return type;
@@ -1005,18 +1058,18 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitExpressionAST(MiniCSharpParser.ExpressionASTContext context)
     {
-        
+        IToken currentToken = context.Start;
         
         if (context.cast() != null)
         {
-            string type = (string) Visit(context.cast());
-            return type;
-           
+            string castType = (string) Visit(context.cast());
+            return castType;
         }
 
-        string tipo = (string) Visit(context.term(0));
-        if (tipo == null)
+        string termType = (string) Visit(context.term(0));
+        if (termType == null)
         {
+            consola.SalidaConsola.AppendText("Error: Tipo no válido de la expresión. Se encontró null. \n");
             System.Diagnostics.Debug.WriteLine("Error: Tipo no válido de la expresión. Se encontró null.");
 
             return null;
@@ -1024,47 +1077,50 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
      
         for (int i = 1; i < context.term().Length; i++)
         {
-            string tipoLista = (string) Visit(context.term(i));
-            if (tipo != tipoLista)
+            string currentTerm = (string) Visit(context.term(i));
+            if (termType != currentTerm)
             {
+                consola.SalidaConsola.AppendText("Error de tipos: Todos los tipos en la expresión deben ser iguales. \n");
                 System.Diagnostics.Debug.WriteLine("Error de tipos: Todos los tipos en la expresión deben ser iguales.");
 
                 return null;
             }
         }
         
-        return tipo;
+        return termType;
     }
-
+    
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
-        string tipo = (string)Visit(context.factor(0));
-
+        IToken currentToken = context.Start;
+    
+        string factorType = (string)Visit(context.factor(0));
+    
         if (context.factor().Length > 1)
         {
-            for (int i = 1; i < context.factor().Length; i++)
-            {   
-               
-                string tipoLista = (string) Visit(context.factor(i));
-                if(tipo != tipoLista)
-                {
-                    System.Diagnostics.Debug.WriteLine("Error de tipos: Los tipos son diferentes en term.");
-                    
-                    return null;
-                }
-                
+            int i = 1;
+            while (i < context.factor().Length && factorType == (string)Visit(context.factor(i)))
+            {
+                i++;
+            }
+    
+            if (i < context.factor().Length)
+            {
+                consola.SalidaConsola.AppendText("Error de tipos: Los tipos son diferentes en term. \n");
+                System.Diagnostics.Debug.WriteLine("Error de tipos: Los tipos son diferentes en term.");
+    
+                return null;
             }
         }
-        
-        return tipo;
+    
+        return factorType;
     }
 
     public override object VisitFactorAST(MiniCSharpParser.FactorASTContext context)
     {
-        //TODO: validar que el metodo exista
-        //TODO: verificar que la cantidad de parametros sea correcta
-        //TODO: verificar que el orden y tipos de los parametros sean correctos
-        string tipo = (string)Visit(context.designator());
+        IToken currentToken = context.Start;
+        string designatorType = (string)Visit(context.designator());
+        
         if (context.LPARENT() != null)
         {
             LinkedList<Type> tipos = (LinkedList<Type>)Visit(context.actPars());
@@ -1072,30 +1128,34 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             Type? metodo = (Type)_symbolTable.Search(context.designator().GetText());
             if (metodo is MethodType method)
             {
-                if (((MethodType)metodo).parametersL.Count == tipos.Count)
+
+                if (!(method.parametersL.Count == tipos.Count))
                 {
-                    for (int i = 0; i < ((MethodType)metodo).parametersL.Count; i++)
+                    consola.SalidaConsola.AppendText("Error: Cantidad de parámetros incorrecta");
+                    System.Diagnostics.Debug.WriteLine("Error: Cantidad de parámetros incorrecta");
+
+                    return null;
+                }
+                else
+                {
+                    for (int i = 0; i < method.parametersL.Count; i++)
                     {
                         if (((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() !=
                             tipos.ElementAt(i).GetStructureType())
                         {
+                            consola.SalidaConsola.AppendText($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {tipos.ElementAt(i).GetStructureType()} \n");
                             System.Diagnostics.Debug.WriteLine($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {tipos.ElementAt(i).GetStructureType()}");
 
                             return null;
                         }
                     }
 
-                    return ((MethodType)metodo).ReturnTypeGetSet;
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("Error: Cantidad de parámetros incorrecta");
-
-                    return null;
+                    return method.ReturnTypeGetSet;
                 }
             }
             else
             {
+                consola.SalidaConsola.AppendText("Error: No se encontró el método\n");
                 System.Diagnostics.Debug.WriteLine("Error: No se encontró el método");
 
                 return null;
@@ -1103,7 +1163,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
-            return tipo;
+            return designatorType;
         }
     }
     
@@ -1130,14 +1190,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitNewFactorAST(MiniCSharpParser.NewFactorASTContext context)
     {
+        IToken currentToken = context.Start;
         
         string ident = (string) Visit(context.type());
         //Busca en la tabla para ver si es una clase
-        Type? tipo = _symbolTable.Search(ident);
+        Type? classType = _symbolTable.Search(ident);
 
-        if (tipo != null)
+        if (classType != null)
         {
-            return tipo.GetStructureType();
+            return classType.GetStructureType();
         }
         
         //Verifica si es un arreglo de tipo basico (int o char)
@@ -1148,6 +1209,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             return arrType.ToString();
         }
         
+        consola.SalidaConsola.AppendText($"Error de tipos: El tipo del 'new' no existe en la tabla de símbolos ni es un arreglo de tipo básico\n");
         System.Diagnostics.Debug.WriteLine("Error de tipos: El tipo del 'new' no existe en la tabla de símbolos ni es un arreglo de tipo básico");
 
         return null;
@@ -1155,13 +1217,18 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
     public override object VisitParenFactorAST(MiniCSharpParser.ParenFactorASTContext context)
     {
-        string tipo = (string)Visit(context.expr());
-        if(tipo != null) return tipo;
+        string expressionType = (string)Visit(context.expr());
+        if(expressionType != null)
+        {
+            return expressionType;
+        }
+        
         return null;
     }
 
     public override object? VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
+        IToken currentToken = context.Start;
         
         Type? typeIdent= _symbolTable.Search(context.ident(0).GetText());
         //TODO validar el tipo de arreglo que sea correcto y q este en el alcance
@@ -1185,6 +1252,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                     }
                     
+                    consola.SalidaConsola.AppendText($"No se encontró la variable '{context.ident(1).GetText()}' en la clase");
                     System.Diagnostics.Debug.WriteLine($"No se encontró la variable '{context.ident(1).GetText()}' en la clase");
                     
                     return null;
@@ -1192,7 +1260,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 }
             }
            
-
+            consola.SalidaConsola.AppendText($"No se encontró en dicha clase '{context.ident(context.ident().Length - 2).GetText()}'");
             System.Diagnostics.Debug.WriteLine($"No se encontró en dicha clase '{context.ident(context.ident().Length - 2).GetText()}'");
 
             return null;
@@ -1210,6 +1278,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     return typeIdent.GetStructureType().ToLower();
                 }
               
+                consola.SalidaConsola.AppendText($"Error de tipos: El índice del arreglo no es de tipo Int");
                 System.Diagnostics.Debug.WriteLine("Error de tipos: El índice del arreglo no es de tipo Int");
             }
             return null;
@@ -1242,8 +1311,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             {
                 return typeIdent.GetStructureType();
             }
-            
-            
+
+            consola.SalidaConsola.AppendText($"No se encontró en la tabla la variable: {context.ident(0).GetText()}\n");
             System.Diagnostics.Debug.WriteLine($"No se encontró en la tabla la variable: {context.ident(0).GetText()}");
 
             return null;
