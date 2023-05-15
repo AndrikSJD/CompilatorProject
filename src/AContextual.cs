@@ -12,40 +12,34 @@ using Type =Proyecto.StructureTypes.Type;
 
 namespace Proyecto;
 
+/// <summary>
+/// Clase que realiza el análisis contextual en el contexto del lenguaje MiniCSharp.
+/// </summary>
 public class AContextual : MiniCSharpParserBaseVisitor<object> {
     
     private SymbolTable _symbolTable;
     private Consola consola;
     
+    /// <summary>
+    /// Constructor de la clase AContextual.
+    /// </summary>
+    /// <param name="consola">Instancia de la consola para la impresión de erros en caso de haberlos.</param>
     public AContextual(Consola consola)
     {
         this.consola = consola;
         _symbolTable = new SymbolTable();
     }
     
+    /// <summary>
+    /// Devuelve la línea y la columna del token especificado.
+    /// </summary>
+    /// <param name="token">Token para mostrar línea y columna.</param>
+    /// <returns>Cadena que representa la línea y columna del token especificado.</returns>
     private string ShowToken(IToken token)
     {
         return $"[Línea: {token.Line}, Columna: {token.Column}]";
     }
 
-    
-    private void PrintError(IToken tok, String msg)
-    {
-        Console.WriteLine($"Error en la línea {tok.Line}:{tok.Column} {msg}");
-    }
-
-    private bool IsMultitype(String op)
-    {
-        switch (op)
-        {
-            case "==": return true;
-            case "!=": return true;
-            default: return false;
-            
-        }
-    }
-
-    
     public override object VisitProgramAST(MiniCSharpParser.ProgramASTContext context)
     {
         try

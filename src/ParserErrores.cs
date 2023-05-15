@@ -12,15 +12,31 @@ namespace Proyecto;
 
 using Antlr4.Runtime;
 
+/// <summary>
+/// Clase que implementa el error listener para el parser.
+/// </summary>
 public class ParserErrorListener : BaseErrorListener
 {
     private ArrayList<string> errorMsgs;
 
+    /// <summary>
+    /// Constructor de la clase ParserErrorListener.
+    /// </summary>
     public ParserErrorListener()
     {
         this.errorMsgs = new ArrayList<string>();
     }
 
+    /// <summary>
+    /// Método que se llama cuando se encuentra un error de sintaxis.
+    /// </summary>
+    /// <param name="output">Escritor de texto para la salida.</param>
+    /// <param name="recognizer">Reconocedor del error.</param>
+    /// <param name="offendingSymbol">Símbolo ofensivo.</param>
+    /// <param name="line">Número de línea donde ocurrió el error.</param>
+    /// <param name="charPositionInLine">Posición del carácter en la línea donde ocurrió el error.</param>
+    /// <param name="msg">Mensaje de error.</param>
+    /// <param name="e">Excepción asociada al error.</param>
     public override void SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line,
         int charPositionInLine, string msg, RecognitionException e)
     {
@@ -32,18 +48,19 @@ public class ParserErrorListener : BaseErrorListener
 
     }
 
+    /// <summary>
+    /// Método que verifica si hay errores en la lista de mensajes.
+    /// </summary>
+    /// <returns>True si hay errores, False en caso contrario.</returns>
     public bool HasErrors()
     {
         return errorMsgs.Count > 0;
     }
 
-    public void SyntaxError(TextWriter output, IRecognizer recognizer, int offendingSymbol, int line,
-        int charPositionInLine,
-        string msg, RecognitionException e)
-    {
-        throw new NotImplementedException();
-    }
-
+    /// <summary>
+    /// Sobrescribe el método ToString para obtener una representación en cadena de los mensajes de error.
+    /// </summary>
+    /// <returns>Cadena de texto que representa los mensajes de error.</returns>
     public override string ToString()
     {
         if (!HasErrors()) return "No hay errores";
