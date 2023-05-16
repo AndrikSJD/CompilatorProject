@@ -24,12 +24,15 @@ public class ClassType: Type
     /// <summary>
     /// Imprime los detalles del tipo de clase en la salida de depuración.
     /// </summary>
-    public void PrintClass(IToken s, int level, string type)
+    public string PrintClass(IToken s, int level, string type)
     {
-        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel tabla: {level}");
-        System.Diagnostics.Debug.WriteLine("\n");
+        string classPrint = "";
+        
+        classPrint += $"---Token: {s.Text}\n";
+        classPrint += $" - Tipo de dato: {type}\n";
+        classPrint += $" - Nivel de scope: {level}\n";
+        return classPrint;
+
     }
     
     /// <summary>

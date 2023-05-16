@@ -144,35 +144,38 @@ public class SymbolTable
     /// <summary>
     /// Imprime el contenido de la tabla de símbolos.
     /// </summary>
-    public void Print()
+    public string Print()
     {
-        System.Diagnostics.Debug.WriteLine("--------------- TABLA DE SIMBOLOS ---------------");
+        string printTable = "";
+        printTable += "\n--------------- TABLA DE SIMBOLOS ---------------\n";
         for (int i = 0; i < table.Count; i++)
         {
             IToken s = ((Type)table.ElementAt(i)).GetToken();
             if(table.ElementAt(i).GetType() == typeof(ClassType))
             {
-                ((ClassType)table.ElementAt(i)).PrintClass(s, ((Type)table.ElementAt(i)).Level, ((ClassType)table.ElementAt(i)).Type);
+                printTable += ((ClassType)table.ElementAt(i)).PrintClass(s, ((Type)table.ElementAt(i)).Level, ((ClassType)table.ElementAt(i)).Type) + "\n";
             }
             else if(table.ElementAt(i).GetType() == typeof(ClassVarType))
             {
-                ((ClassVarType)table.ElementAt(i)).PrintClassVarType(s, ((Type)table.ElementAt(i)).Level, 
-                    ((ClassVarType)table.ElementAt(i)).Type, ((ClassVarType)table.ElementAt(i)).Type);
+                printTable += ((ClassVarType)table.ElementAt(i)).PrintClassVarType(s, ((Type)table.ElementAt(i)).Level, 
+                    ((ClassVarType)table.ElementAt(i)).Type, ((ClassVarType)table.ElementAt(i)).Type) + "\n";
             }
             else if(table.ElementAt(i).GetType() == typeof(MethodType))
             {
-                ((MethodType)table.ElementAt(i)).PrintMethod();
+                printTable += ((MethodType)table.ElementAt(i)).PrintMethod() + "\n";
             }
             else if(table.ElementAt(i).GetType() == typeof(PrimaryType))
             {
-                ((PrimaryType)table.ElementAt(i)).PrintPrimaryType(s, ((Type)table.ElementAt(i)).Level, ((PrimaryType)table.ElementAt(i)).TypeGetSet);
+                printTable += ((PrimaryType)table.ElementAt(i)).PrintPrimaryType(s, ((Type)table.ElementAt(i)).Level, ((PrimaryType)table.ElementAt(i)).TypeGetSet) + "\n";
             }
             else if (table.ElementAt(i).GetType() == typeof(ArrayType))
             {
-                ((ArrayType)table.ElementAt(i)).PrintArrayType(s, ((Type)table.ElementAt(i)).Level, 
-                    ((ArrayType)table.ElementAt(i)).Type, ((ArrayType)table.ElementAt(i)).GetSetArrType);
+                printTable += ((ArrayType)table.ElementAt(i)).PrintArrayType(s, ((Type)table.ElementAt(i)).Level, 
+                    ((ArrayType)table.ElementAt(i)).Type, ((ArrayType)table.ElementAt(i)).GetSetArrType) + "\n";
             }
         }
-        System.Diagnostics.Debug.WriteLine("--------------- FIN DE TABLA ---------------");
+        printTable += "--------------- FIN DE TABLA ---------------";
+
+        return printTable;
     }
 }

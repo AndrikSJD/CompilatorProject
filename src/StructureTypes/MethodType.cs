@@ -35,43 +35,50 @@ public class MethodType : Type
     /// <summary>
     /// Imprime los detalles del tipo de datos método en la salida de depuración.
     /// </summary>
-    public void PrintMethod()
+    public string PrintMethod()
     {
-        System.Diagnostics.Debug.WriteLine("---Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
-        System.Diagnostics.Debug.WriteLine(" - Nivel: " + Level);
-        System.Diagnostics.Debug.WriteLine(" - Tipo de retorno: " + returnType);
-        System.Diagnostics.Debug.WriteLine(" - Numero de parametros: " + ParamsNum);
-        System.Diagnostics.Debug.WriteLine(" - Parametros: ");
+        string methodPrint = "";
+        methodPrint+= "---Tipo de metodo "+ this.GetToken().Text +"\n";
+        methodPrint+= " - Nivel: " + Level + "\n";
+        methodPrint+= " - Tipo de retorno: " + returnType + "\n";
+        methodPrint+= " - Numero de parametros: " + ParamsNum + "\n";
+        if(parametersL.Count == 0)
+            methodPrint+= " - Parametros: 0" + "\n";
+        else
+            methodPrint+= " - Parametros: " + "\n";
+        
         foreach (var parameter in parametersL)
         {
             if (parameter is ClassVarType classVarType)
             {
-                System.Diagnostics.Debug.WriteLine($"Token: {classVarType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {classVarType.Type}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo de {classVarType.classType}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel: {classVarType.Level}");
+                 methodPrint+= $"     Token: {classVarType.GetToken().Text}\n";
+                 methodPrint+=$"      - Tipo: {classVarType.Type}\n";
+                 methodPrint+=$"      - Tipo de {classVarType.classType}\n";
+                 methodPrint+=$"      - Nivel: {classVarType.Level}\n";
             }
             
             if (parameter is PrimaryType primaryType)
             {
-                System.Diagnostics.Debug.WriteLine($"Token: {primaryType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {primaryType.TypeGetSet}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel: {primaryType.Level}");
+                methodPrint+=$"     Token: {primaryType.GetToken().Text}\n";
+                methodPrint+=$"     - Tipo: {primaryType.TypeGetSet}\n";
+                methodPrint+=$"     - Nivel: {primaryType.Level}\n";
 
             }
 
             if (parameter is ArrayType arrType)
             {
-                System.Diagnostics.Debug.WriteLine($"Token: {arrType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {arrType.Type}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo de array: {arrType.GetSetArrType}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel: {arrType.Level}");
+                methodPrint+=$"     Token: {arrType.GetToken().Text}\n";
+                methodPrint+=$"     - Tipo: {arrType.Type}\n";
+                methodPrint+=$"     - Tipo de array: {arrType.GetSetArrType}\n";
+                methodPrint+=$"     - Nivel: {arrType.Level}\n";
             }
             
             
         }
-        System.Diagnostics.Debug.WriteLine("\n");
-        
+        methodPrint+="\n";
+
+        return methodPrint;
+
     }
 
     /// <summary>
