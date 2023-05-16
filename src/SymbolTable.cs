@@ -54,12 +54,11 @@ public class SymbolTable
     /// <returns>Estructura de tipo encontrada o nulo si no se encuentra.</returns>
     public Type? Search(string name)
     {
-        foreach (Type id in table)
+        foreach (Type tok in table)
         {
-            //if id.level <= levelActual
-            if (id.GetToken().Text.Equals(name))
+            if (tok.GetToken().Text.Equals(name))
             {
-                return id;
+                return tok;
             }
         }
         return null;
@@ -70,13 +69,12 @@ public class SymbolTable
     /// </summary>
     /// <param name="id">Identificador de la variable personalizada.</param>
     /// <returns>Variable personalizada encontrada o nulo si no se encuentra.</returns>
-    public Type? BuscarCustomVar(string id)
+    public Type? SearchCustomVariable(string id)
     {
-        foreach (Type? i in table)
+        foreach (Type? tok in table)
         {
-            //&& i.Level <= nivelActual
-            if (i.GetToken().Text.Equals(id) && i is ClassVarType)
-                return i;
+            if (tok.GetToken().Text.Equals(id) && tok is ClassVarType)
+                return tok;
         }
         return null;
     }
@@ -148,7 +146,7 @@ public class SymbolTable
     /// </summary>
     public void Print()
     {
-        System.Diagnostics.Debug.WriteLine("--------------- INICIA TABLA ---------------");
+        System.Diagnostics.Debug.WriteLine("--------------- TABLA DE SIMBOLOS ---------------");
         for (int i = 0; i < table.Count; i++)
         {
             IToken s = ((Type)table.ElementAt(i)).GetToken();
@@ -175,6 +173,6 @@ public class SymbolTable
                     ((ArrayType)table.ElementAt(i)).Type, ((ArrayType)table.ElementAt(i)).GetSetArrType);
             }
         }
-        System.Diagnostics.Debug.WriteLine("--------------- TERMINA TABLA ---------------");
+        System.Diagnostics.Debug.WriteLine("--------------- FIN DE TABLA ---------------");
     }
 }

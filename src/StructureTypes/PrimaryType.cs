@@ -40,10 +40,10 @@ public class PrimaryType: Type
         return type switch
         {
             "int" => PrimaryTypes.Int,
-            "string" => PrimaryTypes.String,
-            "boolean" => PrimaryTypes.Boolean,
             "double" => PrimaryTypes.Double,
             "char" => PrimaryTypes.Char,
+            "boolean" => PrimaryTypes.Boolean,
+            "string" => PrimaryTypes.String,
             _ => PrimaryTypes.Unknown,
         };
     }
@@ -65,7 +65,7 @@ public class PrimaryType: Type
     /// <param name="type">Tipo de datos primitivo.</param>
     public void PrintPrimaryType(IToken s, int level, PrimaryTypes type)
     {
-        System.Diagnostics.Debug.WriteLine($"Nombre: {s.Text}");
+        System.Diagnostics.Debug.WriteLine($"Token: {s.Text}");
         System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
         System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
         System.Diagnostics.Debug.WriteLine("\n");

@@ -28,7 +28,7 @@ public class ClassVarType : Type
     /// </summary>
     public void PrintClassVarType(IToken s, int level, string type, string fatherType)
     {
-        System.Diagnostics.Debug.WriteLine($"Nombre: {s.Text}");
+        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
         System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
         System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
         System.Diagnostics.Debug.WriteLine($" - Tipo de padre: {fatherType}");

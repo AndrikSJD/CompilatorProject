@@ -12,8 +12,8 @@ public class ArrayType : Type
     
     public enum ArrTypes
     {
-        Int,
         Char,
+        Int,
         Unknown,
     }
     
@@ -40,8 +40,8 @@ public class ArrayType : Type
     {
         return type switch
         {
-            "int" => ArrTypes.Int,
             "char" => ArrTypes.Char,
+            "int" => ArrTypes.Int,
             _ => ArrTypes.Unknown,
         };
     }
@@ -60,10 +60,11 @@ public class ArrayType : Type
     /// </summary>
     public void PrintArrayType(IToken s, int level, string type, ArrTypes baseType)
     {
-        System.Diagnostics.Debug.WriteLine($"Nombre {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
+        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
         System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo base: {baseType}");
+        System.Diagnostics.Debug.WriteLine($" - Arreglo de: {baseType}");
+        System.Diagnostics.Debug.WriteLine($" - Nivel tabla: {level}");
+
         System.Diagnostics.Debug.WriteLine("\n");
     }
 

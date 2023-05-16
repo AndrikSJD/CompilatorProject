@@ -37,7 +37,7 @@ public class MethodType : Type
     /// </summary>
     public void PrintMethod()
     {
-        System.Diagnostics.Debug.WriteLine("Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
+        System.Diagnostics.Debug.WriteLine("---Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
         System.Diagnostics.Debug.WriteLine(" - Nivel: " + Level);
         System.Diagnostics.Debug.WriteLine(" - Tipo de retorno: " + returnType);
         System.Diagnostics.Debug.WriteLine(" - Numero de parametros: " + ParamsNum);
@@ -46,27 +46,26 @@ public class MethodType : Type
         {
             if (parameter is ClassVarType classVarType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {classVarType.GetToken().Text}");
+                System.Diagnostics.Debug.WriteLine($"Token: {classVarType.GetToken().Text}");
                 System.Diagnostics.Debug.WriteLine($" - Tipo: {classVarType.Type}");
                 System.Diagnostics.Debug.WriteLine($" - Tipo de {classVarType.classType}");
-                System.Diagnostics.Debug.WriteLine($"Nombre: {classVarType.GetToken().Text}");
                 System.Diagnostics.Debug.WriteLine($" - Nivel: {classVarType.Level}");
             }
             
             if (parameter is PrimaryType primaryType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {primaryType.GetToken().Text}");
+                System.Diagnostics.Debug.WriteLine($"Token: {primaryType.GetToken().Text}");
                 System.Diagnostics.Debug.WriteLine($" - Tipo: {primaryType.TypeGetSet}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel {primaryType.Level}");
+                System.Diagnostics.Debug.WriteLine($" - Nivel: {primaryType.Level}");
 
             }
 
             if (parameter is ArrayType arrType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {arrType.GetToken().Text}");
+                System.Diagnostics.Debug.WriteLine($"Token: {arrType.GetToken().Text}");
                 System.Diagnostics.Debug.WriteLine($" - Tipo: {arrType.Type}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo de array {arrType.GetSetArrType}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel {arrType.Level}");
+                System.Diagnostics.Debug.WriteLine($" - Tipo de array: {arrType.GetSetArrType}");
+                System.Diagnostics.Debug.WriteLine($" - Nivel: {arrType.Level}");
             }
             
             

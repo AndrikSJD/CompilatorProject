@@ -16,7 +16,7 @@ public class ClassType: Type
     /// </summary>
     /// <param name="type">Token asociado al tipo de clase.</param>
     /// <param name="lvl">Nivel de anidamiento.</param>
-    public ClassType(IToken type, int lvl) : base(type, lvl)
+    public ClassType(IToken type, int lvl) : base(type, lvl)// constructor del padre
     {
         
     }
@@ -26,9 +26,9 @@ public class ClassType: Type
     /// </summary>
     public void PrintClass(IToken s, int level, string type)
     {
-        System.Diagnostics.Debug.WriteLine($"Nombre: {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
+        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
         System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
+        System.Diagnostics.Debug.WriteLine($" - Nivel tabla: {level}");
         System.Diagnostics.Debug.WriteLine("\n");
     }
     
