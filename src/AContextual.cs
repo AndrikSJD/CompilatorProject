@@ -62,6 +62,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
             // Cerramos el ámbito del programa
             _symbolTable.CloseScope();
+            if (consola.SalidaConsola.SelectedText == "")
+            {
+                consola.SalidaConsola.AppendText("Compilación exitosa");
+            }
         }
         catch (Exception e)
         {
@@ -1204,11 +1208,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (expectedType == null || actualType == null)
         {
             // Si alguno de los tipos es nulo, mostramos un mensaje de error específico
-            return "Error en el Factor de Condición: No se puede comparar el tipo de condición con null.";
+            return "Error en el Factor de Condición: No se puede comparar el tipo de condición con null. \n";
         }
 
         // Mostramos un mensaje de error indicando los tipos esperado y actual
-        return $"Error en el Factor de Condición: Los tipos de condición no coinciden. Se esperaba {expectedType} pero se encontró {actualType}.";
+        return $"Error en el Factor de Condición: Los tipos de condición no coinciden. Se esperaba {expectedType} pero se encontró {actualType}. \n";
     }
 
 
@@ -1327,7 +1331,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             LinkedList<Type> listOfTypes = (LinkedList<Type>)Visit(context.actPars());
 
             // Buscar el método en la tabla de símbolos
-            Type? metodo = (Type)_symbolTable.Search(context.designator().GetText());
+            string designator = context.designator().GetText();
+            if (designator == "len")
+            {
+                return "Int";
+            }
+            Type? metodo = (Type)_symbolTable.Search(designator);
             if (metodo is MethodType method)
             {
                 // Verificar si la cantidad de parámetros es incorrecta
