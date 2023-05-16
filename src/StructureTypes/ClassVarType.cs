@@ -26,13 +26,16 @@ public class ClassVarType : Type
     /// <summary>
     /// Imprime los detalles del tipo de datos de clase en la salida de depuración.
     /// </summary>
-    public void PrintClassVarType(IToken s, int level, string type, string fatherType)
+    public string PrintClassVarType(IToken s, int level, string type, string fatherType)
     {
-        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo de padre: {fatherType}");
-        System.Diagnostics.Debug.WriteLine("\n");
+        string classPrint = "";
+        classPrint+= "---Token: " + s.Text + "\n";
+        classPrint+= " - Nivel: " + level + "\n";
+        classPrint+= " - Tipo de dato: " + type + "\n";
+        classPrint+= " - Tipo de padre: " + fatherType + "\n";
+        return classPrint;
+        
+
     }
     
     /// <summary>

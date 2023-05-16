@@ -70,7 +70,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
     
         // Imprimimos la tabla de símbolos (opcional, puedes eliminar esta línea si no es necesaria)
-        _symbolTable.Print();
+        consola.SalidaConsola.AppendText(_symbolTable.Print());   
 
         return null;
     }
@@ -615,6 +615,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             {
                 expressionType = expressionType.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
                 designatorType= designatorType.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
+                
+                
+                //Aqui se verifica si es un arreglo y se le asigna un arreglo
+                if (designatorType.Contains("[]") && expressionType.Contains("[]"))
+                {
+                    consola.SalidaConsola.AppendText($"Error de asignación: No se pueden asignar una lista \"{designatorType}\" a otra \"{expressionType.ToLower()}\".  {ShowToken(currentToken)}\n");
+                    return null;
+                }
+                
                 // Verificar si es un nuevo arreglo
                 if (designatorType.Contains("[]") && context.expr().GetText().Contains("new"))
                 {
@@ -626,10 +635,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     
                     return null;
                 }
+                
             
+                // Los tipos no son compatibles
                 if (designatorType != expressionType)
                 {
-                    // Si los tipos no son compatibles
+                    
                     consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no es compatible con el tipo de la expresión \"{expressionType}\". {ShowToken(currentToken)}\n");
 
                     return null;
@@ -647,7 +658,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
                 return null;
             }
-
             
         }
         else if (context.LPARENT() != null) // si es llamada a metodo
@@ -685,7 +695,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     consola.SalidaConsola.AppendText($"Error de parámetros: Faltan parámetros en el método \"{method.GetToken().Text}\". {ShowToken(currentToken)}\n");
                 }
             }
-            
             
             else if (context.designator().GetText() == "add")
             {

@@ -63,12 +63,14 @@ public class PrimaryType: Type
     /// <param name="s">Token asociado al tipo de datos.</param>
     /// <param name="level">Nivel de ámbito.</param>
     /// <param name="type">Tipo de datos primitivo.</param>
-    public void PrintPrimaryType(IToken s, int level, PrimaryTypes type)
+    public string PrintPrimaryType(IToken s, int level, PrimaryTypes type)
     {
-        System.Diagnostics.Debug.WriteLine($"Token: {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel: {level}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
-        System.Diagnostics.Debug.WriteLine("\n");
+        string primaryTypePrint = "";
+        primaryTypePrint += $"---Token: {s.Text}\n";
+        primaryTypePrint += $" - Nivel: {level}\n";
+        primaryTypePrint += $" - Tipo de dato: {type}\n";
+        return primaryTypePrint;
+
     }
 
     /// <summary>

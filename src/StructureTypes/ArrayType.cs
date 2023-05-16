@@ -58,14 +58,15 @@ public class ArrayType : Type
     /// <summary>
     /// Imprime los detalles del tipo de arreglo en la salida de depuración.
     /// </summary>
-    public void PrintArrayType(IToken s, int level, string type, ArrTypes baseType)
+    public string  PrintArrayType(IToken s, int level, string type, ArrTypes baseType)
     {
-        System.Diagnostics.Debug.WriteLine($"---Token: {s.Text}");
-        System.Diagnostics.Debug.WriteLine($" - Tipo de dato: {type}");
-        System.Diagnostics.Debug.WriteLine($" - Arreglo de: {baseType}");
-        System.Diagnostics.Debug.WriteLine($" - Nivel tabla: {level}");
-
-        System.Diagnostics.Debug.WriteLine("\n");
+        string arrayPrint = "";
+        arrayPrint += $"---Token: {s.Text}\n";
+        arrayPrint += $" - Tipo de dato: {type}\n";
+        arrayPrint += $" - Arreglo de: {baseType}\n";
+        arrayPrint += $" - Nivel de scope: {level}\n";
+        
+        return arrayPrint;
     }
 
     /// <summary>
