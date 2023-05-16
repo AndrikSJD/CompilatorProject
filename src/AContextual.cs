@@ -608,29 +608,29 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Verificar si es una asignación
         if(context.expr()!=null)
         {
-            string tipoExpresion = ((string)Visit(context.expr())); //tolower para que no haya problemas con mayusculas y minusculas
+            string expressionType = ((string)Visit(context.expr())); //tolower para que no haya problemas con mayusculas y minusculas
             
             //verificamos si el tipodesignator viene nulo es decir el indice no es null
-            if (designatorType != null && tipoExpresion != null)
+            if (designatorType != null && expressionType != null)
             {
-                designatorType = designatorType.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
-                
+                expressionType = expressionType.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
+                designatorType= designatorType.ToLower();//tolower para que no haya problemas con mayusculas y minusculas
                 // Verificar si es un nuevo arreglo
                 if (designatorType.Contains("[]") && context.expr().GetText().Contains("new"))
                 {
           
-                    if (!(designatorType.ToLower().Contains(tipoExpresion.ToLower())))
+                    if (!(designatorType.Contains(expressionType.ToLower())))
                     {
-                        consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no coincide con el tipo de la expresión \"{tipoExpresion.ToLower()}\". {ShowToken(currentToken)}\n");
+                        consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no coincide con el tipo de la expresión \"{expressionType.ToLower()}\". {ShowToken(currentToken)}\n");
                     }
                     
                     return null;
                 }
             
-                if (designatorType != tipoExpresion)
+                if (designatorType != expressionType)
                 {
                     // Si los tipos no son compatibles
-                    consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no es compatible con el tipo de la expresión \"{tipoExpresion}\". {ShowToken(currentToken)}\n");
+                    consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no es compatible con el tipo de la expresión \"{expressionType}\". {ShowToken(currentToken)}\n");
 
                     return null;
                 }
@@ -1446,7 +1446,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if(context.ident().Length > 1) // mas de un id
         {
             // Buscar el tipo de la variable personalizada en la tabla de símbolos
-            Type? customVar = _symbolTable.BuscarCustomVar(context.ident(0).GetText());
+            Type? customVar = _symbolTable.SearchCustomVariable(context.ident(0).GetText());
             
             // Si se encontró el tipo de la variable
             if (customVar != null)
