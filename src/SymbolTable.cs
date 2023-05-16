@@ -69,7 +69,7 @@ public class SymbolTable
     /// </summary>
     /// <param name="id">Identificador de la variable personalizada.</param>
     /// <returns>Variable personalizada encontrada o nulo si no se encuentra.</returns>
-    public Type? SearchCustomVariable(string id)
+    public Type? SearchClassVariable(string id)
     {
         foreach (Type? tok in table)
         {

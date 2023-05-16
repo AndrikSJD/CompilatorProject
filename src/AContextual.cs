@@ -156,10 +156,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         PrimaryType.PrimaryTypes varType, bool isClassVarType)
     {
         // Recorrer todos los identificadores en la declaración de variables
-        foreach (var child in context.ident())
+        foreach (var ident in context.ident())
             {      
                 // Obtener el token del identificador
-                IToken token = (IToken)Visit(child);
+                IToken token = (IToken)Visit(ident);
                 
                 //verificamos si es un array
                 if(isArray) 
@@ -172,7 +172,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                     {
-                        IToken tok = (IToken)Visit(child);
+                        IToken tok = (IToken)Visit(ident);
                         Type typeVariable = _symbolTable.Search(token.Text);
                         
                         // Verificar si la variable y afue declarada en el ámbito
@@ -199,7 +199,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                     {
-                        IToken tok = (IToken)Visit(child);
+                        IToken tok = (IToken)Visit(ident);
                         Type typeVariable = _symbolTable.Search(token.Text);
                         
                         // Verificar si la variable ya ha sido declarada
@@ -238,7 +238,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                         {
-                            IToken tok = (IToken)Visit(child);
+                            IToken tok = (IToken)Visit(ident);
                             Type typeVariable = _symbolTable.Search(token.Text);
                             
                             // Verificar si la variable ya ha sido declarada
@@ -255,7 +255,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                         {
-                            IToken tok = (IToken)Visit(child);
+                            IToken tok = (IToken)Visit(ident);
                             Type typeVariable = _symbolTable.Search(token.Text);
                             
                             // Verificar si la variable ya ha sido declarada
@@ -619,7 +619,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if (designatorType.Contains("[]") && context.expr().GetText().Contains("new"))
                 {
           
-                    if (!(designatorType.Contains(expressionType.ToLower())))
+                    if (!(designatorType.Contains(expressionType)))
                     {
                         consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{designatorType}\" no coincide con el tipo de la expresión \"{expressionType.ToLower()}\". {ShowToken(currentToken)}\n");
                     }
@@ -654,37 +654,70 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             Type? type = _symbolTable.Search(context.designator().GetText());
             
-            if (context.designator().GetText() == "del")
+            
+            if (type is MethodType method)
+            {
+                if (context.actPars() != null)
+                {
+                    LinkedList<Type> parameters = (LinkedList<Type>)Visit(context.actPars());
+
+                    if (parameters.Count == method.parametersL.Count)
+                    {
+                        for (int i = 0; i < method.parametersL.Count; i++)
+                        {
+                            if (method.parametersL.ElementAt(i).GetStructureType().ToString() !=
+                                parameters.ElementAt(i).GetStructureType())
+                            {
+                                // Los tipos de parámetros no coinciden
+                                consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} no coincide con el tipo de la expresión \"{parameters.ElementAt(i)}\". {ShowToken(currentToken)}\n");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Si la cantidad de parámetros no es correcta
+                        consola.SalidaConsola.AppendText($"Error de asignación: El número de parámetros ({method.parametersL.Count}) no coincide con el número de expresiones ({parameters.Count}). {ShowToken(currentToken)}\n");
+                    }
+                }
+                else if (method.parametersL.Count > 0)
+                {
+                    // Si se carece de parámetros
+                    consola.SalidaConsola.AppendText($"Error de parámetros: Faltan parámetros en el método \"{method.GetToken().Text}\". {ShowToken(currentToken)}\n");
+                }
+            }
+            
+            
+            else if (context.designator().GetText() == "add")
             {
                 if (context.actPars() != null)
                 {
                     // Obtener lista de parametros
-                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    LinkedList<Type> parameters = (LinkedList<Type>)Visit(context.actPars());
                     //Recibe dos parametros, la lista, el indice
 
-                    if (parametros.Count == 2)
+                    if (parameters.Count == 2)
                     {
-                        if (!(parametros.ElementAt(0) is ArrayType &&
-                             parametros.ElementAt(1).GetStructureType().Equals("Int")))
+                        if (!(parameters.ElementAt(0).GetStructureType()
+                                .Equals(parameters.ElementAt(1).GetStructureType())))
                         {
                             // Si los parametros no son correctos
-                            consola.SalidaConsola.AppendText($"Error de parámetros: Los tipos de parámetros no coinciden en el método del. {ShowToken(currentToken)}\n");
+                            consola.SalidaConsola.AppendText($"Error de parámetros: Los tipos de parámetros no coinciden en el método add. {ShowToken(currentToken)}\n");
                         }
                     }
-                    else if (parametros.Count != 2)
+                    else if (parameters.Count != 2)
                     {
                         // Si se exede la cantidad de parámetros
-                        consola.SalidaConsola.AppendText($"Error en los parámetros: Cantidad incorrecta de parámetros para el método del. {ShowToken(currentToken)}\n");
+                        consola.SalidaConsola.AppendText($"Error en los parámetros: Cantidad incorrecta de parámetros para el método add. {ShowToken(currentToken)}\n");
                     }
-
                 }
                 else
                 {
                     // Si carece de parámetros
-                    consola.SalidaConsola.AppendText($"Error en el método: Faltan los parámetros para el método del. {ShowToken(currentToken)}\n");
+                    consola.SalidaConsola.AppendText($"Error en el método: Faltan los parámetros para el método add. {ShowToken(currentToken)}\n");
                 }
                 
             }
+            
             else if (context.designator().GetText() == "len")
             {
                 if (context.actPars() != null)
@@ -713,65 +746,37 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     consola.SalidaConsola.AppendText($"Error en el método: Faltan los parámetros para el método len. {ShowToken(currentToken)}\n");
                 }
             }
-            else if (context.designator().GetText() == "add")
+            
+            else if (context.designator().GetText() == "del")
             {
                 if (context.actPars() != null)
                 {
                     // Obtener lista de parametros
-                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
+                    LinkedList<Type> parameters = (LinkedList<Type>)Visit(context.actPars());
                     //Recibe dos parametros, la lista, el indice
 
-                    if (parametros.Count == 2)
+                    if (parameters.Count == 2)
                     {
-                        if (!(parametros.ElementAt(0).GetStructureType()
-                                .Equals(parametros.ElementAt(1).GetStructureType())))
+                        if (!(parameters.ElementAt(0) is ArrayType &&
+                             parameters.ElementAt(1).GetStructureType().Equals("Int")))
                         {
                             // Si los parametros no son correctos
-                            consola.SalidaConsola.AppendText($"Error de parámetros: Los tipos de parámetros no coinciden en el método add. {ShowToken(currentToken)}\n");
+                            consola.SalidaConsola.AppendText($"Error de parámetros: Los tipos de parámetros no coinciden en el método del. {ShowToken(currentToken)}\n");
                         }
                     }
-                    else if (parametros.Count != 2)
+                    else if (parameters.Count != 2)
                     {
                         // Si se exede la cantidad de parámetros
-                        consola.SalidaConsola.AppendText($"Error en los parámetros: Cantidad incorrecta de parámetros para el método add. {ShowToken(currentToken)}\n");
+                        consola.SalidaConsola.AppendText($"Error en los parámetros: Cantidad incorrecta de parámetros para el método del. {ShowToken(currentToken)}\n");
                     }
+
                 }
                 else
                 {
                     // Si carece de parámetros
-                    consola.SalidaConsola.AppendText($"Error en el método: Faltan los parámetros para el método add. {ShowToken(currentToken)}\n");
+                    consola.SalidaConsola.AppendText($"Error en el método: Faltan los parámetros para el método del. {ShowToken(currentToken)}\n");
                 }
                 
-            }
-            else if (type is MethodType method)
-            {
-                if (context.actPars() != null)
-                {
-                    LinkedList<Type> parametros = (LinkedList<Type>)Visit(context.actPars());
-
-                    if (parametros.Count == method.parametersL.Count)
-                    {
-                        for (int i = 0; i < method.parametersL.Count; i++)
-                        {
-                            if (method.parametersL.ElementAt(i).GetStructureType().ToString() !=
-                                parametros.ElementAt(i).GetStructureType())
-                            {
-                                // Los tipos de parámetros no coinciden
-                                consola.SalidaConsola.AppendText($"Error de asignación: El tipo \"{method.parametersL.ElementAt(i).GetStructureType()}\" del parámetro {i} no coincide con el tipo de la expresión \"{parametros.ElementAt(i)}\". {ShowToken(currentToken)}\n");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Si la cantidad de parámetros no es correcta
-                        consola.SalidaConsola.AppendText($"Error de asignación: El número de parámetros ({method.parametersL.Count}) no coincide con el número de expresiones ({parametros.Count}). {ShowToken(currentToken)}\n");
-                    }
-                }
-                else if (method.parametersL.Count > 0)
-                {
-                    // Si se carece de parámetros
-                    consola.SalidaConsola.AppendText($"Error de parámetros: Faltan parámetros en el método \"{method.GetToken().Text}\". {ShowToken(currentToken)}\n");
-                }
             }
             else
             {
@@ -781,24 +786,26 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             
            
         }
-        else if (context.INC()!=null)
-        {
-            if(designatorType.ToLower() != "int")
-            {
-                // Si el tipo de dato no es int
-                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede incrementar utilizando el operador ++ en enteros. {ShowToken(currentToken)}\n");
-            }
-            
-        }
         else if (context.DEC()!=null)
         {
             if(designatorType.ToLower() != "int")
             {
                 // Si el tipo de dato no es int
-                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede decrementar utilizando el operador -- en enteros. {ShowToken(currentToken)}\n");
+                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede decrementar variables enteras. {ShowToken(currentToken)}\n");
             }
             
         }
+        
+        else if (context.INC()!=null)
+        {
+            if(designatorType.ToLower() != "int")
+            {
+                // Si el tipo de dato no es int
+                consola.SalidaConsola.AppendText($"Error de asignación: \"{context.designator().GetText()}\" solo se puede incrementar variables enteras. {ShowToken(currentToken)}\n");
+            }
+            
+        }
+        
         
         return null;
     }
@@ -1049,27 +1056,28 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         LinkedList<Type> parametersTypes = new LinkedList<Type>();
 
         // Iteramos sobre cada expresión en los argumentos
-        foreach (var child in context.expr())
+        foreach (var expression in context.expr())
         {
             // Obtenemos el tipo de la expresión
-            string expressionType = (string)Visit(child);
+            string expressionType = (string)Visit(expression);
 
             // Buscamos el tipo en la tabla de símbolos
-            Type? tableType = _symbolTable.Search(child.GetText());
-
-            // Verificamos si el tipo de la expresión es válido
-            if (expressionType != null)
-            {
-                // Creamos un nuevo objeto PrimaryType y lo agregamos a la lista de tipos de parámetros
-                parametersTypes.AddLast(new PrimaryType(child.Start, PrimaryType.showType(expressionType.ToLower()),
-                    _symbolTable.currentLevel));
-            }
-            // Verificamos si el tipo se encuentra en la tabla de símbolos
-            else if (tableType != null)
+            Type? tableType = _symbolTable.Search(expression.GetText());
+            
+            if (tableType != null)
             {
                 // Agregamos el tipo de la tabla de símbolos a la lista de tipos de parámetros
                 parametersTypes.AddLast(tableType);
             }
+            // Verificamos si el tipo de la expresión es válido
+            else if (expressionType != null)
+            {
+                // Creamos un nuevo objeto PrimaryType y lo agregamos a la lista de tipos de parámetros
+                parametersTypes.AddLast(new PrimaryType(expression.Start, PrimaryType.showType(expressionType.ToLower()),
+                    _symbolTable.currentLevel));
+            }
+            // Verificamos si el tipo se encuentra en la tabla de símbolos
+            
         }
 
         // Devolvemos la lista de tipos de parámetros
@@ -1316,14 +1324,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (context.LPARENT() != null)
         {
             // Obtener la lista de tipos de los parámetros al visitar el nodo actPars
-            LinkedList<Type> tipos = (LinkedList<Type>)Visit(context.actPars());
+            LinkedList<Type> listOfTypes = (LinkedList<Type>)Visit(context.actPars());
 
             // Buscar el método en la tabla de símbolos
             Type? metodo = (Type)_symbolTable.Search(context.designator().GetText());
             if (metodo is MethodType method)
             {
                 // Verificar si la cantidad de parámetros es incorrecta
-                if (!(method.parametersL.Count == tipos.Count))
+                if (!(method.parametersL.Count == listOfTypes.Count))
                 {
                     consola.SalidaConsola.AppendText($"Error: Cantidad de parámetros incorrecta. {ShowToken(currentToken)}\n");
 
@@ -1335,9 +1343,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     for (int i = 0; i < method.parametersL.Count; i++)
                     {
                         if (((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() !=
-                            tipos.ElementAt(i).GetStructureType())
+                            listOfTypes.ElementAt(i).GetStructureType())
                         {
-                            consola.SalidaConsola.AppendText($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {tipos.ElementAt(i).GetStructureType()} {ShowToken(currentToken)}\n");
+                            consola.SalidaConsola.AppendText($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {listOfTypes.ElementAt(i).GetStructureType()} {ShowToken(currentToken)}\n");
 
                             return null;
                         }
@@ -1442,16 +1450,69 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Buscar el tipo de la variable en la tabla de símbolos
         Type? typeIdent= _symbolTable.Search(context.ident(0).GetText());
         
+        
+        // Si el tipo de la variable es un arreglo y solo hay una expresión
+        if (typeIdent is ArrayType && context.expr().Length == 1) //cuando es arreglo
+        {
+            string typeExpr = (string) Visit(context.expr(0));
+            
+            // Comprobar si el tipo de la expresión es válido para un arreglo
+            if (typeExpr != null)
+            {
+                if(typeExpr.Equals("Int"))
+                {
+                    return typeIdent.GetStructureType().ToLower();
+                }
+                // Error de tipos: El índice del arreglo no es de tipo Int
+                consola.SalidaConsola.AppendText($"Error de tipos: El índice del arreglo no es de tipo Int. {ShowToken(currentToken)}\n");
+            }
+            
+            return null;
+        }
+
+        // Si solo hay un identificador
+        if (context.ident().Length == 1) 
+        {
+            if (context.ident(0).GetText().Equals("len"))
+            {
+                return "Int";
+            }
+            // Palabras clave especiales
+            if (context.ident(0).GetText().Equals("del"))
+            {
+                return "Boolean";
+            }
+            if (context.ident(0).GetText().Equals("add"))
+            {
+                return "Boolean";
+            }
+            
+            // Si el tipo de la variable es un arreglo
+            if(typeIdent is ArrayType)
+            {
+                return typeIdent.GetStructureType().ToLower()+"[]"; //int[] o char[]
+            }
+
+            // Si se encontró el tipo de la variable en la tabla de símbolos
+            if (typeIdent!= null)
+            {
+                return typeIdent.GetStructureType();
+            }
+            // Si la variable no se encuentra
+            consola.SalidaConsola.AppendText($"No se encontró en la tabla la variable: {context.ident(0).GetText()}. {ShowToken(currentToken)}\n");
+
+            return null;
+        }
         // Si hay más de un identificador (más de un nivel de acceso)
         if(context.ident().Length > 1) // mas de un id
         {
             // Buscar el tipo de la variable personalizada en la tabla de símbolos
-            Type? customVar = _symbolTable.SearchCustomVariable(context.ident(0).GetText());
+            Type? classVar = _symbolTable.SearchClassVariable(context.ident(0).GetText());
             
             // Si se encontró el tipo de la variable
-            if (customVar != null)
+            if (classVar != null)
             {
-                ClassVarType tipo = (ClassVarType)customVar;
+                ClassVarType tipo = (ClassVarType)classVar;
                 ClassType classType = (ClassType)_symbolTable.Search(tipo.GetStructureType());
                 
                 // Si se encontró el tipo de la clase
@@ -1476,58 +1537,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
            
             // Si no se encontró el tipo de la clase o el parámetro en la clase
             consola.SalidaConsola.AppendText($"No se encontró en dicha clase '{context.ident(context.ident().Length - 2).GetText()}'. {ShowToken(currentToken)}\n");
-
-            return null;
-        }
-        
-        // Si el tipo de la variable es un arreglo y solo hay una expresión
-        if (typeIdent is ArrayType && context.expr().Length == 1) //cuando es arreglo
-        {
-            string typeExpr = (string) Visit(context.expr(0));
-            
-            // Comprobar si el tipo de la expresión es válido para un arreglo
-            if (typeExpr != null)
-            {
-                if(typeExpr.Equals("Int"))
-                {
-                    return typeIdent.GetStructureType().ToLower();
-                }
-                // Error de tipos: El índice del arreglo no es de tipo Int
-                consola.SalidaConsola.AppendText($"Error de tipos: El índice del arreglo no es de tipo Int. {ShowToken(currentToken)}\n");
-            }
-            
-            return null;
-        }
-
-        // Si solo hay un identificador
-        if (context.ident().Length == 1) 
-        {
-            // Palabras clave especiales
-            if (context.ident(0).GetText().Equals("del"))
-            {
-                return "Boolean";
-            }
-            if (context.ident(0).GetText().Equals("add"))
-            {
-                return "Boolean";
-            }
-            if (context.ident(0).GetText().Equals("len"))
-            {
-                return "Int";
-            }
-            // Si el tipo de la variable es un arreglo
-            if(typeIdent is ArrayType)
-            {
-                return typeIdent.GetStructureType().ToLower()+"[]"; //int[] o char[]
-            }
-
-            // Si se encontró el tipo de la variable en la tabla de símbolos
-            if (typeIdent!= null)
-            {
-                return typeIdent.GetStructureType();
-            }
-            // Si la variable no se encuentra
-            consola.SalidaConsola.AppendText($"No se encontró en la tabla la variable: {context.ident(0).GetText()}. {ShowToken(currentToken)}\n");
 
             return null;
         }
