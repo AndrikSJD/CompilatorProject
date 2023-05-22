@@ -62,7 +62,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
             // Cerramos el ámbito del programa
             _symbolTable.CloseScope();
-            if (consola.SalidaConsola.SelectedText == "")
+            if (String.IsNullOrEmpty(consola.SalidaConsola.Text))
             {
                 consola.SalidaConsola.AppendText("Compilación exitosa");
             }
@@ -843,7 +843,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
-            consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del if es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
+            consola.SalidaConsola.AppendText($"Error: El tipo en la condición del if es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
         
             // Verificamos si hay una segunda declaración en el cuerpo del if
             if (context.statement(1) != null)
@@ -900,7 +900,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             }
             else
             {
-                consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del for es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
+                consola.SalidaConsola.AppendText($"Error: El tipo en la condición del for es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
             }
             
             // Cerramos el ámbito actual en la tabla de símbolos
@@ -946,7 +946,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         else
         {
-            consola.SalidaConsola.AppendText($"ERROR: El tipo en la condición del while es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
+            consola.SalidaConsola.AppendText($"Error: El tipo en la condición del while es falsa: \"{context.condition().GetText()}\". {ShowToken(currentToken)}\n");
         }
     
         // Cerramos el ámbito actual en la tabla de símbolos
@@ -976,17 +976,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             // Verificamos si el método actual es de tipo "void"
             if (_symbolTable.currentMethod.ReturnTypeGetSet == "void")
             {
-                consola.SalidaConsola.AppendText($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" es de tipo void y no puede tener un valor de retorno. {ShowToken(currentToken)}\n");
+                consola.SalidaConsola.AppendText($"Error de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" es de tipo void y no puede tener un valor de retorno. {ShowToken(currentToken)}\n");
             }
             // Verificamos si el tipo de retorno de la expresión es válido
             else if (!IsReturnTypeValid(returnType))
             {
-                consola.SalidaConsola.AppendText($"ERROR de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" no puede retornar un valor de tipo \"{returnType}\". {ShowToken(currentToken)}\n");
+                consola.SalidaConsola.AppendText($"Error de Retorno: El método \"{_symbolTable.currentMethod.GetToken().Text}\" no puede retornar un valor de tipo \"{returnType}\". {ShowToken(currentToken)}\n");
             }
         }
         else
         {
-            consola.SalidaConsola.AppendText($"ERROR de Retorno: El método no tiene un valor de retorno válido. {ShowToken(currentToken)}\n");
+            consola.SalidaConsola.AppendText($"Error de Retorno: El método no tiene un valor de retorno válido. {ShowToken(currentToken)}\n");
         }
 
         // Retornamos null, ya que el retorno no tiene un valor específico
@@ -1191,7 +1191,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         else
         {
             // La comparación no es válida, mostramos un mensaje de error
-            consola.SalidaConsola.AppendText(GetErrorComparisonMessage(firstExprType, secondExprType) + $"{ShowToken(currentToken)}");
+            consola.SalidaConsola.AppendText(GetErrorComparisonMessage( secondExprType, firstExprType, currentToken));
 
             // Retornamos false para indicar que la comparación no es válida
             return false;
@@ -1211,17 +1211,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return firstType == secondType;
     }
 
-    private string GetErrorComparisonMessage(string expectedType, string actualType)
+    private string GetErrorComparisonMessage(string expectedType, string actualType, IToken currentToken)
     {
         // Verificamos si alguno de los tipos es nulo
         if (expectedType == null || actualType == null)
         {
             // Si alguno de los tipos es nulo, mostramos un mensaje de error específico
-            return "Error en el Factor de Condición: No se puede comparar el tipo de condición con null. \n";
+            return $"Error: No se puede comparar el tipo de condición con null. {ShowToken(currentToken)}\n";
         }
 
         // Mostramos un mensaje de error indicando los tipos esperado y actual
-        return $"Error en el Factor de Condición: Los tipos de condición no coinciden. Se esperaba {expectedType} pero se encontró {actualType}. \n";
+        return $"Error: Los tipos de condición no coinciden. Se esperaba {expectedType} pero se encontró {actualType}. {ShowToken(currentToken)}\n";
     }
 
 
