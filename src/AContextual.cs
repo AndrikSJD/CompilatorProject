@@ -317,7 +317,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             Type variableglobal = _symbolTable.Search(token.Text);
                             
                             // Verificar si la variable ya ha sido declarada
-                            if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel)
+                            if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel && !(_symbolTable.searchClassAttribute(token.Text)))
                             { 
                                 // Mostrar error si la variable ya fue declara
                                 consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable local. {ShowToken(currentToken)}\n");

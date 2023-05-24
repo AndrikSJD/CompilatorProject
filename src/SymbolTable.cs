@@ -98,6 +98,32 @@ public class SymbolTable
         return 0;
     }
 
+    
+    
+    //TODO:REVISAR NUEVOS CAMBIOS
+    public bool searchClassAttribute(string var)
+    {
+        for (int i = 0; i < table.Count; i++)
+        {
+            if ((table.ElementAt(i)) is ClassType)
+            {
+                foreach (var parameter in ((ClassType)table.ElementAt(i)).parametersL)
+                {
+                    if (parameter.GetToken().Text == var)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    
+    
+    
+    
     /// <summary>
     /// Elimina los parámetros y el cuerpo de un método de la tabla de símbolos.
     /// </summary>
