@@ -25,7 +25,7 @@ public class PrimaryType: Type
     /// <param name="t">Token asociado al tipo de datos primitivo.</param>
     /// <param name="pt">Tipo de datos primitivo.</param>
     /// <param name="lvl">Nivel de ámbito.</param>
-    public PrimaryType(IToken t, PrimaryTypes pt, int lvl) : base(t, lvl)
+    public PrimaryType(IToken t, PrimaryTypes pt, int lvl, ParserRuleContext contxt) : base(t, lvl, contxt)
     {
         Type = pt;
     }

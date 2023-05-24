@@ -25,7 +25,7 @@ public class MethodType : Type
     /// <param name="parN">Número de parámetros del método.</param>
     /// <param name="rt">Tipo de retorno del método.</param>
     /// <param name="parsList">Lista enlazada de parámetros del método.</param>
-    public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList) : base(tok, level)
+    public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList,ParserRuleContext contxt) : base(tok, level, contxt)
     {
         this.ParamsNum = parN;
         this.returnType = rt;

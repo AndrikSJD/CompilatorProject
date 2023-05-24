@@ -47,9 +47,16 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             // Abrimos un nuevo ámbito para el programa
             _symbolTable.OpenScope();
         
+            
+           
+            
             // Visitamos el identificador del programa y creamos un objeto ClassType para representarlo
-            IToken token = (IToken)Visit(context.ident());
-            ClassType classType = new ClassType(token, _symbolTable.currentLevel);
+           
+            
+            //se obtiene el context del ident
+            MiniCSharpParser.IdentASTContext ident =  (MiniCSharpParser.IdentASTContext)Visit(context.ident());
+            IToken token = (IToken)ident.ID().Symbol;
+            ClassType classType = new ClassType(token, _symbolTable.currentLevel,context);
         
             // Insertamos la clase principal en la tabla de símbolos
             _symbolTable.Insert(classType);
@@ -163,7 +170,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         foreach (var ident in context.ident())
             {      
                 // Obtener el token del identificador
-                IToken token = (IToken)Visit(ident);
+                // IToken token = (IToken)Visit(ident);
+                
+                //Obtener del context de ident
+                MiniCSharpParser.IdentASTContext identCtx =  (MiniCSharpParser.IdentASTContext)Visit(ident);
+                IToken token = (IToken)identCtx.ID().Symbol;
                 
                 //verificamos si es un array
                 if(isArray) 
@@ -190,20 +201,24 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             // Crear y insertar un nuevo ArrayType en la tabla de símbolos
                             if (varType is PrimaryType.PrimaryTypes.Int)
                             {
-                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int, context);
                                 _symbolTable.Insert(array);
                                 
                             }
                             else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
-                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
                             }
                         }
                     }
                     else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                     {
-                        IToken tok = (IToken)Visit(ident);
+                        //TODO: REVISAR CAMBIOS
+                        MiniCSharpParser.IdentASTContext  identContext = (MiniCSharpParser.IdentASTContext)Visit(ident);
+                        //IToken tok = (IToken)Visit(ident);
+                        IToken tok = identContext.ID().Symbol;
+                        
                         Type typeVariable = _symbolTable.Search(token.Text);
                         
                         // Verificar si la variable ya ha sido declarada
@@ -217,12 +232,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             // Crear y insertar un nuevo ArrayType en la tabla de símbolos
                             if (varType is PrimaryType.PrimaryTypes.Int)
                             {
-                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int);
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int, context);
                                 _symbolTable.Insert(array);    
                             }
                             else if (varType is PrimaryType.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
-                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char);
+                                ArrayType array = new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
                                 
                             }
@@ -253,7 +268,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                             else
                             {
-                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText(), context);
                                 _symbolTable.Insert(element);
                             }
                         }
@@ -270,7 +285,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                             else
                             {
-                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText());
+                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText(), context);
                                 _symbolTable.Insert(element);
                             }
                         }
@@ -279,7 +294,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else //es de un tipo primario
                     {
-                        PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel);
+                        PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel, context);
                         if(_symbolTable.currentClass != null) //si estamos dentro de una clase
                         {
 
@@ -347,9 +362,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
             return null;
         }
+        
+        //TODO REVISAR: GUARDAMOS IDENT DE CLASS DECLARATION
+        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
     
         // Creamos un objeto ClassType para representar la clase actual
-        ClassType classDcl = new ClassType((IToken)Visit(context.ident()), _symbolTable.currentLevel);
+        ClassType classDcl = new ClassType(ident.ID().Symbol, _symbolTable.currentLevel, context);
     
         // Insertamos la clase en la tabla de símbolos
         _symbolTable.Insert(classDcl);
@@ -385,7 +403,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         IToken currentToken = context.Start;  
         
         // Obtenemos el nombre del método
-        IToken token = (IToken)Visit(context.ident());
+        //IToken token = (IToken)Visit(context.ident());
+        
+        //TODO:REVISAR CAMBIOS
+        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
+        IToken token = ident.ID().Symbol;
+        
+        
         string methodName = token.Text;
         
         Type? existingType = _symbolTable.Search(methodName);
@@ -473,14 +497,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if(isArray)
                 {
                     // Creamos un nuevo objeto MethodType para el método con tipo de retorno de arreglo
-                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() + "[]", parameters);
+                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() + "[]", parameters, context);
                     _symbolTable.Insert(method);
                     _symbolTable.currentMethod = method;
                 }
                 else
                 {
                     // Creamos un nuevo objeto MethodType para el método con tipo de retorno normal
-                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters);
+                    method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters, context);
                     _symbolTable.Insert(method);
                     _symbolTable.currentMethod = method;
                     
@@ -489,7 +513,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             else
             {
                 // Creamos un nuevo objeto MethodType para el método con tipo de retorno "Void"
-                method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, "Void", parameters);
+                method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, "Void", parameters, context);
                 _symbolTable.Insert(method);
                 _symbolTable.currentMethod = method;
             }
@@ -536,8 +560,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Iteramos sobre los identificadores y tipos de los parámetros
         for (int i = 0; i < context.ident().Length; i++)
         {
+            
+            //TODO:REVISAR CAMBIOS
+            MiniCSharpParser.IdentASTContext identCtx = (MiniCSharpParser.IdentASTContext)Visit(context.ident(i));
             // Obtenemos el token del identificador
-            IToken token = (IToken)Visit(context.ident(i));
+            // IToken token = (IToken)Visit(context.ident(i));
+            IToken token = identCtx.ID().Symbol;
+            
+            //TODO:REVISAR
+            MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext) Visit(context.ident(i));
             
             // Obtenemos el tipo del parámetro como cadena
             string type = context.type(i).GetText();
@@ -551,11 +582,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 // Verificamos el tipo del arreglo y creamos un objeto ArrayType correspondiente
                 if (varType is PrimaryType.PrimaryTypes.Int)
                 {
-                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int));
+                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Int, context));
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Char)
                 {
-                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char));
+                    parameters.AddLast(new ArrayType(token, _symbolTable.currentLevel, ArrayType.ArrTypes.Char, context));
                 }
                 else
                 {
@@ -573,7 +604,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 if (varType is PrimaryType.PrimaryTypes.Unknown && paramT != null)
                 {
                     // Si es un tipo desconocido y existe en la tabla de símbolos, es una clase
-                    parameters.AddLast(new ClassVarType(token, _symbolTable.currentLevel, type));
+                    parameters.AddLast(new ClassVarType(token, _symbolTable.currentLevel, type, context));
                     // También puedes agregarlo a la tabla de símbolos
                 }
                 else if (varType is PrimaryType.PrimaryTypes.Unknown && paramT == null)
@@ -583,7 +614,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 else
                 {
                     // Es un tipo primario conocido
-                    parameters.AddLast(new PrimaryType(token, varType, _symbolTable.currentLevel));
+                    parameters.AddLast(new PrimaryType(token, varType, _symbolTable.currentLevel, context));
                 }
             }
         }
@@ -592,10 +623,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     }
 
 
-    //TODO: Revsar el visit de type
+
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
-        IToken type = (IToken)Visit(context.ident());
+        //TODO: REVISAR
+        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
+        // IToken type = (IToken)Visit(context.ident());
+        IToken type = ident.ID().Symbol;
 
         //se retorna el identificador del tipo
         return type.Text;
@@ -1087,7 +1121,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             {
                 // Creamos un nuevo objeto PrimaryType y lo agregamos a la lista de tipos de parámetros
                 parametersTypes.AddLast(new PrimaryType(expression.Start, PrimaryType.showType(expressionType.ToLower()),
-                    _symbolTable.currentLevel));
+                    _symbolTable.currentLevel, context));
             }
             // Verificamos si el tipo se encuentra en la tabla de símbolos
             
@@ -1566,9 +1600,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return null;
     }
 
-    public override Antlr4.Runtime.IToken VisitIdentAST(MiniCSharpParser.IdentASTContext context)
+    
+    public override object VisitIdentAST(MiniCSharpParser.IdentASTContext context)
     {
-        return context.ID().Symbol;
+        return context;
     }
 
     public override object VisitDoubleFactorAST(MiniCSharpParser.DoubleFactorASTContext context)

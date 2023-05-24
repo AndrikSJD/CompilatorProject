@@ -12,16 +12,18 @@ public  abstract class Type
 
     private IToken _token;
     private int level;
+    private ParserRuleContext _context;
 
     /// <summary>
     /// Constructor de la clase Type.
     /// </summary>
     /// <param name="token">Token asociado al tipo.</param>
     /// <param name="level">Nivel de ámbito del tipo.</param>
-    protected Type(IToken token, int level)
+    protected Type(IToken token, int level, ParserRuleContext context)
     {
         this._token = token;
         this.level = level;
+        this._context = context;
     }
 
     /// <summary>
@@ -47,4 +49,11 @@ public  abstract class Type
     /// </summary>
     /// <returns>Tipo de estructura.</returns>
     public abstract string GetStructureType();
+
+
+    public ParserRuleContext ContextGetSet
+    {
+        get => _context;
+        set => _context = value ?? throw new ArgumentNullException(nameof(value));
+    }
 }

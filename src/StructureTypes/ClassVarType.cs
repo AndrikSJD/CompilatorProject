@@ -17,7 +17,7 @@ public class ClassVarType : Type
     /// <param name="tk">Token asociado al tipo de datos de clase.</param>
     /// <param name="lvl">Nivel de ámbito.</param>
     /// <param name="tf">Tipo de clase.</param>
-    public ClassVarType(IToken tk, int lvl, string tf) : base(tk, lvl)
+    public ClassVarType(IToken tk, int lvl, string tf, ParserRuleContext contxt) : base(tk, lvl, contxt)
     {
         classType = tf;
         

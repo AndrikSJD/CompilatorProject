@@ -9,7 +9,7 @@ program : using* CLASS ident LBRACE (varDecl | classDecl | methodDecl)* RBRACE E
 
 using : USING ident SEMICOLON                                                          #usingAST;
 
-varDecl : type ident (COMMA ident)* SEMICOLON                                             #varDeclAST;
+varDecl locals[int indexVar=0] : type ident (COMMA ident)* SEMICOLON                                             #varDeclAST;
 
 classDecl : CLASS ident LBRACE varDecl* RBRACE                                     #classDeclAST;
 
@@ -62,6 +62,6 @@ factor : designator (LPARENT actPars? RPARENT)?                #factorAST
 
 designator : ident ((DOT ident) | (LBRACK expr RBRACK))*          #designatorAST;
 
-ident: ID                                                    #identAST;
+ident locals [ParserRuleContext declPointer = null]: ID                                                    #identAST;
 
 relop : (EQUAL | NOTEQUAL | GT | GE | LT | LE)              #relopAST;

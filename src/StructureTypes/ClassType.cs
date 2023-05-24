@@ -16,7 +16,7 @@ public class ClassType: Type
     /// </summary>
     /// <param name="type">Token asociado al tipo de clase.</param>
     /// <param name="lvl">Nivel de anidamiento.</param>
-    public ClassType(IToken type, int lvl) : base(type, lvl)// constructor del padre
+    public ClassType(IToken type, int lvl, ParserRuleContext contxt) : base(type, lvl, contxt)// constructor del padre
     {
         
     }

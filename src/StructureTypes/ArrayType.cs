@@ -26,7 +26,7 @@ public class ArrayType : Type
     /// <param name="tok">Token asociado al tipo de arreglo.</param>
     /// <param name="lvl">Nivel de anidamiento.</param>
     /// <param name="arr">Tipo base del arreglo.</param>
-    public ArrayType(IToken tok, int lvl, ArrTypes arr) : base(tok, lvl)
+    public ArrayType(IToken tok, int lvl, ArrTypes arr, ParserRuleContext contxt) : base(tok, lvl, contxt)
     {
         arrType = arr;
     }
