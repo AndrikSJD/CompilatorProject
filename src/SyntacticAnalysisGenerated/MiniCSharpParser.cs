@@ -289,6 +289,7 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class VarDeclContext : ParserRuleContext {
+		public int indexVar = 0;
 		public VarDeclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -298,6 +299,7 @@ public partial class MiniCSharpParser : Parser {
 		public VarDeclContext() { }
 		public virtual void CopyFrom(VarDeclContext context) {
 			base.CopyFrom(context);
+			this.indexVar = context.indexVar;
 		}
 	}
 	public partial class VarDeclASTContext : VarDeclContext {
@@ -2107,6 +2109,7 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class IdentContext : ParserRuleContext {
+		public ParserRuleContext declPointer = null;
 		public IdentContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -2116,6 +2119,7 @@ public partial class MiniCSharpParser : Parser {
 		public IdentContext() { }
 		public virtual void CopyFrom(IdentContext context) {
 			base.CopyFrom(context);
+			this.declPointer = context.declPointer;
 		}
 	}
 	public partial class IdentASTContext : IdentContext {

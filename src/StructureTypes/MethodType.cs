@@ -4,6 +4,9 @@ using Antlr4.Runtime;
 
 namespace Proyecto.StructureTypes;
 
+/// <summary>
+/// Clase que representa un tipo de datos método.
+/// </summary>
 public class MethodType : Type
 {
     private readonly string Type = "method";
@@ -14,65 +17,82 @@ public class MethodType : Type
    
     public LinkedList<Type> parametersL;
     
-    public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList) : base(tok, level)
+    /// <summary>
+    /// Constructor de la clase MethodType.
+    /// </summary>
+    /// <param name="tok">Token asociado al tipo de datos método.</param>
+    /// <param name="level">Nivel de ámbito.</param>
+    /// <param name="parN">Número de parámetros del método.</param>
+    /// <param name="rt">Tipo de retorno del método.</param>
+    /// <param name="parsList">Lista enlazada de parámetros del método.</param>
+    public MethodType(IToken tok, int level, int parN, string rt, LinkedList<Type> parsList,ParserRuleContext contxt) : base(tok, level, contxt)
     {
         this.ParamsNum = parN;
         this.returnType = rt;
         this.parametersL = parsList;
     }
     
-    public void PrintMethod()
+    /// <summary>
+    /// Imprime los detalles del tipo de datos método en la salida de depuración.
+    /// </summary>
+    public string PrintMethod()
     {
-        System.Diagnostics.Debug.WriteLine("Tipo de metodo "+ this.GetToken().Text + " Nivel: " + Level);
-        System.Diagnostics.Debug.WriteLine(" - Nivel: " + Level);
-        System.Diagnostics.Debug.WriteLine(" - Tipo de retorno: " + returnType);
-        System.Diagnostics.Debug.WriteLine(" - Numero de parametros: " + ParamsNum);
-        System.Diagnostics.Debug.WriteLine(" - Parametros: ");
+        string methodPrint = "";
+        methodPrint+= "---Tipo de metodo "+ this.GetToken().Text +"\n";
+        methodPrint+= " - Nivel: " + Level + "\n";
+        methodPrint+= " - Tipo de retorno: " + returnType + "\n";
+        methodPrint+= " - Numero de parametros: " + ParamsNum + "\n";
+        if(parametersL.Count == 0)
+            methodPrint+= " - Parametros: 0" + "\n";
+        else
+            methodPrint+= " - Parametros: " + "\n";
+        
         foreach (var parameter in parametersL)
         {
             if (parameter is ClassVarType classVarType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {classVarType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {classVarType.Type}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo de {classVarType.classType}");
-                System.Diagnostics.Debug.WriteLine($"Nombre: {classVarType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel: {classVarType.Level}");
+                 methodPrint+= $"     Token: {classVarType.GetToken().Text}\n";
+                 methodPrint+=$"      - Tipo: {classVarType.Type}\n";
+                 methodPrint+=$"      - Tipo de {classVarType.classType}\n";
+                 methodPrint+=$"      - Nivel: {classVarType.Level}\n";
             }
             
             if (parameter is PrimaryType primaryType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {primaryType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {primaryType.TypeGetSet}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel {primaryType.Level}");
+                methodPrint+=$"     Token: {primaryType.GetToken().Text}\n";
+                methodPrint+=$"     - Tipo: {primaryType.TypeGetSet}\n";
+                methodPrint+=$"     - Nivel: {primaryType.Level}\n";
 
             }
 
             if (parameter is ArrayType arrType)
             {
-                System.Diagnostics.Debug.WriteLine($"Nombre: {arrType.GetToken().Text}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo: {arrType.Type}");
-                System.Diagnostics.Debug.WriteLine($" - Tipo de array {arrType.GetSetArrType}");
-                System.Diagnostics.Debug.WriteLine($" - Nivel {arrType.Level}");
+                methodPrint+=$"     Token: {arrType.GetToken().Text}\n";
+                methodPrint+=$"     - Tipo: {arrType.Type}\n";
+                methodPrint+=$"     - Tipo de array: {arrType.GetSetArrType}\n";
+                methodPrint+=$"     - Nivel: {arrType.Level}\n";
             }
             
             
         }
-        System.Diagnostics.Debug.WriteLine("\n");
-        
+        methodPrint+="\n";
+
+        return methodPrint;
+
     }
 
-    public int ParamsNumGetSet
-    {
-        get => ParamsNum;
-        set => ParamsNum = value;
-    }
-
+    /// <summary>
+    /// Propiedad para obtener o establecer el tipo de retorno del método.
+    /// </summary>
     public string ReturnTypeGetSet
     {
         get => returnType;
         set => returnType = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    /// <summary>
+    /// Retorna el tipo de estructura, que en este caso es el tipo de retorno del método.
+    /// </summary>
     public override string GetStructureType()
     {
         return this.returnType;

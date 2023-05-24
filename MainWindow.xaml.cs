@@ -209,31 +209,21 @@ namespace Proyecto
                 }
                 else
                 {
-                    AContextual contextA = new AContextual();
+                    AContextual contextA = new AContextual(salida);
                     contextA.Visit(tree);
-                    salida.SalidaConsola.Text = "Compilacion Exitosa";
-                
                 }
                 salida.Show();
-
-
-
             }
             catch (Exception exception)
-                {
-                System.Diagnostics.Debug.WriteLine("Error al ejecutar el codigo");
-                System.Diagnostics.Debug.WriteLine(exception);
+            { 
+                MessageBox.Show("Error al ejecutar el codigo");
                 throw;
-                }
+            }
             }
             else
             {
                 MessageBox.Show("Por favor, abra un archivo antes de ejecutar el codigo");
-                
             }
-            
-            
- 
         }
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)
