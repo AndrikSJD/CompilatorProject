@@ -150,6 +150,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Verificar si no hay errores en el tipo de variable
         if (!isError)
         {
+            System.Diagnostics.Debug.WriteLine("DECLARACION DE VARIABLE");
             // Verificar otros errores en la variable y mostrar mensajes en la consola
             CheckVariableErrors(context, currentToken, isArray, varType, isClassVarType);
         }
@@ -166,6 +167,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public void CheckVariableErrors(MiniCSharpParser.VarDeclASTContext context, IToken currentToken, bool isArray,
         PrimaryType.PrimaryTypes varType, bool isClassVarType)
     {
+       
         // Recorrer todos los identificadores en la declaración de variables
         foreach (var ident in context.ident())
             {      
@@ -187,15 +189,34 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                     {
-                        IToken tok = (IToken)Visit(ident);
+                     
                         Type typeVariable = _symbolTable.Search(token.Text);
-                        
-                        // Verificar si la variable y afue declarada en el ámbito
-                        if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
+                        Type methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
+                        System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
+       
+
+                        if (typeVariable != null && typeVariable.Level == 0)
                         {
-                            // Mostrar error si la variable ya ha sido declarada previamente en el mismo ámbito
-                            consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
+                            consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada previamente en el scope global. {ShowToken(currentToken)}\n");
                         }
+
+                        else if (methodRepeatedVar != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
+                            if (typeVariable != null && typeVariable.Level == 1)
+                            {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                            }
+
+                            else if (methodRepeatedVar.Level == _symbolTable.currentLevel)
+                            {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                            }
+                            {
+                                
+                            }
+                        }
+                        
                         else
                         {
                             // Crear y insertar un nuevo ArrayType en la tabla de símbolos
@@ -214,10 +235,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     }
                     else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                     {
+                        
                         //TODO: REVISAR CAMBIOS
                         MiniCSharpParser.IdentASTContext  identContext = (MiniCSharpParser.IdentASTContext)Visit(ident);
                         //IToken tok = (IToken)Visit(ident);
                         IToken tok = identContext.ID().Symbol;
+                        
                         
                         Type typeVariable = _symbolTable.Search(token.Text);
                         
@@ -249,22 +272,73 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     //si la variable es de un tipo de clase
                     if(isClassVarType)
                     {
+                        System.Diagnostics.Debug.WriteLine("ES UNA VARIABLE DE TIPO DE CLASE");
                         // Verificar si está dentro en una clase
                         if(_symbolTable.currentClass != null) 
                         {
                             // Mostrar error si el tipo de la variable no es básico
                             consola.SalidaConsola.AppendText($"Error: Solo se permiten variables de tipos básicos dentro de una clase. {ShowToken(currentToken)}\n");
                         }
-                        else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
+                        else if(_symbolTable.currentMethod != null) //es una variable local dentro de un metodo
                         {
-                            IToken tok = (IToken)Visit(ident);
+                         
+                            
+                            Type typeVariable = _symbolTable.Search(token.Text);
+                            Type methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
+                         
+                            ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText(), context);
+                            
+                            // Verificar si la variable ya ha sido declarada
+                            // if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
+                            // {
+                            //     // Mostrar error si la variable ya fue declarada
+                            //     consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
+                            // }
+                            
+                            
+                            System.Console.WriteLine("DECLARACION VARIABLE: " + token.Text);
+                            if (typeVariable != null && typeVariable.Level == 0)
+                            {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada previamente en el scope global. {ShowToken(currentToken)}\n");
+                            }
+                            
+                            else if (methodRepeatedVar != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
+                                if (typeVariable != null && typeVariable.Level == 1 )
+                                {
+                                    consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                                }
+
+                                else if (methodRepeatedVar.Level == _symbolTable.currentLevel)
+                                {
+                                    consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                                }
+                                {
+                                
+                                }
+                            }
+                            
+                            else
+                            {
+                                
+                                _symbolTable.Insert(element);
+                            }
+
+                           
+                            
+                        }
+                        else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
+                        {
+                            System.Diagnostics.Debug.WriteLine("ES UNA VARIABLE DE CLASE GLOBAL");
+                            // IToken tok = (IToken)Visit(ident);
                             Type typeVariable = _symbolTable.Search(token.Text);
                             
                             // Verificar si la variable ya ha sido declarada
-                            if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
+                            if (typeVariable != null )
                             {
                                 // Mostrar error si la variable ya fue declarada
-                                consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
                             }
                             else
                             {
@@ -272,22 +346,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 _symbolTable.Insert(element);
                             }
                         }
-                        else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
+                        else
                         {
-                            IToken tok = (IToken)Visit(ident);
-                            Type typeVariable = _symbolTable.Search(token.Text);
-                            
-                            // Verificar si la variable ya ha sido declarada
-                            if (typeVariable != null )
-                            {
-                                // Mostrar error si la variable ya fue declarada
-                                consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
-                            }
-                            else
-                            {
-                                ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText(), context);
-                                _symbolTable.Insert(element);
-                            }
+                            System.Diagnostics.Debug.WriteLine("NO ENTRO A NINGUNO");
                         }
                         
       
@@ -295,6 +356,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     else //es de un tipo primario
                     {
                         PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel, context);
+                        System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION " + _symbolTable.currentLevel);
                         if(_symbolTable.currentClass != null) //si estamos dentro de una clase
                         {
 
@@ -314,14 +376,38 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                         {
-                            Type variableglobal = _symbolTable.Search(token.Text);
+                            Type typeVariable = _symbolTable.Search(token.Text);
+                            Type methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
+                            // // Verificar si la variable ya ha sido declarada
+                            // if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel && !(_symbolTable.searchClassAttribute(token.Text)))
+                            // { 
+                            //     // Mostrar error si la variable ya fue declara
+                            //     consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable local. {ShowToken(currentToken)}\n");
+                            // }
+
                             
-                            // Verificar si la variable ya ha sido declarada
-                            if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel && !(_symbolTable.searchClassAttribute(token.Text)))
-                            { 
-                                // Mostrar error si la variable ya fue declara
-                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable local. {ShowToken(currentToken)}\n");
+                            if (typeVariable != null && typeVariable.Level == 0)
+                            {
+                                consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable global. {ShowToken(currentToken)}\n");
                             }
+                            else if (methodRepeatedVar != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
+                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL REPETIDA: " +methodRepeatedVar.Level );
+                                if (typeVariable != null && typeVariable.Level == 1 ) //en caso de que primero se declare en nivel mayor el typevariable level sera >1 entonces no da error
+                                {
+                                    consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                                }
+
+                                else if (methodRepeatedVar.Level == _symbolTable.currentLevel)
+                                {
+                                    consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
+                                }
+                                {
+                                
+                                }
+                            }
+                            
                             else
                             {
                                 _symbolTable.Insert(element);
@@ -500,6 +586,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() + "[]", parameters, context);
                     _symbolTable.Insert(method);
                     _symbolTable.currentMethod = method;
+                    _symbolTable.currentMethodIndex = _symbolTable.getTableSize() - 1;
                 }
                 else
                 {
@@ -507,6 +594,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, methodType.ToString() , parameters, context);
                     _symbolTable.Insert(method);
                     _symbolTable.currentMethod = method;
+                    _symbolTable.currentMethodIndex = _symbolTable.getTableSize() - 1;
                     
                 }
             }
@@ -516,6 +604,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                 method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, "Void", parameters, context);
                 _symbolTable.Insert(method);
                 _symbolTable.currentMethod = method;
+                _symbolTable.currentMethodIndex = _symbolTable.getTableSize() - 1;
             }
         
             // Insertamos los parámetros en la tabla de símbolos
@@ -545,6 +634,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
         // Establecemos el método actual como nulo en la tabla de símbolos
         _symbolTable.currentMethod = null;
+        _symbolTable.currentMethodIndex = 0;
         
         return null;
     }

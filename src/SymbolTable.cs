@@ -16,6 +16,7 @@ public class SymbolTable
     LinkedList<Object>table;
     public int currentLevel;
     public MethodType currentMethod;
+    public int currentMethodIndex;
     public ClassType? currentClass;
     
 
@@ -99,25 +100,27 @@ public class SymbolTable
     }
 
     
-    
-    //TODO:REVISAR NUEVOS CAMBIOS
-    public bool searchClassAttribute(string var)
+    public int getTableSize()
     {
-        for (int i = 0; i < table.Count; i++)
+        return table.Count;
+    }
+
+    /// <summary>
+    /// Busca un parametro en la tabla de simbolos que se haya creado dentro del metodo actual
+    /// </summary>
+    /// <param name="par"></param>
+    /// <returns></returns>
+    public Type getRepeatedParameter(string par)
+    {
+        for (int i = table.Count-1; i > currentMethodIndex; i--)
         {
-            if ((table.ElementAt(i)) is ClassType)
+            if (((Type)table.ElementAt(i)).GetToken().Text == par)
             {
-                foreach (var parameter in ((ClassType)table.ElementAt(i)).parametersL)
-                {
-                    if (parameter.GetToken().Text == var)
-                    {
-                        return true;
-                    }
-                }
+                return (Type)table.ElementAt(i);
             }
         }
 
-        return false;
+        return null;
     }
     
     
