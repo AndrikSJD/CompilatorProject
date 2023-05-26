@@ -290,6 +290,7 @@ public partial class MiniCSharpParser : Parser {
 
 	public partial class VarDeclContext : ParserRuleContext {
 		public int indexVar = 0;
+		public bool isLocal = false;
 		public VarDeclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -300,6 +301,7 @@ public partial class MiniCSharpParser : Parser {
 		public virtual void CopyFrom(VarDeclContext context) {
 			base.CopyFrom(context);
 			this.indexVar = context.indexVar;
+			this.isLocal = context.isLocal;
 		}
 	}
 	public partial class VarDeclASTContext : VarDeclContext {

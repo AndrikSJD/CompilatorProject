@@ -51,11 +51,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
            
             
             // Visitamos el identificador del programa y creamos un objeto ClassType para representarlo
-           
-            
-            //se obtiene el context del ident
-            MiniCSharpParser.IdentASTContext ident =  (MiniCSharpParser.IdentASTContext)Visit(context.ident());
-            IToken token = (IToken)ident.ID().Symbol;
+            IToken token = (IToken)Visit(context.ident());
             ClassType classType = new ClassType(token, _symbolTable.currentLevel,context);
         
             // Insertamos la clase principal en la tabla de símbolos
@@ -171,12 +167,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Recorrer todos los identificadores en la declaración de variables
         foreach (var ident in context.ident())
             {      
-                // Obtener el token del identificador
-                // IToken token = (IToken)Visit(ident);
                 
-                //Obtener del context de ident
-                MiniCSharpParser.IdentASTContext identCtx =  (MiniCSharpParser.IdentASTContext)Visit(ident);
-                IToken token = (IToken)identCtx.ID().Symbol;
+                
+                
+                // Obtener el token del identificador
+                IToken token = (IToken)Visit(ident);
                 
                 //verificamos si es un array
                 if(isArray) 
@@ -236,12 +231,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
                     {
                         
-                        //TODO: REVISAR CAMBIOS
-                        MiniCSharpParser.IdentASTContext  identContext = (MiniCSharpParser.IdentASTContext)Visit(ident);
-                        //IToken tok = (IToken)Visit(ident);
-                        IToken tok = identContext.ID().Symbol;
-                        
-                        
+                       
+                        IToken tok = (IToken)Visit(ident);
+
+
                         Type typeVariable = _symbolTable.Search(token.Text);
                         
                         // Verificar si la variable ya ha sido declarada
@@ -444,10 +437,10 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
         
         //TODO REVISAR: GUARDAMOS IDENT DE CLASS DECLARATION
-        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
+        IToken ident = (IToken)Visit(context.ident());
     
         // Creamos un objeto ClassType para representar la clase actual
-        ClassType classDcl = new ClassType(ident.ID().Symbol, _symbolTable.currentLevel, context);
+        ClassType classDcl = new ClassType(ident, _symbolTable.currentLevel, context);
     
         // Insertamos la clase en la tabla de símbolos
         _symbolTable.Insert(classDcl);
@@ -486,8 +479,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         //IToken token = (IToken)Visit(context.ident());
         
         //TODO:REVISAR CAMBIOS
-        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
-        IToken token = ident.ID().Symbol;
+      Visit(context.ident());
+        IToken token = (IToken)Visit(context.ident());
         
         
         string methodName = token.Text;
@@ -646,13 +639,11 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             
             //TODO:REVISAR CAMBIOS
-            MiniCSharpParser.IdentASTContext identCtx = (MiniCSharpParser.IdentASTContext)Visit(context.ident(i));
+          
             // Obtenemos el token del identificador
-            // IToken token = (IToken)Visit(context.ident(i));
-            IToken token = identCtx.ID().Symbol;
-            
-            //TODO:REVISAR
-            MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext) Visit(context.ident(i));
+             IToken token = (IToken)Visit(context.ident(i));
+
+      
             
             // Obtenemos el tipo del parámetro como cadena
             string type = context.type(i).GetText();
@@ -711,9 +702,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
         //TODO: REVISAR
-        MiniCSharpParser.IdentASTContext ident = (MiniCSharpParser.IdentASTContext)Visit(context.ident());
-        // IToken type = (IToken)Visit(context.ident());
-        IToken type = ident.ID().Symbol;
+        IToken type = (IToken)Visit(context.ident());
+
 
         //se retorna el identificador del tipo
         return type.Text;
@@ -727,6 +717,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     
         string designatorType = (string)Visit(context.designator());
         
+       
         // Verificar si es una asignación
         if(context.expr()!=null)
         {
@@ -1534,7 +1525,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         IToken currentToken = context.Start;
 
         // Obtenemos el identificador del tipo
-        string ident = (string)Visit(context.ident());
+        IToken tok = (IToken)Visit(context.ident());
+        
 
         if (context.LBRACK() != null)
         {
@@ -1548,7 +1540,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
         // Buscamos en la tabla de símbolos para verificar si es una clase
-        Type? classType = _symbolTable.Search(ident);
+        Type? classType = _symbolTable.Search(tok.Text);
 
         if (classType != null)
         {
@@ -1557,7 +1549,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
         // Verificamos si es un arreglo de tipo básico (int o char)
-        ArrayType.ArrTypes arrType = ArrayType.showType(ident);
+        ArrayType.ArrTypes arrType = ArrayType.showType(tok.Text);
 
         if (arrType != ArrayType.ArrTypes.Unknown)
         {
@@ -1596,6 +1588,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
         // Buscar el tipo de la variable en la tabla de símbolos
         Type? typeIdent= _symbolTable.Search(context.ident(0).GetText());
+        
         
         
         // Si el tipo de la variable es un arreglo y solo hay una expresión
@@ -1699,7 +1692,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitIdentAST(MiniCSharpParser.IdentASTContext context)
     {
         
-        return context;
+  
+        return context.ID().Symbol;
     }
 
     public override object VisitDoubleFactorAST(MiniCSharpParser.DoubleFactorASTContext context)
@@ -1711,6 +1705,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object VisitSemicolonStatementAST(MiniCSharpParser.SemicolonStatementASTContext context)
     {
         return null;
+        
     }
     
 }

@@ -9,7 +9,7 @@ program : using* CLASS ident LBRACE (varDecl | classDecl | methodDecl)* RBRACE E
 
 using : USING ident SEMICOLON                                                          #usingAST;
 
-varDecl locals[int indexVar=0] : type ident (COMMA ident)* SEMICOLON                                             #varDeclAST;
+varDecl locals[int indexVar=0, bool isLocal=false] : type ident (COMMA ident)* SEMICOLON  #varDeclAST;
 
 classDecl : CLASS ident LBRACE varDecl* RBRACE                                     #classDeclAST;
 
