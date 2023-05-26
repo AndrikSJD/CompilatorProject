@@ -656,6 +656,7 @@ public partial class MiniCSharpParser : Parser {
 	public TypeContext type() {
 		TypeContext _localctx = new TypeContext(Context, State);
 		EnterRule(_localctx, 12, RULE_type);
+		int _la;
 		try {
 			_localctx = new TypeASTContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
@@ -664,16 +665,16 @@ public partial class MiniCSharpParser : Parser {
 			ident();
 			State = 112;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,8,Context) ) {
-			case 1:
+			_la = TokenStream.LA(1);
+			if (_la==LBRACK) {
 				{
 				State = 110;
 				Match(LBRACK);
 				State = 111;
 				Match(RBRACK);
 				}
-				break;
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -1779,8 +1780,8 @@ public partial class MiniCSharpParser : Parser {
 	}
 	public partial class NewFactorASTContext : FactorContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NEW() { return GetToken(MiniCSharpParser.NEW, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public TypeContext type() {
-			return GetRuleContext<TypeContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public IdentContext ident() {
+			return GetRuleContext<IdentContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LBRACK() { return GetToken(MiniCSharpParser.LBRACK, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
@@ -1976,7 +1977,7 @@ public partial class MiniCSharpParser : Parser {
 				State = 266;
 				Match(NEW);
 				State = 267;
-				type();
+				ident();
 				State = 272;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
@@ -2321,18 +2322,18 @@ public partial class MiniCSharpParser : Parser {
 		0,255,257,5,37,0,0,256,255,1,0,0,0,256,257,1,0,0,0,257,258,1,0,0,0,258,
 		279,5,44,0,0,259,279,5,47,0,0,260,279,5,46,0,0,261,263,5,37,0,0,262,261,
 		1,0,0,0,262,263,1,0,0,0,263,264,1,0,0,0,264,279,5,43,0,0,265,279,7,2,0,
-		0,266,267,5,15,0,0,267,272,3,12,6,0,268,269,5,20,0,0,269,270,3,28,14,0,
-		270,271,5,21,0,0,271,273,1,0,0,0,272,268,1,0,0,0,272,273,1,0,0,0,273,279,
-		1,0,0,0,274,275,5,18,0,0,275,276,3,28,14,0,276,277,5,19,0,0,277,279,1,
-		0,0,0,278,247,1,0,0,0,278,256,1,0,0,0,278,259,1,0,0,0,278,260,1,0,0,0,
-		278,262,1,0,0,0,278,265,1,0,0,0,278,266,1,0,0,0,278,274,1,0,0,0,279,33,
-		1,0,0,0,280,289,3,36,18,0,281,282,5,24,0,0,282,288,3,36,18,0,283,284,5,
-		20,0,0,284,285,3,28,14,0,285,286,5,21,0,0,286,288,1,0,0,0,287,281,1,0,
-		0,0,287,283,1,0,0,0,288,291,1,0,0,0,289,287,1,0,0,0,289,290,1,0,0,0,290,
-		35,1,0,0,0,291,289,1,0,0,0,292,293,5,45,0,0,293,37,1,0,0,0,294,295,7,3,
-		0,0,295,39,1,0,0,0,33,43,52,54,70,81,88,93,106,112,119,124,135,142,146,
-		161,175,183,188,190,200,208,216,229,236,244,250,253,256,262,272,278,287,
-		289
+		0,266,267,5,15,0,0,267,272,3,36,18,0,268,269,5,20,0,0,269,270,3,28,14,
+		0,270,271,5,21,0,0,271,273,1,0,0,0,272,268,1,0,0,0,272,273,1,0,0,0,273,
+		279,1,0,0,0,274,275,5,18,0,0,275,276,3,28,14,0,276,277,5,19,0,0,277,279,
+		1,0,0,0,278,247,1,0,0,0,278,256,1,0,0,0,278,259,1,0,0,0,278,260,1,0,0,
+		0,278,262,1,0,0,0,278,265,1,0,0,0,278,266,1,0,0,0,278,274,1,0,0,0,279,
+		33,1,0,0,0,280,289,3,36,18,0,281,282,5,24,0,0,282,288,3,36,18,0,283,284,
+		5,20,0,0,284,285,3,28,14,0,285,286,5,21,0,0,286,288,1,0,0,0,287,281,1,
+		0,0,0,287,283,1,0,0,0,288,291,1,0,0,0,289,287,1,0,0,0,289,290,1,0,0,0,
+		290,35,1,0,0,0,291,289,1,0,0,0,292,293,5,45,0,0,293,37,1,0,0,0,294,295,
+		7,3,0,0,295,39,1,0,0,0,33,43,52,54,70,81,88,93,106,112,119,124,135,142,
+		146,161,175,183,188,190,200,208,216,229,236,244,250,253,256,262,272,278,
+		287,289
 	};
 
 	public static readonly ATN _ATN =

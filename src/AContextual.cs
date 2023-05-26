@@ -1534,7 +1534,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         IToken currentToken = context.Start;
 
         // Obtenemos el identificador del tipo
-        string ident = (string)Visit(context.type());
+        string ident = (string)Visit(context.ident());
 
         if (context.LBRACK() != null)
         {
@@ -1698,6 +1698,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     
     public override object VisitIdentAST(MiniCSharpParser.IdentASTContext context)
     {
+        
         return context;
     }
 
