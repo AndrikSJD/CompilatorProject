@@ -203,7 +203,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         else if (methodRepeatedVar != null)
                         {
                             System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
-                            if (typeVariable != null && typeVariable.Level == 1)
+                            if (methodRepeatedVar.Level < _symbolTable.currentLevel)
                             {
                                 consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
                             }
@@ -288,13 +288,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                          
                             ClassVarType element = new ClassVarType(token, _symbolTable.currentLevel, context.type().GetText(), context);
                             
-                            // Verificar si la variable ya ha sido declarada
-                            // if (typeVariable!= null && typeVariable.Level <= _symbolTable.currentLevel)
-                            // {
-                            //     // Mostrar error si la variable ya fue declarada
-                            //     consola.SalidaConsola.AppendText($"Error: La variable \"{tok.Text}\" ya ha sido declarada previamente. {ShowToken(currentToken)}\n");
-                            // }
-                            
+                         
                             
                             System.Console.WriteLine("DECLARACION VARIABLE: " + token.Text);
                             if (typeVariable != null && typeVariable.Level == 0)
@@ -305,7 +299,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             else if (methodRepeatedVar != null)
                             {
                                 System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
-                                if (typeVariable != null && typeVariable.Level == 1 )
+                                if (methodRepeatedVar.Level < _symbolTable.currentLevel )
                                 {
                                     consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
                                 }
@@ -392,9 +386,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             }
                             else if (methodRepeatedVar != null)
                             {
-                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
-                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL REPETIDA: " +methodRepeatedVar.Level );
-                                if (typeVariable != null && typeVariable.Level == 1 ) //en caso de que primero se declare en nivel mayor el typevariable level sera >1 entonces no da error
+                                
+                               
+                                if(methodRepeatedVar.Level < _symbolTable.currentLevel)
                                 {
                                     consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
                                 }
@@ -1541,6 +1535,17 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
         // Obtenemos el identificador del tipo
         string ident = (string)Visit(context.type());
+
+        if (context.LBRACK() != null)
+        {
+            string type = (string) Visit(context.expr());
+            if (type != "Int")
+            {
+                consola.SalidaConsola.AppendText($"Error de tipos: El indice  del 'new' no es un entero, es de tipo: {type}. {ShowToken(currentToken)}\n");
+                return null;
+            }
+            
+        }
 
         // Buscamos en la tabla de símbolos para verificar si es una clase
         Type? classType = _symbolTable.Search(ident);
