@@ -146,7 +146,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Verificar si no hay errores en el tipo de variable
         if (!isError)
         {
-            System.Diagnostics.Debug.WriteLine("DECLARACION DE VARIABLE");
+
             // Verificar otros errores en la variable y mostrar mensajes en la consola
             CheckVariableErrors(context, currentToken, isArray, varType, isClassVarType);
         }
@@ -187,7 +187,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                      
                         Type typeVariable = _symbolTable.Search(token.Text);
                         Type methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
-                        System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
+                       
        
 
                         if (typeVariable != null && typeVariable.Level == 0)
@@ -197,7 +197,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
                         else if (methodRepeatedVar != null)
                         {
-                            System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
                             if (methodRepeatedVar.Level < _symbolTable.currentLevel)
                             {
                                 consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
@@ -265,7 +264,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     //si la variable es de un tipo de clase
                     if(isClassVarType)
                     {
-                        System.Diagnostics.Debug.WriteLine("ES UNA VARIABLE DE TIPO DE CLASE");
                         // Verificar si está dentro en una clase
                         if(_symbolTable.currentClass != null) 
                         {
@@ -291,7 +289,6 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             
                             else if (methodRepeatedVar != null)
                             {
-                                System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION VARIABLE LOCAL TABLA: " +_symbolTable.currentLevel );
                                 if (methodRepeatedVar.Level < _symbolTable.currentLevel )
                                 {
                                     consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada localmente. {ShowToken(currentToken)}\n");
@@ -343,7 +340,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     else //es de un tipo primario
                     {
                         PrimaryType element = new PrimaryType(token,varType, _symbolTable.currentLevel, context);
-                        System.Diagnostics.Debug.WriteLine("NIVEL DECLARACION " + _symbolTable.currentLevel);
+                        
                         if(_symbolTable.currentClass != null) //si estamos dentro de una clase
                         {
 
@@ -1300,7 +1297,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         else
         {
             // La comparación no es válida, mostramos un mensaje de error
-            consola.SalidaConsola.AppendText(GetErrorComparisonMessage( secondExprType, firstExprType, currentToken));
+            consola.SalidaConsola.AppendText(GetErrorComparisonMessage(firstExprType, secondExprType,currentToken));
 
             // Retornamos false para indicar que la comparación no es válida
             return false;
@@ -1317,6 +1314,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
 
         // Comparamos los tipos
+        System.Diagnostics.Debug.WriteLine($"Comparando {firstType} con {secondType}");
         return firstType == secondType;
     }
 
@@ -1445,40 +1443,66 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Verificar si el factor es una llamada a método
         if (context.LPARENT() != null)
         {
-            // Obtener la lista de tipos de los parámetros al visitar el nodo actPars
-            LinkedList<Type> listOfTypes = (LinkedList<Type>)Visit(context.actPars());
-
+            
             // Buscar el método en la tabla de símbolos
             string designator = context.designator().GetText();
+            Type? metodo = (Type)_symbolTable.Search(designator);
+            
+            // Verificar si es el caso del metodo predefinido len
             if (designator == "len")
             {
                 return "Int";
             }
-            Type? metodo = (Type)_symbolTable.Search(designator);
-            if (metodo is MethodType method)
+            if (context.actPars() != null)
             {
-                // Verificar si la cantidad de parámetros es incorrecta
-                if (!(method.parametersL.Count == listOfTypes.Count))
+                // Obtener la lista de tipos de los parámetros al visitar el nodo actPars
+                LinkedList<Type> listOfTypes = (LinkedList<Type>)Visit(context.actPars());
+                
+                if (metodo is MethodType method)
                 {
-                    consola.SalidaConsola.AppendText($"Error: Cantidad de parámetros incorrecta. {ShowToken(currentToken)}\n");
+                    // Verificar si la cantidad de parámetros es incorrecta
+                    if (!(method.parametersL.Count == listOfTypes.Count))
+                    {
+                        consola.SalidaConsola.AppendText($"Error: Cantidad de parámetros incorrecta. {ShowToken(currentToken)}\n");
 
-                    return null;
+                        return null;
+                    }
+                    else
+                    {
+                        // Verificar si los tipos de los parámetros son correctos
+                        for (int i = 0; i < method.parametersL.Count; i++)
+                        {
+                            if (((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() !=
+                                listOfTypes.ElementAt(i).GetStructureType())
+                            {
+                                consola.SalidaConsola.AppendText($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {listOfTypes.ElementAt(i).GetStructureType()} {ShowToken(currentToken)}\n");
+
+                                return null;
+                            }
+                        }
+
+                        // Devolver el tipo de retorno del método
+                        return method.ReturnTypeGetSet;
+                    }
                 }
                 else
                 {
-                    // Verificar si los tipos de los parámetros son correctos
-                    for (int i = 0; i < method.parametersL.Count; i++)
+                    // Mostrar mensaje de error si no se encuentra el método en la tabla de símbolos
+                    consola.SalidaConsola.AppendText($"Error: No se encontró el método. {ShowToken(currentToken)}\n");
+
+                    return null;
+                }
+                
+            }
+            else if (metodo != null)
+            {
+                if (metodo is MethodType method)
+                {
+                    if(method.parametersL.Count() >0)
                     {
-                        if (((MethodType)metodo).parametersL.ElementAt(i).GetStructureType() !=
-                            listOfTypes.ElementAt(i).GetStructureType())
-                        {
-                            consola.SalidaConsola.AppendText($"Error: Tipo de parámetro incorrecto. Se esperaba: {((MethodType)metodo).parametersL.ElementAt(i).GetStructureType()}, se obtuvo: {listOfTypes.ElementAt(i).GetStructureType()} {ShowToken(currentToken)}\n");
-
-                            return null;
-                        }
+                        consola.SalidaConsola.AppendText($"Error: Cantidad de parámetros incorrecta, faltan parametros en llamada metodo: {method.GetToken().Text}. {ShowToken(currentToken)}\n");
+                        return null;
                     }
-
-                    // Devolver el tipo de retorno del método
                     return method.ReturnTypeGetSet;
                 }
             }
@@ -1489,12 +1513,18 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
 
                 return null;
             }
+            {
+                
+            }
         }
         else
         {
+            System.Diagnostics.Debug.WriteLine("Visita factor designator: " + context.designator().GetText()+" tipo: "+designatorType);
             // Devolver el tipo de designador
             return designatorType;
         }
+
+        return null;
     }
 
     
@@ -1585,11 +1615,32 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object? VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
         IToken currentToken = context.Start;
+
+        //preguntar si tiene parentesis es decir es una llamda a un metodo de funcion
+        
+        // System.Diagnostics.Debug.WriteLine("DESIGNATOR TEXTO: "+context.ident(0).GetText());
+        
         
         // Buscar el tipo de la variable en la tabla de símbolos
         Type? typeIdent= _symbolTable.Search(context.ident(0).GetText());
         
-        
+        if(typeIdent == null)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error: No se encontró el identificador. {ShowToken(currentToken)}\n");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("DESIGNATOR TYPE ENCONTRADO: "+ typeIdent.GetToken().Text + " y es de tipo: " + typeIdent.GetStructureType());
+        }
+      
+
+        if (typeIdent != null)
+        {
+            //TODO: Se hace el puntero del ident hacia el contexto del var declaration
+            context.ident(0).declPointer = typeIdent.ContextGetSet;
+
+        }
+
         
         // Si el tipo de la variable es un arreglo y solo hay una expresión
         if (typeIdent is ArrayType && context.expr().Length == 1) //cuando es arreglo
