@@ -473,10 +473,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         IToken currentToken = context.Start;  
         
         // Obtenemos el nombre del método
-        //IToken token = (IToken)Visit(context.ident());
-        
-        //TODO:REVISAR CAMBIOS
-      Visit(context.ident());
+        Visit(context.ident());
         IToken token = (IToken)Visit(context.ident());
         
         
@@ -546,6 +543,18 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Si no hubo error en la obtención del tipo de retorno
         if (!isError)
         {
+
+            if (methodType != null && context.block().GetText().Equals("{}"))
+            {
+                consola.SalidaConsola.AppendText($"Error: en el metodo {context.ident().GetText()} falta el retorno de tipo {methodType.ToString()}. {ShowToken(currentToken)} \n");
+            } else if (!(context.block().GetText().Contains("return")) && methodType != null && (context.VOID()== null))
+            {
+                consola.SalidaConsola.AppendText($"Error: en el metodo {context.ident().GetText()} falta el retorno de tipo {methodType.ToString()}. {ShowToken(currentToken)} \n");
+             }
+            
+            
+            
+            
             LinkedList<Type> parameters = new LinkedList<Type>();
             
             // Verificamos si se especificaron parámetros
@@ -581,14 +590,21 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                     _symbolTable.currentMethodIndex = _symbolTable.getTableSize() - 1;
                     
                 }
+                
             }
             else
             {
                 // Creamos un nuevo objeto MethodType para el método con tipo de retorno "Void"
                 method = new MethodType(token, _symbolTable.currentLevel, parameters.Count, "Void", parameters, context);
                 _symbolTable.Insert(method);
+                // Establecemos el método actual en la tabla de símbolos
                 _symbolTable.currentMethod = method;
+                //Obtenemos el indice del metodo actual
                 _symbolTable.currentMethodIndex = _symbolTable.getTableSize() - 1;
+                // Guardamos el block del metodo actual
+                
+               
+                
             }
         
             // Insertamos los parámetros en la tabla de símbolos
