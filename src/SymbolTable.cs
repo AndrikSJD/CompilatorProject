@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
 using Proyecto.StructureTypes;
+using SyntacticAnalysisGenerated;
 using Type =Proyecto.StructureTypes.Type;
 
 namespace Proyecto;
